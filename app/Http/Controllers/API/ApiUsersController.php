@@ -896,6 +896,8 @@ class ApiUsersController extends Controller
             $response['suggestion'] = "";
         }
         $response['submitted']      = $submited;
+        $response['user_id']         = $user_id;
+        $response['emp_event_id']   = $emp_ev_book_id;
         if ($recordCount > 0) {
             $status = 200;
             return response()->json(['status' => $status, "response" => $response]);

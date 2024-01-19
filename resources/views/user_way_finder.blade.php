@@ -3,19 +3,17 @@
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Way_Finder';
 @endphp
+@section('pageName', 'Way Finder')
 @section('title', $pageNm)
 @section('content')
 
 <section class="way_finder">
-     <iframe src="https://route.heliware.co.in/basemap" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
+     <iframe src="https://route.heliware.co.in" style="width: 100%; height: 90vh; border: 0;"></iframe>
 
 </section>
     
 @endsection
 @section('javascript')
   <script>
-        document.querySelector('iframe').onerror = function (event) {
-            console.error('Error loading iframe:', event);
-        };
     </script>
 @endsection

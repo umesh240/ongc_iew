@@ -6,7 +6,7 @@
     <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="" class="h1">{{ __('Reset Password') }}</a>
+                <a href="" class="h1">{{ __('Reset Password222') }}</a>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('password.update') }}">

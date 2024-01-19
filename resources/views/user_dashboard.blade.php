@@ -1,5 +1,6 @@
 @extends('layouts.app_user_new')
 @php
+  $embedded = session()->get('embedded'); 
   @$curRouteNm = Route::currentRouteName();
   @$pageNm = 'Dashboard';
   @$boardDirectors = @$hotel_imageAll = [];
@@ -15,8 +16,9 @@
   $hotel_imageCnt = 1;
   $emp_ev_book_id = @$event_pdf_file = '';
   $cod = 0;
-    
+  $user_name = '';  
   if(@$status == 200){  
+    $user_name = @$userData->user_name;
     $emp_ev_book_id = @$userData->emp_ev_book_id;
     $boardDirectors = @$userData->boardDirectors;
     $hotel_image = @$userData->hotel_details->hotel_image;
@@ -454,6 +456,40 @@
           <h3>About Local</h3>
         </div>
       </div>
+      @if($embedded == 1)
+      <div class="col-4 col-md-2  text-center">
+        <div class="local-menus">
+          <div class="icon-finder">
+           <a href="{{ route('my.page', ['page'=>'way_finder']) }}"> <i class="fas fa-map"></i></a>
+          </div>
+          <div class="local-content about-local">
+            <b><p>Way Finder</p></b>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2  text-center">
+        <div class="local-menus">
+          <div class="icon-day">
+           <a href="{{ route('my.page', ['page'=>'day_wise']) }}"> <i class="fas fa-calendar-week"></i></a>
+          </div>
+          <div class="local-content about-local">
+            <b><p>Event Details</p></b>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2  text-center">
+        <div class="local-menus">
+          <div class="icon-chat">
+           <a href="{{ route('my.page', ['page'=>'chat']) }}"><i class="far fa-comments"></i></a>
+          </div>
+          <div class="local-content about-local">
+            <b><p>chat</p></b>
+          </div>
+        </div>
+      </div>
+      @endif
 
       <div class="col-4 col-md-2 text-center">
         <div class="local-menus">
@@ -585,12 +621,18 @@
 
 </section>
  
-<div id="mdlWelCome" class="modal in fade show" role="dialog" style="display: block; ">
-  <div class="modal-dialog" style="margin: 50% auto; width: 70%;" >
-    <div class="modal-content">
-      <div class="modal-body">
-        <h4 class="modal-title">Welcome</h4>
-        <button type="button" class="btn btn-warning" onclick="$('#mdlWelCome').css('display', 'none');">Get Started</button>
+<div id="mdlWelCome" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" style="margin: auto auto; width: 90%;" >
+    <div class="modal-content" style="border-radius: 20px; box-shadow: 0px 6px 20px -5px #457cb26b;  border: none;">
+      <div class="modal-body" style="text-align: center;">
+      <div class="user-img" style="justify-content: center; display: flex;">
+       <img src="{{ asset('/pages/images/user-img.png') }}">
+      </div>
+        <h4 class="modal-title mb-3" style="color:#457CB2;">Welcome To IEW</h4>
+        <div class="ongc-user">
+          <h5 class="mb-4" style="color:#457CB2;">{{ $user_name }}</h5>
+        </div>
+        <button type="button" class="btn btn-warning welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
       </div>
     </div>
 

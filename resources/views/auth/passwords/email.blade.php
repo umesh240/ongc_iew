@@ -1,12 +1,49 @@
-@extends('layouts.app')
-@section('title', "Password Reset")
-@section('content')
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="mQ2N9odf46abAjHLsCii4HP2uzl8waz3Z2pJAMnR">
+
+    <title>Password Reset | ONGC</title>
+
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/x-icon" />
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('pages/dist/css/adminlte.min.css') }}">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('pages/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('pages/login.css') }}">
+</head>
+<!--<body class="control-sidebar-slide-open sidebar-collapse layout-navbar-fixed layout-fixed sidebar-mini ">-->
+<body class="sidebar-mini layout-fixed">
+    <div class="loading-container">
+        <div class="logo">
+            <img src="https://ongcevents.co.in/images/logo.png" alt="Logo">
+        </div>
+        <div class="loading"></div>
+    </div>
+    
+    
+    <!-- Site wrapper -->
+    <div class="wrapper">
+  
 <section class="login-page">
-    <div class="login-box justify-content-center  w-50">
-    <!-- /.login-logo -->
+<div class="login-logo">
+ <img src="{{ asset('/pages/images/Ongc-Green-Logo1.png') }}" alt="ONGC Logo">
+ </div>
+    <div class="login-box justify-content-center">
+        <!-- /.login-logo -->
         <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <a href="" class="h1">{{ __('Reset Password') }}</a>
+            <div class="card-header login-header text-center">
+                <h4 style="color:#457CB2;">{{ __('Reset Password') }}</h4>
             </div>
             <div class="card-body">
                 @if (session('status'))
@@ -14,33 +51,48 @@
                         {{ session('status') }}
                     </div>
                 @endif
-
                 <form method="POST" action="{{ route('password.email') }}">
                     @csrf
-
-                    <div class="row mb-3">
-                        <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                        <div class="col-md-6">
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                    <div class="input-group login-pg mb-3">
+                        <input id="name" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="CPF No. or Mobile No." autofocus>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
                         </div>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
-
-                    <div class="row mb-0">
-                        <div class="col-md-8 offset-md-4">
-                            <button type="submit" class="btn btn-primary">{{ __('Send Password Reset Link') }}</button>
-                            <a class="ml-4" href="{{ route('login') }}">{{ __('Login Now') }}</a>
+                    <div class="row">
+                        <!-- /.col -->
+                        <div class="col-md-12 mt-4 mb-3">
+                            <button type="submit" class="btn btn-primary login-btn">{{ __('Send Password Reset Link') }}</button>
                         </div>
+                        <!-- /.col -->
                     </div>
                 </form>
+                <p class="mb-1 text-center">
+                    @if (Route::has('password.request'))
+                        <a class="ml-4" href="{{ route('login') }}"  style="color:#7A7A7A; font-size:16px;">{{ __('Login Now') }}</a>
+                    @endif
+                </p>
             </div>
+            <!-- /.card-body -->
         </div>
+        <!-- /.card -->
     </div>
-</div>
-@endsection
+</section>
+
+    </div>
+</body>
+<!-- jQuery -->
+<script src="https://ongcevents.co.in/pages/plugins/jquery/jquery.min.js"></script>
+<script>
+  setTimeout(function(){
+    $('.loading-container').css('display', 'none');
+  }, 200);
+</script>
+
+</html>
+

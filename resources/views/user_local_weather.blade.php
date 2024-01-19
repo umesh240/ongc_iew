@@ -19,6 +19,7 @@
 	$main = $weather_result->weather[0]->main;
 	$cod = $weather_result->cod;
   @endphp
+  @section('pageName', 'Local Weather')
 @section('title', $pageNm)
 @section('content')	
 <div class="div_weather">

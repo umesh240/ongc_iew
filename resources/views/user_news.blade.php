@@ -3,20 +3,9 @@
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'News';
 @endphp
+@section('pageName', 'News')
 @section('title', $pageNm)
 @section('content')
-
-
-<section class="ongc-head desktop ccsticky-nav" id="innerPageHeader">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg">
-            <i id="backIcon" class="fas fa-arrow-left" onclick="goBack()"></i>
-            <span id="innerPageHeading"></span>
-        </nav>
-    </div>
-</section>
-
-
 
 
 <section class="news">

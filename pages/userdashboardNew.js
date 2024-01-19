@@ -194,3 +194,17 @@ $('.frmHotel').submit(function(e){
     }
   });
 });
+//////////////////////////////////////////////////////////////////////////
+var winHt = $(window).height() / 2;
+var winHt = parseInt(winHt) - 150;
+$('#mdlWelCome').css('margin', winHt+'px auto');
+var wel_cnt = sessionStorage.getItem("wel_cnt");
+if(wel_cnt == '1'){
+  $('#mdlWelCome').modal('show');
+}
+
+$('.mdlWelComeClose').on('click', function(){
+  $('#mdlWelCome').modal('hide');
+  sessionStorage.setItem("wel_cnt", 0);
+});
+

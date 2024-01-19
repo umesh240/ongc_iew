@@ -189,10 +189,11 @@ Route::middleware(['employeeGaurd'])->group(function () {
             Route::post('/user_query', 'userQuery')->name('user_query');
             Route::post('/event_cancel', 'eventCancel')->name('event_cancel');
             Route::post('/save_quiz', 'saveQuiz')->name('save_quiz');
+            Route::post('/save_feedback', 'saveFeedBack')->name('save_feedback');
             Route::get('/menus', 'menuPage')->name('menu.page');
 
 
-            Route::get('/my.{page}', 'pageIndex')->name('my.page')->where('page','participation|quiz|faq|feedback|flight|helpdesk|local_area|news|change_password|day_wise|date_wise|local_weather|about|way_finder');
+            Route::get('/my.{page}', 'pageIndex')->name('my.page')->where('page','participation|quiz|faq|feedback|flight|helpdesk|local_area|news|change_password|day_wise|date_wise|local_weather|about|way_finder|chat');
             /*
             Route::get('/my.faq', 'faqIndex')->name('my.faq');
             Route::get('/my.feedback', 'feedbackIndex')->name('my.feedback');

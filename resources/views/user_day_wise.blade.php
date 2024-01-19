@@ -3,6 +3,7 @@
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Day Wise';
 @endphp
+@section('pageName', 'Day Wise Event')
 @section('title', $pageNm)
 
 @section('content')

@@ -394,6 +394,9 @@ class UserDashboardController extends Controller
             case 'way_finder':
                 $pg = 'user_way_finder';
             break;
+            case 'chat':
+                $pg = 'user_chat';
+            break;
 
             default:
             // code...
@@ -470,5 +473,53 @@ class UserDashboardController extends Controller
         return response()->json(['status' => $status, "message" => $message, "url" => $url]);
         
         //return view('user_quiz_response', $data);
+    }
+    
+    public function saveFeedBack(Request $request)
+    {
+        //print_r($request->all()); die;
+        $validator = Validator::make($request->all(), [
+            'rating' => ['required', 'array'],
+            'rating.*' => ['required', 'numeric', 'min:0.5'],
+        ]);
+
+        if ($validator->fails()) {
+            //return redirect()->back()->withErrors($validator)->withInput();
+            $allErrors = 'Please rate the all feedbacks.';
+            return response()->json(['status' => 2, "message" => $allErrors, "url" => '']);
+        }
+
+        $user_id = $request->user_id;
+        $event_id = $request->event_id;
+        $suggestion = $request->suggestion;
+        $rating = $request->rating;
+        $feedbacks = [];
+        foreach ($rating as $key => $rate) {
+            $rating         = $request->input('rating.'.$key);
+            $feedback_id    = $request->input('feedback_id.'.$key);
+            $feedbacks[]    = array('fb_id' => $feedback_id, 'rating' => $rating);
+        }
+
+        $apiData = new Request([
+            'emp_ev_book_id' => $event_id,
+            'id' => $user_id,
+            'feedbacks' => $feedbacks,
+            'suggestion' => $suggestion
+        ]);
+        $api = new ApiUsersController();
+        
+        $quiz_save = $api->feedbackSave($apiData); 
+        $qData = $quiz_save->getData();
+
+        $url = '';
+        $message = $qData->message;
+        $status = $qData->status;
+        if($status == 200){
+            $status = 1;
+            $url = route('my.page', ['page'=>'feedback']);
+        }else{
+            $status = 2;
+        }
+        return response()->json(['status' => $status, "message" => $message, "url" => $url]);
     }
 }

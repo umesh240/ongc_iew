@@ -1,6 +1,95 @@
 body {
  font-family: 'Karla', sans-serif !important;
 }
+
+
+/*back navigation*/
+nav.inner-header {
+    padding: 10px;
+}
+.inner-head {
+    display: flex;
+    color: #fff;
+}
+.inner-head i.fas.fa-arrow-left {
+    margin-right: 10px;
+    font-size: 25px;
+    margin-top: 5px;
+}
+.inner-head h5 {
+    font-size: 25px;
+    font-weight: 600;
+}
+/*end*/
+
+.chat-bg {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 10px;
+    gap: 5px;
+}
+.user-chat {
+    background-color: #457CB2;
+    border-radius: 8px;
+    color: #fff !important;
+    padding: 5px 100px 5px 10px;
+}
+.chat-bg i.fas.fa-user {
+    background-color: grey;
+    color: #fff;
+    padding: 10px 10px 5px 10px;
+    border-radius: 50px;
+    font-size: 20px;
+}
+.sender-chat {
+    background-color: grey;
+    border-radius: 8px;
+    color: #fff !important;
+    padding: 5px 100px 5px 10px;
+}
+.chat-bg-sender {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 10px;
+    gap: 5px;
+}
+.chat-bg-sender i.fas.fa-user {
+    background-color: grey;
+    color: #fff;
+    padding: 10px 10px 5px 10px;
+    border-radius: 50px;
+    font-size: 20px;
+}
+.chat-bg-sender p {
+    color: #fff;
+    margin-bottom: 0px;
+    font-size: 20px;
+}
+.user-chat p {
+    color: #fff;
+    margin-bottom: 0px;
+    font-size: 20px;
+}
+.bottom-chat {
+    position: fixed;
+    bottom: 97px;
+    width: 100%;
+}
+button.chat-btn {
+    background-color: #457CB2;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+}
+.bottom-chat input[type="text"] {
+    border-radius: 8px;
+    background-color: #eeeeee;
+    border: 1px solid #eeeeee;
+    padding: 10px;
+    width: 80%;
+}
 button.check-green {
     background-color: #3cb043 !important;
    border: 1px solid #3cb043 !important
@@ -31,7 +120,21 @@ button.check-green {
 .vehicle-shape img {
     width: 100%;
 }
-
+button.welcome-button {
+    width: 75%;
+    background-color: #F07E29;
+    border-radius: 10px;
+    color: #fff;
+    padding: 10px;
+}
+button.welcome-button:focus {
+    background-color: #F07E29 !important;
+    color: #fff !important
+    }
+    .ongc-user h5 {
+    font-size: 30px;
+    font-weight: 600;
+}
 /* event details*/
 section.day-wise {
     padding: 50px 15px 80px 15px;
@@ -516,6 +619,54 @@ div#last-col {
     top: 30%;
     left: 37%;
 }
+.icon-finder i.fas.fa-map {
+    background-color: #D1C900;
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    font-size: 35px;
+    color: #fff;
+    box-shadow: 0px 4px 15px 0px #d1c90075;
+}
+.fa-map:before {
+    content: "\f279";
+    position: absolute;
+    top: 32%;
+    left: 32%;
+}
+.icon-day i.fas.fa-calendar-week {
+    background-color: #A4D667;
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    font-size: 35px;
+    color: #fff;
+    box-shadow: 0px 4px 15px 0px #a4d66780;
+}
+.icon-day .fa-calendar-week:before {
+    content: "\f784";
+    position: absolute;
+    top: 32%;
+    left: 35%;
+}
+.icon-chat i.far.fa-comments {
+    background-color: #FF7759;
+    border-radius: 50px;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    font-size: 35px;
+    color: #fff;
+    box-shadow: 0px 4px 15px 0px #ff77596e;
+}
+.icon-chat .fa-comments:before {
+    content: "\f086";
+    position: absolute;
+    top: 32%;
+    left: 32%;
+}
   .local-head h3 {
     color: #3F70A1;
 }
@@ -782,6 +933,7 @@ section.menu {
 section.quiz {
     background: linear-gradient(to bottom right, #457CB2, #EFF7FF);
     width: 100%;
+        height: 63vh;
     float: left;
     padding: 50px 0px 100px 0px;
 
@@ -921,7 +1073,7 @@ button.helpDesk-btn {
 
 
 
-/* feedback*/
+
 
 .text-content {
     padding: 30px;
@@ -932,12 +1084,18 @@ button.helpDesk-btn {
 .text-content p {
     color: #457CB2;
 }
+.feedback-frm textarea {
+    box-shadow: 0px 2px 21px -6px #366c753b;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-color: #ebebeb;
+    padding: 10px;
+}
 
 
 
 
-
-/*faq*/
+/*feedback*/
 .w3l-faq ul li i:before, .w3l-faq ul li i:after {
     background-color: #F07E29 !important;
 }
@@ -950,9 +1108,15 @@ button.helpDesk-btn {
     margin-bottom: 0px;
 }
 section#faq {
-    padding: 50px 0px 70px 0px;
+    padding: 50px 0px 100px 0px;
 }
-
+.feedback-frm textarea {
+    box-shadow: 0px 2px 21px -6px #366c753b;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-color: #ebebeb;
+    padding: 10px;
+}
 
 /*flight*/
 section.flights {
@@ -1625,6 +1789,35 @@ footer {
         
         
 @media only screen and (min-width : 320px) and (max-width : 767px) {
+.user-chat p {
+    font-size: 14px;
+}
+.user-chat span {
+    font-size: 12px;
+}
+.chat-bg-sender p {
+    font-size: 14px;
+}
+.chat-bg-sender span {
+    font-size: 12px;
+}
+.inner-head h5 {
+    font-size: 18px;
+    margin-bottom: 0px;
+}
+.bottom-chat input[type="text"] {
+    width: 70%;
+}
+.bottom-chat {
+    margin: 0 15px 0px 15px;
+}
+nav.inner-header {
+    padding: 15px;
+}
+.inner-head i.fas.fa-arrow-left {
+    font-size: 20px;
+    margin-top: 5px;
+}
 .flight-mobile {
     display: flex;
 }
@@ -1725,7 +1918,26 @@ nav.main-header {
   .desktop {
     display: block;
 }
-
+.user-img img {
+    width: 120px;
+}
+.modal-dialog {
+    width: 80% !important;
+}
+#mdlWelCome .modal-body {
+    padding: 15px;
+}
+.welcome-button i.fa.fa-long-arrow-right {
+    margin-left: 10px;
+}
+.ongc-user h5 {
+    font-size: 20px;
+    font-weight: 700;
+}
+#mdlWelCome  .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
 .downMenu .downBtn {
     padding: 0;
 }
@@ -1883,6 +2095,21 @@ div#last-col {
     height: 55px;
     font-size: 18px;
 }
+.icon-finder i.fas.fa-map {
+    width: 55px;
+    height: 55px;
+    font-size: 18px;
+}
+.icon-day i.fas.fa-calendar-week {
+    width: 55px;
+    height: 55px;
+    font-size: 18px;
+}
+.icon-chat i.far.fa-comments {
+    width: 55px;
+    height: 55px;
+    font-size: 18px;
+}
 .details h3 {
     font-size: 16px;
 }
@@ -1916,10 +2143,12 @@ ul.nav.nav-tabs.justify-content-center {
     font-size: 9px !important;
 }
 .local-content p {
-    font-size: 9px;
+    font-size: 10px;
     text-align: center;
 }
-
+.local-content {
+    height: 45px;
+}
 .options {
     width: 100%;
     font-size: 11px;
@@ -2179,13 +2408,13 @@ section.banner-inner {
 }
 
 
-/*faq*/
+
 .faq-page h3 {
     font-size: 12px;
     margin-bottom: 0px;
 }
 section#faq {
-    padding: 30px 0px;
+    padding: 30px 0px 100px 0px;
 }
 .w3l-faq ul li i {
     right: 13px !important;
@@ -2193,12 +2422,12 @@ section#faq {
 }
 
 
-/*feedback*/
+
 .text-content p {
-    font-size: 13px;
+    font-size: 11px;
 }
 .text-content {
-    padding: 20px;
+    padding: 10px;
 }
 
 
@@ -2239,6 +2468,7 @@ i.material-icons.nav__icon {
 
 
 @media only screen and (min-width : 414px) and (max-width : 896px) {
+
 .nav-tabs>.nav-item>.nav-link {
     font-size: 13px !important;
     padding: 5px 28px !important;
@@ -2260,7 +2490,9 @@ p.event-text {
     font-weight: 700;
     line-height: 21px;
 }
-
+.event-content p {
+    font-size: 11px !important;
+}
 .ministers-head {
     padding: 5px;
 }
@@ -2368,6 +2600,7 @@ div#last-col {
 section.day-wise {
     padding: 50px 0px 80px 0px;
 }
+
 }
 
 
@@ -2454,6 +2687,21 @@ img#driver-img {
     font-size: 30px;
 }
 .icon-news i {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+}
+.icon-finder i.fas.fa-map {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+}
+.icon-day i.fas.fa-calendar-week {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+}
+.icon-chat i.far.fa-comments {
     width: 80px;
     height: 80px;
     font-size: 30px;

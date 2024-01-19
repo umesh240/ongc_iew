@@ -7,6 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer-when-downgrade">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -57,7 +58,10 @@
 
   <section class="ongc-head desktop ccsticky-nav" id="mainHeader">
     <div class="container">
-
+      @php
+      $currentRouteName = Route::currentRouteName();
+      @endphp
+       @if($currentRouteName == 'my.dashboard')
       <nav class="navbar navbar-expand-lg ">
        
         <a class="navbar-brand" href="#">
@@ -101,38 +105,51 @@
         </div> 
         
       </nav>
+        @else
+        <nav class="inner-header">
+            <div class="inner-head">
+                <i class="fas fa-arrow-left" style="cursor: pointer;"  onclick="goBackToHomePage()"></i><h5>@yield('pageName')</h5>
+          </div>
+        </nav>
+        @endif
     </div>
   </section>
 
   @yield('content')
  
  
- 
+@php
+$embedded = session()->get('embedded'); 
+if($embedded != 1){
+@endphp
+
 <!--- footer nav--->
  
 <div class="container">
-<nav class="nav_bottom">
-    <a href="{{ route('my.dashboard') }}" class="nav__link">
-        <i class="material-icons nav__icon"><i class="fas fa-home"></i></i>
-       
-        <span class="nav__text">Home</span>
-    </a>
-    <a href="{{ route('my.page', ['page'=>'way_finder']) }}" class="nav__link nav__link--active" >
-        <i class="material-icons nav__icon"><i class="fas fa-map-marked-alt"></i></i>
-        <span class="nav__text">Way Finder</span>
-    </a>
-   <a href="{{ route('my.page', ['page'=>'day_wise']) }}" class="nav__link">
-        <i class="material-icons nav__icon"><i class="far fa-calendar-alt"></i></i>
-        <span class="nav__text">Event Details</span>
-    </a>
-    <a href="#" class="nav__link">
-        <i class="material-icons nav__icon"><i class="far fa-comment-alt"></i></i>
-        <span class="nav__text">Chat</span>
-    </a>
+  <nav class="nav_bottom">
+      <a href="{{ route('my.dashboard') }}" class="nav__link">
+          <i class="material-icons nav__icon"><i class="fas fa-home"></i></i>
+         
+          <span class="nav__text">Home</span>
+      </a>
+      <a href="{{ route('my.page', ['page'=>'way_finder']) }}" class="nav__link nav__link--active" >
+          <i class="material-icons nav__icon"><i class="fas fa-map-marked-alt"></i></i>
+          <span class="nav__text">Way Finder</span>
+      </a>
+     <a href="{{ route('my.page', ['page'=>'day_wise']) }}" class="nav__link">
+          <i class="material-icons nav__icon"><i class="far fa-calendar-alt"></i></i>
+          <span class="nav__text">Event Details</span>
+      </a>
+      <a href="{{ route('my.page', ['page'=>'chat']) }}" class="nav__link">
+          <i class="material-icons nav__icon"><i class="far fa-comment-alt"></i></i>
+          <span class="nav__text">Chat</span>
+      </a>
 
-</nav>
+  </nav>
 </div>
- 
+@php
+}
+@endphp
  
  
   
@@ -243,7 +260,9 @@ $(document).ready(function () {
             window.location.href = 'tel:' + encodeURIComponent(phoneNumber);
         }
 
-  
+      function goBackToHomePage() {
+        window.location.href = "/"; // Replace with the actual URL of your home page
+    }
 
   
   </script>

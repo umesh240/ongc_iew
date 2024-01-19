@@ -4,6 +4,7 @@
   $pageNm = 'IEW';
  
   @endphp
+  @section('pageName', 'About Iew')
 @section('title', $pageNm)
 @section('content')
 <style type="text/css">
