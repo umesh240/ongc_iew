@@ -253,8 +253,11 @@
         <div class="card-body pt-0">
           <div class="row divDriverInfo">
             <div class="col-sm-6">
-              <label>Driver Number : </label>
-              <input type="text" class="form-control drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
+              <label>Driver Name & Number : </label>
+              <div class="input-group">
+                <input type="text" class="form-control drvr_name" name="drvr_name" value="{{ old('drvr_name')?old('drvr_name'):@$drvr_name }}" placeholder="Driver name" maxlength="240">
+                <input type="text" class="form-control drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
+              </div>
             </div>  
             <div class="col-sm-6">
               <label>Vehicle Details : </label>

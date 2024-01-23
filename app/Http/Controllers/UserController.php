@@ -234,7 +234,7 @@ class UserController extends Controller
         $assign_check_out       = @$request->assign_check_out;
         $user_pass              = @$request->user_pass;
         $user_trip_id           = @$request->user_trip_id;
-        $drvr_name              = NULL;
+        $drvr_name              = @$request->drvr_name;
 
         $user = Auth()->user();
         $userId = $user->id;
@@ -273,12 +273,12 @@ class UserController extends Controller
                 $row_dataE['dptr_location']       = ucwords(@$dpt_flight_location);
             }
             if(!empty(trim($drvr_number))){
-                $row_dataE['drvr_number']        = @$drvr_number;
-                $row_dataE['drvr_veh_details']   = strtoupper(@$vehicle_details);
-                $row_dataE['drvr_name']          = ucwords(@$drvr_name);
+                $row_dataE['drvr_number']        = $drvr_number;
+                $row_dataE['drvr_veh_details']   = strtoupper($vehicle_details);
+                $row_dataE['drvr_name']          = ucwords($drvr_name);
             }
         }
-
+        //print_r($row_dataE);
         $intcd = @$request->intcd;
         if($cd > 0){
             $emp_cd = $cd;
@@ -495,10 +495,10 @@ class UserController extends Controller
         if($change_stataus == 4){
             $drvr_number        = $request->drvr_number;
             $vehicle_details    = $request->vehicle_details;
-            $drvr_name          = NULL;
+            $drvr_name          = @$request->drvr_name;
 
             $dataUpdate = [];
-            $dataUpdate['drvr_name']        = $drvr_name;
+            $dataUpdate['drvr_name']        = ucwords($drvr_name);
             $dataUpdate['drvr_number']      = $drvr_number;
             $dataUpdate['drvr_veh_details'] = $vehicle_details;
             $dataUpdate['flight_status']    = 0;

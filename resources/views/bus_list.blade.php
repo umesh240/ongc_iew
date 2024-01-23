@@ -1,9 +1,6 @@
 @extends('layouts.app')
 @php
-  $pageNm = 'Chatting lists';
-  //  echo '<pre>';
-  //   print_r($chat_list);
-  // die;
+  $pageNm = 'Bus List';
 @endphp
 @section('title', $pageNm)
 @section('content')
@@ -33,37 +30,37 @@
       <div class="card">
         <div class="card-header bg-info">
           <h3 class="card-title">{{ $pageNm }}</h3>
+          <button type="button" class="btn btn-xs btn-success float-right" onclick="linkClick(this);" data-link="{{ route('bus.ae', ['ae' => 'add']) }}"><i class="fa fa-plus"></i> Add New</button>
         </div>
         <div class="card-body">
+        
           <form action="" method="post" class="update-role-form">
-            
-            <table class="table tblResponsiv">
+            <table class='table'>
               <thead>
                 <tr>
                   <th>S No.</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>CPF NO</th>
-                  <th>Mobile</th>
+                  <th>Event type</th>
+                  <th>Bust type</th>
+                  <th>Bus no.</th>
+                  <th>Time</th>
                   <th>Action</th>
                 </tr>
               </thead>
-          
               <tbody>
-                @foreach($chat_list as $chat)
-                  <tr>
-                    <td>{{$loop->index + 1}}</td>
-                    <td>{{$chat->name}}</td>
-                    <td>{{$chat->email}}</td>
-                    <td>{{$chat->cpf_no}}</td>
-                    <td>{{$chat->mobile}}</td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-sm" title="Reply" onclick="window.location='{{ route("chatting.show", ["id" => $chat->id]) }}';" >Reply</button>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
+                <tr>
+                  <td>1</td>
+                  <td>Event type</td>
+                  <td>Bust type</td>
+                  <td>Bus no.</td>
+                  <td>Time</td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-sm" title="Edit" onclick="linkClick(this);" data-link="{{ route('bus.ae', ['ae' => 'edit']) }}">Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="linkClick(this);" data-link="{{ route('bus.ae', ['ae' => 'delete']) }}">Delete</button>
+                  </td>
+
+                </tr>
+                <tbody>
+              <table>
           </form>
         </div>
         <!-- /.card-footer-->

@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('faqs', function (Blueprint $table) {
-            $table->bigIncrements('faq_id');
-            $table->longText('question');
-            $table->longText('answer');
-            $table->integer('create_by', false, false)->length(5)->default(0);
+        Schema::create('feedbacks', function (Blueprint $table) {
+            $table->bigIncrements('fb_id');
+            $table->longText('feedback');
+            $table->integer('order_by', false, false)->length(5)->default(0);
             $table->timestamps();
             $table->timestamp('delete_date')->nullable();
             $table->integer('delete_yn', false, false)->length(1)->comment('1:Deleted')->default(0);
-            $table->integer('order_by', false, false)->length(5)->default(0);
-            
-            //$table->index(['question', 'create_by', 'delete_yn', 'answer'], 'faqs_index');
+
+            $table->index(['feedback', 'delete_yn'], 'feedbackss_index');
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('faqs');
+        Schema::dropIfExists('feedbacks');
     }
 };

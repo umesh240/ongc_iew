@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @php
   $pageNm = 'Chatting';
-//    echo '<pre>';
-// print_r($chatting_list);
+  //echo '<pre>'; print_r($user_info); die;
+  $chatId = $user_info->chat_id;
+  $userId = $user_info->user_id;
 @endphp
 @section('title', $pageNm)
 @section('content')
@@ -37,19 +38,18 @@
         <div class="card-body">
         <form action="{{ route('chatting.save')}}" method="POST">
             @csrf
-            {{-- <input type="hidden" name="user_id" value="{{$chatting[array_key_last($chatting)];}}"> --}}
-            @if(!empty($chatting_list))
-            <input type="hidden" name="user_id" value="{{ $chatting_list[end($chatting_list)]->user_id }}">
-            @endif
+            <input type="hidden" name="user_id" value="{{ $userId }}">
+            <input type="hidden" name="chat_id" value="{{ $chatId }}">
+            
             <div class="form-group row"> 
                 <div class="col-sm-12">
-                    <textarea class="form-control" name="chat" required></textarea>
+                    <textarea class="form-control" name="chat" placeholder="Enter Message" required ></textarea>
                 </div>
             </div>
         
             <div class="form-group row">
                 <div class="col-sm-6">
-                    <button type="button" class="btn btn-primary sub-btn">Submit</button>
+                  <button type="button" class="btn btn-primary sub-btn">Submit</button>
                 </div>
             </div>
           </form>   
@@ -57,6 +57,7 @@
             <thead>
               <tr>
                 <th>S No.</th>
+                <th>Response</th>
                 <th>Message</th>
                 <th>Date</th>
               </tr>
@@ -64,10 +65,10 @@
         
             <tbody>
 
-       
               @foreach($chatting_list as $chatting)
                 <tr>
                   <td>{{$loop->index + 1}}</td>
+                  <td>{{$chatting->user_type}}</td>
                   <td>{{$chatting->message}}</td>
                   <td>{{$chatting->created_at}}</td>
                 </tr>
@@ -102,6 +103,7 @@
                     console.log(response);
                     show_msgT(response.status, response.message);
                     form.find('textarea[name="chat"]').val('');
+                    window.location.reload();
                 },
                 error: function (error) {
                     console.error(error);

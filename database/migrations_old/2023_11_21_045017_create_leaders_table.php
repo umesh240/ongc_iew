@@ -25,7 +25,7 @@ class CreateLeadersTable extends Migration
             $table->timestamp('delete_date')->nullable();
             $table->integer('order_by', false, false)->length(5)->default(0);
 
-            //$table->index(['l_name', 'l_post'], 'leaders_index');
+            $table->index(['l_name', 'l_post'], 'leaders_index');
         });
     }
 

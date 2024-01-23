@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('delete_date')->nullable();
             $table->integer('delete_yn', false, false)->length(1)->comment('1:Deleted')->default(0);
 
-            $table->index(['feedback', 'delete_yn'], 'feedbackss_index');
+            //$table->index(['feedback', 'delete_yn'], 'feedbackss_index');
         });
     }
 

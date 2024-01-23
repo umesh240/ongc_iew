@@ -82,6 +82,7 @@ button.chat-btn {
     color: #fff;
     padding: 10px;
     border-radius: 8px;
+      width: 20%;
 }
 .bottom-chat input[type="text"] {
     border-radius: 8px;
@@ -1073,13 +1074,16 @@ button.helpDesk-btn {
 
 
 
-
+h4.feedbackTitle {
+    color: #457CB2;
+    font-size: 25px;
+}
 
 .text-content {
     padding: 30px;
-    box-shadow: 0px 2px 21px -6px #366c753b;
+    box-shadow: 0px 2px 21px -6px #c6c6c6;
     margin-bottom: 10px;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 .text-content p {
     color: #457CB2;
@@ -1091,7 +1095,9 @@ button.helpDesk-btn {
     border-color: #ebebeb;
     padding: 10px;
 }
-
+.feedback-content {
+    margin-top: 30px;
+}
 
 
 
@@ -1125,6 +1131,7 @@ section.flights {
     background-size: cover;
     position: relative;
     padding-bottom: 70PX;
+    height: 90vh;
 }
 .flight-bg {
     background-color: #457cb2b0;
@@ -1135,17 +1142,18 @@ section.flights {
     height: 100%;
 }
 .arrival-departure .nav-tabs>.nav-item>.nav-link.active {
-    background-color: #fff;
+    background-color: #fff !important;
     border-radius: 30px;
     color: #457CB2;
     padding: 10px 60px;
+    box-shadow: none !important;
 }
 .arrival-departure .nav-tabs>.nav-item>.nav-link {
     color: #fff;
     border: 2px solid #fff;
     border-radius: 30px;
     padding: 10px 60px;
-    background: transparent;
+    background: transparent !important;
 }
 .arrival input {
     background: transparent;
@@ -1171,6 +1179,12 @@ section.flights {
 }
 .flight-arrival ::placeholder {
     color: #fff;
+}
+.arrival input:focus {
+    color: #fff !important;
+}
+.departure input:focus {
+    color: #fff !important;
 }
 .form-group {
     margin-bottom: 25px;
@@ -1270,6 +1284,12 @@ img#driver-img {
 }
 .tab-pane ul li {
     list-style-type: none;
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+.tab-pane ul li i {
+    margin-right: 10px;
 }
 .vehicle-icons {
     display: flex;
@@ -1779,16 +1799,21 @@ footer {
     padding-right: 10px;
 }
 
-        #innerPageHeader {
-            background-color: #457CB2;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            display: none; /* Initially hide the inner page header */
-        }
-        
-        
+/* Remove calendar icon in Chrome/Edge */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+input[type="datetime-local"]::-moz-calendar-box {
+    display: none;
+}    
+ 
 @media only screen and (min-width : 320px) and (max-width : 767px) {
+h4.feedbackTitle {
+    font-size: 18px;
+}
+.feedback-content {
+    margin-top: 30px;
+}
 .user-chat p {
     font-size: 14px;
 }
@@ -1816,7 +1841,7 @@ nav.inner-header {
 }
 .inner-head i.fas.fa-arrow-left {
     font-size: 20px;
-    margin-top: 5px;
+    margin-top: 0px;
 }
 .flight-mobile {
     display: flex;
@@ -1838,11 +1863,12 @@ nav.inner-header {
     background-size: cover;
     background-position: center;
     border-radius: 10px;
-    padding: 40px 0px;
-      position: relative;
+    padding: 40px 0px 15px 0px;
+    position: relative;
 }
 section.hotel-event {
     padding: 0px 15px;
+    margin-top: -25px;
 }
 .event-bg {
     padding: 10px;
@@ -1895,9 +1921,9 @@ h5.mb-3.text-left.right-sde:before {
 .check-tab h4 {
     font-size: 45px;
 }
-.nav-tabs>.nav-item>.nav-link {
+/*.nav-tabs>.nav-item>.nav-link {
     height: 60px !important;
-}
+}*/
 div#checkInOut {
     padding-bottom: 10px;
 }
@@ -2062,6 +2088,8 @@ p.event-text {
     font-size: 13px;
     margin-bottom: 0px !important;
     line-height: 22px;
+    color: #7A7A7A;
+    font-weight: 600;
 }
 
 .user-details i {
@@ -2134,16 +2162,18 @@ ul.nav.nav-tabs.justify-content-center {
     height: 225px;
 }
 .flickity-viewport {
-    height: 200px !important;
+    height: 170px !important;
 }
 .event-content {
-    width: 90%;
+    bottom: 60px !important;
+    width: 80%;
+    padding: 5px 15px;
 }
 .event-content p {
-    font-size: 9px !important;
+    font-size: 11px !important;
 }
 .local-content p {
-    font-size: 10px;
+    font-size: 11px;
     text-align: center;
 }
 .local-content {
@@ -2294,8 +2324,8 @@ a#flight-card {
 a#travel-card {
     box-shadow: 0px 6px 20px -5px #457cb25e;
     background-color: #fff;
-   
-     padding: 10px !important;
+    padding: 10px !important;
+    font-size: 10px !important;
 }
 .nav-tabs>.nav-item>.nav-link.active {
     box-shadow: 0px 6px 20px -5px #f07e296e !important;
@@ -2322,6 +2352,7 @@ a#check-card {
 }
 .user-details i.fas.fa-user {
     font-size: 17px;
+    margin-right: 10px;
 }
 section.day-wise {
     padding: 50px 0px 80px 0px;
@@ -2398,17 +2429,37 @@ section.banner-inner {
 }
 .arrival-departure .nav-tabs>.nav-item>.nav-link.active {
     padding: 10px 37px;
+    box-shadow: none !important;
 }
 .arrival-departure p {
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
 }
 .arrival-departure {
     padding-bottom: 50px;
 }
 
-
-
+.flight-arrival i {
+    font-size: 12px;
+}
+.arrival input {
+    padding: 20px 50px;
+}
+.arrival input::placeholder {
+    font-size: 12px;
+}
+.departure input::placeholder {
+    font-size: 12px;
+}
+.arrival input:focus {
+    color: #fff !important;
+}
+.departure input:focus {
+    color: #fff !important;
+}
+.departure input {
+    padding: 20px 50px;
+}
 .faq-page h3 {
     font-size: 12px;
     margin-bottom: 0px;
@@ -2424,7 +2475,7 @@ section#faq {
 
 
 .text-content p {
-    font-size: 11px;
+    font-size: 12px;
 }
 .text-content {
     padding: 10px;
@@ -2443,7 +2494,7 @@ section#faq {
 }
 
 .ministers-head h5 {
-    font-size: 9px;
+    font-size: 11px;
 }
 .ministers-head {
     height: 65px;
@@ -2464,6 +2515,19 @@ span.nav__text {
 i.material-icons.nav__icon {
     font-size: 16px;
 }
+
+
+.login-header {
+    padding-bottom: 0px;
+}
+input#name {
+    margin-bottom: 10px;
+}
+.card-primary.card-outline {
+    border-radius: 15px;
+}
+
+
 }
 
 
@@ -2618,9 +2682,7 @@ section.day-wise {
 .hotel-bg {
     width: 100%;
 }
-#sidebar-btn {
-    margin: 9px;
-}
+
 #sidebar {
     width: 230px;
         top: -11px;

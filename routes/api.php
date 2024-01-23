@@ -33,6 +33,8 @@ Route::middleware(['auth.api'])->group(function () {
     Route::get('/fdb', [ApiUsersController::class, 'feedbackIndex']); 
     //Route::get('/feedback', [ApiUsersController::class, 'feedbackIndex']); 
     Route::post('/feedback', [ApiUsersController::class, 'feedbackSave']); 
+    Route::post('/save_chat', [ApiUsersController::class, 'saveChat']); 
+    Route::get('/list_chat', [ApiUsersController::class, 'saveList']); 
 });
 
 Route::post('/login_emp', [ApiUsersController::class, 'login_API']);

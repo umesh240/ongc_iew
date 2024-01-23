@@ -6,6 +6,8 @@
   $event_id   = @$feedbackList->response->emp_event_id;
   $status     = @$feedbackList->status;
   $feedbacks  = @$feedbackList->response->feedback_list;
+  $suggestion  = @$feedbackList->response->suggestion;
+  $feedbacksAll  = @$feedbackList->response->feedback_list;
   //echo '<pre>'; print_r($feedbackList); die;
 @endphp
 @section('pageName', 'Feedback')
@@ -67,21 +69,50 @@ div#breadcrumb_wrapper h6 {
       <input type="hidden" name="user_id" class="user_id" value="{{ $user_id }}">
       <input type="hidden" name="event_id" class="event_id" value="{{ $event_id }}">
     <div class="col-sm-10">
-      @foreach($feedbacks as $key => $fdb)
-      <div class="text-content">
-      <p class="mb-3  text-center">{{ $key+1 }}. {{ $fdb->feedback }}</p>
-      <p class="rating_p text-center">
-        <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
-        <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
-        <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
-        <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
-        <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
-        <input type="hidden" name="feedback_id[]" class="feedback_id" value="{{ $fdb->fb_id }}">
-        <input type="hidden" name="rating[]" class="rating" value="{{ $fdb->rating > 0 ? $fdb->rating:0 }}">
-      </p>
-      </div>
+      @foreach($feedbacksAll as $key => $feedbackList)
+        @php
+          $title = $feedbackList->title;
+          $id = $feedbackList->id;
+          $feedbacks = $feedbackList->feedbacks;
+        @endphp
+        <div class="feedback-content">
+        <h4 class="feedbackTitle">{{ $title }}</h4>
+        @foreach($feedbacks as $key => $fdb)
+        @php
+          $fdbCatId = $fdb->feedback_category_id;
+          $feedbacks = $fdb->feedback;
+          $rating = $fdb->rating;
+          $rating = $rating > 0 ?$rating:0;
+          $remailWhiteStar = $allStar = 5;
+          $fullColorStar = $halfColorStar = 0;
+          if($rating > 0){
+            $fullColorStar = (int)$rating;
+            $halfColorStar = $rating > $fullColorStar?1:0;
+            $remailWhiteStar = $allStar - ($fullColorStar + $halfColorStar);
+          }
+          //echo $rating.'-'.$fullColorStar.'-'.$halfColorStar.'-'.$remailWhiteStar;
+        @endphp
+        <div class="text-content">
+        <p class="mb-3 text-center">{{ $key+1 }}. {{ $fdb->feedback }}</p>
+        <p class="rating_p text-center">
+          @for($i = 0; $i < $fullColorStar; $i++)
+          <i class="faRate fa fa-star text-orange fa-2x"></i>
+          @endfor
+          @for($i = 0; $i < $halfColorStar; $i++)
+          <i class="faRate fa fa-star-half-alt text-orange fa-2x"></i>
+          @endfor
+          @for($i = 0; $i < $remailWhiteStar; $i++)
+          <i class="faRate fa fa-regular fa-star text-orange fa-2x"></i>
+          @endfor
+          <input type="hidden" name="feedback_category_id[]" class="feedback_category_id" value="{{ @$fdbCatId }}">
+          <input type="hidden" name="feedback_id[]" class="feedback_id" value="{{ @$fdb->fb_id }}">
+          <input type="hidden" name="rating[]" class="rating" value="{{ $rating }}">
+        </p>
+        </div>
+        @endforeach
       @endforeach
-      <textarea rows="4" name="suggestion" placeholder="Enter your suggestion here" style="width:100%;"></textarea>
+      </div>
+      <textarea rows="4" name="suggestion" placeholder="Enter your suggestion here" style="width:100%;">{{ @$suggestion }}</textarea>
       <button class="edit-btn btnSubmitFeedback" type="button"> Submit</button>
     </div>
     </form>

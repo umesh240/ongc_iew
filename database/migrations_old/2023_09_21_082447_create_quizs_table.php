@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('delete_date')->nullable();
             $table->integer('delete_yn', false, false)->length(1)->comment('1:Deleted')->default(0);
 
-            //$table->index(['question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer'], 'quizs_index');
+            $table->index(['question', 'option_1', 'option_2', 'option_3', 'option_4', 'answer'], 'quizs_index');
         });
 
         Schema::create('quiz_user', function (Blueprint $table) {
@@ -38,7 +38,7 @@ return new class extends Migration
             $table->integer('emp_event_id', false, false)->length(10)->default(0);
             $table->timestamps();
 
-            //$table->index(['qu_id', 'ttl_question', 'right_question', 'wrong_question', 'user_id', 'emp_event_id'], 'quiz_user_index');
+            $table->index(['qu_id', 'ttl_question', 'right_question', 'wrong_question', 'user_id', 'emp_event_id'], 'quiz_user_index');
         });
     }
 

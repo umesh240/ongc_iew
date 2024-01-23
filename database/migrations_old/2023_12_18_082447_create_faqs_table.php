@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('delete_yn', false, false)->length(1)->comment('1:Deleted')->default(0);
             $table->integer('order_by', false, false)->length(5)->default(0);
             
-            //$table->index(['question', 'create_by', 'delete_yn', 'answer'], 'faqs_index');
+            $table->index(['question', 'create_by', 'delete_yn', 'answer'], 'faqs_index');
         });
     }
 

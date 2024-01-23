@@ -17,8 +17,8 @@ return new class extends Migration
             $table->longText('message');
             $table->string('user_type', 10)->comment('user/admin');  //   user/admin
             $table->integer('chat_user_id')->length(10)->default(0);
-            $table->integer('resp_chat_id')->length(10)->default(0);
-            $table->timestamps();
+            $table->integer('chat_resp_id')->length(10)->default(0);
+           $table->timestamps();
         });
     }
 

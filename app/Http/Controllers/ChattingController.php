@@ -28,8 +28,10 @@ class ChattingController extends Controller
      */
     public function save(request $request )
     {
-      // print_r($request->all());
+        //   print_r($request->all());
+        //   die;
         //    $user_id= Auth::user()->id;
+        
         $user_id= $request->user_id;
         $validatedData = $request->validate([
             'chat' => 'required',
@@ -38,7 +40,9 @@ class ChattingController extends Controller
         $users = [
         'message' => $request->chat,
         'user_id' => $user_id,
-        'user_type' => 'user',
+        'user_type' => 'admin',
+        'chat_user_id' => $user_id,
+        'resp_chat_id' => $request->chat_id,
         'created_at' => date('Y-m-d H:i:s'),
         ];
         $rowDataQuery = DB::table('chattings')->insert($users);
@@ -58,7 +62,7 @@ class ChattingController extends Controller
     //    ->groupBy('chattings.user_id')
     //    ->get();
 
-        $usersid = Chatting::groupBy('user_id')->pluck('user_id');
+        $usersid = Chatting::groupBy('user_id')->orderBy('chat_id', 'DESC')->pluck('user_id');
         $users = User::whereIn('id', $usersid)->get();
 
         $data=[];
@@ -71,12 +75,13 @@ class ChattingController extends Controller
      */
     public function show($id)
     {
-        {
-            $chats = Chatting::where('user_type', 'user')->where('user_id', $id)->where('chat_resp_id',0)->get();
-            $data=[];
-            $data['chatting_list'] = $chats;
-            return view('chatting', $data);
-        }
+        $user = Chatting::where('user_type', 'user')->where('user_id', $id)->orderBy('created_at', 'DESC')->first();
+        $chats = Chatting::where('chat_user_id', $id)->orderBy('created_at', 'DESC')->get();
+        $data=[];
+        $data['chatting_list']  = $chats;
+        $data['user_info']      = $user;
+        return view('chatting', $data);
+        
     }
 
     /**

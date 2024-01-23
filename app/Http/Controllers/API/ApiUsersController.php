@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EventController;
 use App\Models\ConferenceCategory;
+use App\Models\Feedback;
+use App\Models\FeedbackCategory;
 
 class ApiUsersController extends Controller
 {
@@ -877,6 +879,34 @@ class ApiUsersController extends Controller
         $user_id        = $request->id;
         $emp_ev_book_id = $request->emp_ev_book_id;
 
+
+        try {
+            $feedback_list = FeedbackCategory::select('id', 'title')->with('feedbacks')->where('delete_yn', 0)->get();
+            $status = 200;
+            $savedFeedBack = DB::table('event_books_emp')->where('emp_ev_book_id', $emp_ev_book_id)->where('emp_cd', $user_id)->select('all_feedbacks', 'suggestion', 'feedbacks_submit')->first();
+            $all_feedbacks = @$savedFeedBack->all_feedbacks;
+            $suggestion    = @$savedFeedBack->suggestion;
+            $submited      = @$savedFeedBack->feedbacks_submit;
+            $all_feedbacks = json_decode($all_feedbacks, true);
+            foreach ($feedback_list as $key0 => $feed) {
+                foreach ($feed->feedbacks as $key1 => $feedback) {
+                    $fb_id = $feedback->fb_id;
+                    $rating = $all_feedbacks[$fb_id]['rating'];
+                    $rating = $rating > 0 ? $rating : 0;
+                    $feedback->rating = $rating;
+                }
+            }
+
+            $response['feedback_list']   = $feedback_list;
+            $response['submitted']       = $submited;
+            $response['suggestion']      = $suggestion;
+            $response['user_id']         = $user_id;
+            $response['emp_event_id']    = $emp_ev_book_id;
+            return response()->json(['status' => $status, "response" => $response]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, "message" => $e->getMessage()]);
+        }
+        /*
         $response = [];
         $savedFeedBack = DB::table('event_books_emp')->where('emp_ev_book_id', $emp_ev_book_id)->where('emp_cd', $user_id)->select('all_feedbacks', 'suggestion', 'feedbacks_submit')->first();
         $all_feedbacks = @$savedFeedBack->all_feedbacks;
@@ -888,12 +918,14 @@ class ApiUsersController extends Controller
             $response['feedback_list']  = $all_feedbacks;
             $response['suggestion']     = $suggestion;
         } else {
+            $status = 200;
             $feedback_list = DB::table('feedbacks')->where('delete_yn', 0)->select('fb_id', DB::raw('0 as rating'), 'feedback')->orderByRaw('order_by = 0, order_by asc')->get();
             
             
             $recordCount = $feedback_list->count();
             $response['feedback_list'] = $feedback_list;
             $response['suggestion'] = "";
+            return response()->json(['status' => $status, "response" => $conferenceCategory]);
         }
         $response['submitted']      = $submited;
         $response['user_id']         = $user_id;
@@ -904,11 +936,12 @@ class ApiUsersController extends Controller
         } else {
             $status = 400;
             return response()->json(['status' => $status, "message" => "No feedback found."]);
-        };
+        };*/
     }
 
     public function feedbackSave(Request $request)
     {
+        //print_r($request->all());
         try {
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
@@ -942,11 +975,10 @@ class ApiUsersController extends Controller
                 $rating = $feedback['rating'];
                 $fb_id = $feedback['fb_id'];
 
-                $feedback_list = DB::table('feedbacks')->where('fb_id', $fb_id)->select('fb_id', 'feedback')->first();
-                $feedbackTxt = $feedback_list->feedback;
-
-                $feedback['feedback'] = $feedbackTxt;
-                $feedbackAll[] = $feedback;
+                //$feedback_list = DB::table('feedbacks')->where('fb_id', $fb_id)->select('fb_id', 'feedback')->first();
+                //$feedbackTxt = $feedback_list->feedback;
+                //$feedback['feedback'] = $feedbackTxt;
+                $feedbackAll[$fb_id] = $feedback;
             }
             $feedbacks      = json_encode($feedbackAll);
             $feedbackData = [];
@@ -989,8 +1021,72 @@ class ApiUsersController extends Controller
 
         try {
             $conferenceCategory = ConferenceCategory::with('conferences')->get();
-             $status = 200;
+            $status = 200;
             return response()->json(['status' => $status, "response" => $conferenceCategory]);
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, "message" => $e->getMessage()]);
+        }
+    }
+
+    public function saveChat(Request $request)
+    {
+        //print_r($request->all());
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+                'chat_msg' => 'required'
+            ], [
+                'id.required' => 'User not logged-in.',
+                'chat_msg.required' => 'Enter your query.'
+            ]);
+
+            if ($validator->fails()) {
+                $allErrors = $validator->errors()->all();
+                $allErrors = implode('<br>', $allErrors);
+                return response()->json(['message' => $allErrors, 'status' => 400], 422);
+            }
+            $user_id  = $request->id;
+            $chat_msg = $request->chat_msg;
+            $rowData = [];
+
+            $rowData['user_id']         = $user_id;
+            $rowData['message']         = $chat_msg;
+            $rowData['user_type']       = 'user';
+            $rowData['chat_user_id']    = $user_id;
+            $rowData['resp_chat_id']    = 0;
+            $rowData['created_at']      = date('Y-m-d H:i:s');
+            $chatQuery = DB::table('chattings')->insert($rowData);
+
+            if ($chatQuery) {
+                $status = 200;
+                return response()->json(['status' => $status, "message" => "Chat saved successfully."]);
+            } else {
+                $status = 400;
+                return response()->json(['status' => $status, "message" => "Chat not saved. Try again."]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => 500, "message" => $e->getMessage()]);
+        }
+    }
+
+    public function saveList(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+            ], [
+                'id.required' => 'User not logged-in.',
+            ]);
+
+            if ($validator->fails()) {
+                $allErrors = $validator->errors()->all();
+                $allErrors = implode('<br>', $allErrors);
+                return response()->json(['message' => $allErrors, 'status' => 400], 422);
+            }
+            $chatList = DB::table('chattings')->where('chat_user_id', $request->id)->orderBy('created_at', 'desc')->limit(50)->get();
+            $chatData = [];
+            $chatData['chatList']  = $chatList;
+            return response()->json(['status' => 200, "response" => $chatData]);
         } catch (Exception $e) {
             return response()->json(['status' => 500, "message" => $e->getMessage()]);
         }

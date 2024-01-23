@@ -38,7 +38,7 @@ ud = {
         $('.loading-container').css('display', 'flex');
       },
       success:function(response){
-        //console.log(response);
+        console.log(response);
         var status = response.status;
         var message = response.message;
         var type = 3;
@@ -154,13 +154,6 @@ ud = {
     });
   }
 }
-///////////////////////////////////////////////////////////////////////////
-$(".btn_weather").click(function() {
-  $('.div_weather').css('display', 'block');
-});
-$(".we_remove").click(function() {
-  $('.div_weather').css('display', 'none');
-});
 /////////////////////////////////////////////////////////////////
 $(".cnfCkInOut").click(function() {
   var in_out = $(this).val();

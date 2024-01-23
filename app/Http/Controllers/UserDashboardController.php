@@ -354,6 +354,8 @@ class UserDashboardController extends Controller
                 $pg = 'user_feedback';
             break;
             case 'flight':
+                $data['emp_ev_book_id'] = $emp_ev_book_id;
+                $data['userId'] = $userId;
                 $pg = 'user_flight';
             break;
             case 'helpdesk':
@@ -497,7 +499,8 @@ class UserDashboardController extends Controller
         foreach ($rating as $key => $rate) {
             $rating         = $request->input('rating.'.$key);
             $feedback_id    = $request->input('feedback_id.'.$key);
-            $feedbacks[]    = array('fb_id' => $feedback_id, 'rating' => $rating);
+            $feedback_category_id    = $request->input('feedback_category_id.'.$key);
+            $feedbacks[]    = array('fb_id' => $feedback_id, 'rating' => $rating, 'feedback_category_id' => $feedback_category_id);
         }
 
         $apiData = new Request([
@@ -521,5 +524,88 @@ class UserDashboardController extends Controller
             $status = 2;
         }
         return response()->json(['status' => $status, "message" => $message, "url" => $url]);
+    }
+    
+    public function saveChat(Request $request)
+    {
+        //print_r($request->all());
+
+        $emp_ev_book_id = $request->emp_ev_book_id;
+        $chat_msg       = $request->input('chat_msg'); 
+
+        $user = Auth()->user();
+        $userId = $user->id;
+        $token = $user->login_token;
+        $api = new ApiUsersController();
+
+        $api_data = new Request([
+            'emp_ev_book_id' => @$emp_ev_book_id,
+            'chat_msg' => $chat_msg,
+            'id' => $userId,
+            'auth' => $token
+        ]);
+
+        $resp = $api->saveChat($api_data);
+        $responseData = $resp->getData();
+        $status = $responseData->status;
+        $message = $responseData->message;
+        $response = [];
+        $response['status'] = $status;
+        $response['message'] = $message;
+        $chats = '';
+        if($status == 200){
+            $apiList = new Request([
+                'id' => $userId,
+                'auth' => $token
+            ]);
+            $resp = $api->saveList($apiList);
+            $responseListData = $resp->getData();
+            //print_r($responseListData); die;
+            $statusList = $responseListData->status;
+            if($statusList == 200){
+                $chatList = $responseListData->response->chatList;
+                foreach ($chatList as $key => $chat) {
+                    $user_id = $chat->user_id;
+                    $message = $chat->message;
+                    $user_type = $chat->user_type;
+                    $chat_user_id = $chat->chat_user_id;
+                    $created_at = $chat->created_at;
+
+                    $chatDate = date('Y-m-d', strtotime($created_at));
+                    if($chatDate == date('Y-m-d')){
+                        $chatDtTm = date('h:i:s A');
+                    }else{
+                        $chatDtTm = date('Y-m-d h:i:s A', strtotime($created_at));
+                    }
+
+                    $divUser = $user_type == 'user'?'':'-sender';
+                    if($user_type == 'user'){
+                        $chats .= '<div class="col-md-12">
+                            <div class="chat-bg">
+                              <div class="user-chat">
+                               <p>'.$message.'</p>
+                               <span>'.$chatDtTm.'</span>
+                              </div>
+                              <i class="fas fa-user"></i>
+                            </div>
+                        </div>';
+                    }else if($user_type == 'admin'){
+                        $chats .= '<div class="col-md-12">
+                          <div class="chat-bg-sender">
+                           <i class="fas fa-user"></i>
+                           <div class="sender-chat">
+                            <p>'.$message.'</p>
+                            <span>'.$chatDtTm.'</span>
+                           </div>
+                          </div>
+                        </div>';
+                    }else{
+                        $chats .= '';
+                    }
+                }
+            }
+        }
+        $response['chatList'] = $chats;
+        return response()->json($response);
     }
 }

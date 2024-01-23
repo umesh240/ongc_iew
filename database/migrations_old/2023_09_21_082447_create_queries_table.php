@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('response_by', false, false)->length(10)->default(0);
             $table->timestamps();
 
-            //$table->index(['event_id', 'user_id', 'query_type', 'query_status', 'response_by'], 'queries_index');
+            $table->index(['event_id', 'user_id', 'query_type', 'query_status', 'response_by'], 'queries_index');
         });
     }
 

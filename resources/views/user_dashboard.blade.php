@@ -302,42 +302,30 @@
                   <div class="tab-pane" id="flightDetails" role="tabpanel">
                    <div class="row vehicle-bg" style= "align-items: center;">
                       <div class="col-md-6 col-sm-6 pr-1 pl-1 text-white" style="color: #457CB2;">
-                        <h5 class="mb-3">Arrival</h5>
+                        <h5 class="mb-3 desktop-left">Arrival</h5>
                            <h3>{{ @$arv_flight_no }}</h3>
                            <ul>
-                           <div class="vehicle-icons"> 
-                            <i class="fas fa-fighter-jet"></i>
-                            <li>{{ @$arv_flight_name }}</li>
-                           </div>
-                            <div class="vehicle-icons">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <li>{{ @$arv_location }}</li>
-                            </div>
-                            <div class="vehicle-icons">
-                            <i class="fas fa-calendar-alt"></i>
-                             <li>{{ @$arv_date_time1 }}</li>
-                            </div>
+                            <li><i class="fas fa-fighter-jet"></i>{{ @$arv_flight_name }}</li>
+                            
+                            <li><i class="fas fa-map-marker-alt"></i>{{ @$arv_location }}</li>
+                   
+                             <li><i class="fas fa-calendar-alt"></i>{{ @$arv_date_time1 }}</li>
+
                            </ul>
                       </div>
 
                       
                       
                       <div class="col-md-6 col-sm-6 pr-1 pl-1 mt-1 text-white" style="color: #457CB2;">
-                        <h5 class="mb-3">Departure</h5>
+                        <h5 class="mb-3 desktop-right">Departure</h5>
                            <h3>{{ @$dptr_flight_no }}</h3>
                            <ul >
-                           <div class="vehicle-icons"> 
-                            <i class="fas fa-fighter-jet"></i>
-                            <li>{{ @$dptr_flight_name }}</li>
-                           </div>
-                            <div class="vehicle-icons">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <li>{{ @$dptr_location }}</li>
-                            </div>
-                            <div class="vehicle-icons">
-                            <i class="fas fa-calendar-alt"></i>
-                             <li>{{ @$arv_date_time1 }}</li>
-                            </div>
+                            <li><i class="fas fa-fighter-jet"></i>{{ @$dptr_flight_name }}</li>
+
+                            <li><i class="fas fa-map-marker-alt"></i>{{ @$dptr_location }}</li>
+                         
+                          <li> <i class="fas fa-calendar-alt"></i>{{ @$arv_date_time1 }}</li>
+                            
                            </ul>
                       </div>
              
@@ -378,6 +366,9 @@
                              <li><i class="fas fa-calendar-alt"></i>{{ @$dptr_date_time1 }}</li>
                            </ul>
                         </div>
+                        </div>
+                         <div class="tab-btn pt-3" style="margin: 0 auto">
+                          <a href="{{ route('my.page', ['page'=>'flight']) }}"><button class=" edit-btn" type="submit">Edit Details</button></a>
                         </div>
                     </div>
                     
@@ -497,7 +488,7 @@
            <a href="{{ route('my.page', ['page'=>'local_area']) }}"> <i class="fa-solid fa-location-dot"></i></a>
           </div>
           <div class="local-content">
-            <b><p>About Local Area</p></b>
+            <b><p>Local Area</p></b>
           </div>
         </div>
       </div>
@@ -611,7 +602,7 @@
                     <div class="col-md-6 col-6">
                          <div class="contactUs">
                               <img src="{{ asset('/pages/images/customer-service.png') }}" id="contact-img">
-                              <a href="#"  style="color: #fff; margin-left: 12px;  font-size: 20px;">Contact Us</a>
+                              <a href="{{ route('my.page', ['page'=>'chat']) }}"  style="color: #fff; margin-left: 12px;  font-size: 20px;">Contact Us</a>
                          </div>
                          <h3 class="contact-text text-center" style="font-size: 25px; color: #457CB2; padding-top: 10px;">May I Help You</h3>
                     </div>

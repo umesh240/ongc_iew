@@ -21,7 +21,7 @@ class CreateSocialLinksTable extends Migration
             $table->integer('sc_show', false, false)->length(1)->comment('0:Hide, 1:Show')->default(0);
             $table->timestamps();
 
-            //$table->index(['sc_name', 'sc_icon'], 'social_links_index');
+            $table->index(['sc_name', 'sc_icon'], 'social_links_index');
         });
     }
 

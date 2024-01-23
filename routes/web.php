@@ -24,6 +24,7 @@ use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\ChattingController;
 use App\Http\Controllers\FeedbackCategoryController;
 use App\Http\Controllers\UserWelcomeController;
+use App\Http\Controllers\BusTransportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +168,13 @@ Route::middleware(['adminGaurd'])->group(function () {
             Route::post('/chatting-save', 'save')->name('chatting.save');
             Route::get('/chatting-list', 'lists')->name('chatting.lists');
         });
+        Route::controller(BusTransportController::class)->group(function(){
+            Route::get('/bus/{ae}/{id?}', 'show')->name('bus.ae')->where('ae', 'add|edit');
+            Route::get('/bus', 'index')->name('bus.index');
+            Route::post('/bus/save', 'update')->name('bus.save');
+            Route::post('/bus/delete', 'destroy')->name('bus.delete');
+            Route::post('bus/sort', 'faqsSort')->name('bus.sort');
+        });
 
     });
 });
@@ -191,6 +199,7 @@ Route::middleware(['employeeGaurd'])->group(function () {
             Route::post('/save_quiz', 'saveQuiz')->name('save_quiz');
             Route::post('/save_feedback', 'saveFeedBack')->name('save_feedback');
             Route::get('/menus', 'menuPage')->name('menu.page');
+            Route::post('/save_chat', 'saveChat')->name('save_chat');
 
 
             Route::get('/my.{page}', 'pageIndex')->name('my.page')->where('page','participation|quiz|faq|feedback|flight|helpdesk|local_area|news|change_password|day_wise|date_wise|local_weather|about|way_finder|chat');
