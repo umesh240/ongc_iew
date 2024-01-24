@@ -9,38 +9,75 @@
 @section('content')
 
 <section class="chat-sec">
- <div class="container">
-  <div class="row chatList">
-    <div class="col-md-12">
-     <div class="chat-bg">
-      <div class="user-chat">
-       <p>Hye! how are you?</p>
-       <span>6:15:51 PM</span>
-      </div>
-      <i class="fas fa-user"></i>
+  <div class="container">
+   <!--<div class="row chatList"></div>-->
+   <div class="row">
+     <!--<div class="bottom-chat divChat" data-action="{{ route('save_chat') }}" data-action_list="{{ route('get_chat') }}">
+       <input type="text" class="chat_msg" placeholder="Type a message....">
+       <button class="chat-btn btnSaveChat" type="button"> Send</button>
+     </div>-->
+     
+     <div class="card direct-chat direct-chat-primary">
+     <div class="card-body pt-2">
+ 
+         <div class="direct-chat-messages">
+ 
+             <div class="direct-chat-msg">
+                 <div class="direct-chat-infos clearfix">
+                 </div>
+         
+         <div class="sender-sec mb-2" style="display:flex;">
+         <div class="chat-bg-sender">
+                 <i class="fas fa-user"></i>
+        </div>
+                 <div class="direct-chat-text sender-chat">
+                    <p class="mb-0"> Is this template really for free? That's unbelievable!</p>
+                      <span class="direct-chat-timestamp " style="color:#fff;">23 Jan 2:00 pm</span>
+                 </div>
+ 
+             </div>
+             </div>
+ 
+ 
+             <div class="direct-chat-msg right">
+                 <div class="direct-chat-infos clearfix">
+                 </div>
+ 
+  
+                <div class="chat-sec">
+                 <div class="direct-chat-text user-chat">
+                    <p class="mb-0">You better believe it!</p>
+                     <span class="direct-chat-timestamp" style="color:#fff">23 Jan 2:05 pm</span>
+                 </div>
+                  <div class="chat-bg">
+                  <i class="fas fa-user"></i>
+                </div>
+              </div>
+             </div>
+ 
+ 
+         <div class="direct-chat-contacts">
+         </div>
+ 
      </div>
-    </div>
-
-    <div class="col-md-12">
-      <div class="chat-bg-sender">
-       <i class="fas fa-user"></i>
-       <div class="sender-chat">
-        <p>Hye! I'm doing fine.</p>
-        <span>6:16:51 PM</span>
-       </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="bottom-chat divChat" data-action="{{ route('save_chat') }}">
-      <input type="text" class="chat_msg" placeholder="Type a message....">
-      <button class="chat-btn btnSaveChat" type="button"> Send</button>
-    </div>
-
-  </div>
+ 
+     <div class="card-footer">
+         <form action="#" method="post">
+             <div class="input-group bottom-chat">
+                 <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                 <span class="input-group-append">
+                     <button type="button" class="btn btn-primary chat-btn">Send</button>
+                 </span>
+             </div>
+         </form>
+     </div>
+ 
  </div>
-
-</section>
+ 
+   </div>
+  </div>
+ 
+ </section>
 @endsection
 
 @section('javascript')
@@ -49,7 +86,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 $('.btnSaveChat').click(function () {
   var div = $(this).closest('.divChat');
-  var thiss = this;
   var chat_msg = div.find('.chat_msg').val();
   var url = div.attr('data-action');
   $.ajax({
@@ -57,23 +93,47 @@ $('.btnSaveChat').click(function () {
       type: 'POST',
       data: {chat_msg:chat_msg , _token: "{{ csrf_token() }}" },
       success: function (response) {
-          console.log(response);
-          var status  = response.status;
-          var message = response.message;
-          var chatList = response.chatList;
-          if(status == '200'){
-            status = 1;
-            $('.chatList').html(chatList);
-            div.find('.chat_msg').val('');
-          }else{
-            status = 2;
-          }
-          show_msgT(status, message);
+        console.log(response);
+        var status  = response.status;
+        var message = response.message;
+        if(status == '200'){
+          status = 1;
+          getChats();
+        }else{
+          status = 2;
+        }
+        show_msgT(status, message);
       },
       error: function (error) {
           console.log(error);
       }
   });
 });
+///////////////////////////////////////////////////////////////////////
+function getChats() {
+  var div = $('.divChat');
+  var url = div.attr('data-action_list');
+  $.ajax({
+    url: url,
+    type: 'POST',
+    data: { _token: "{{ csrf_token() }}" },
+    success: function (response) {
+      //console.log(response);
+      var status  = response.status;
+      var chatList = response.chatList;
+      if(status == '200'){
+        status = 1;
+        $('.chatList').html(chatList);
+        div.find('.chat_msg').val('');
+      }else{
+        status = 2;
+      }
+    },
+    error: function (error) {
+        console.log(error);
+    }
+  });
+}
+getChats();
 </script>
 @endsection

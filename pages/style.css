@@ -30,8 +30,8 @@ nav.inner-header {
     gap: 5px;
 }
 .user-chat {
-    background-color: #457CB2;
-    border-radius: 8px;
+    background-color: #457CB2 !important;
+    border-radius: 8px !important;
     color: #fff !important;
     padding: 5px 100px 5px 10px;
 }
@@ -43,10 +43,11 @@ nav.inner-header {
     font-size: 20px;
 }
 .sender-chat {
-    background-color: grey;
+    background-color: #d2d6de !important;
     border-radius: 8px;
     color: #fff !important;
     padding: 5px 100px 5px 10px;
+    width: 100%;
 }
 .chat-bg-sender {
     display: flex;
@@ -67,6 +68,11 @@ nav.inner-header {
     margin-bottom: 0px;
     font-size: 20px;
 }
+.sender-chat p {
+    color: #fff;
+    margin-bottom: 0px;
+    font-size: 20px;
+}
 .user-chat p {
     color: #fff;
     margin-bottom: 0px;
@@ -75,14 +81,13 @@ nav.inner-header {
 .bottom-chat {
     position: fixed;
     bottom: 97px;
-    width: 100%;
+    width: 80%;
 }
 button.chat-btn {
     background-color: #457CB2;
     color: #fff;
     padding: 10px;
     border-radius: 8px;
-      width: 20%;
 }
 .bottom-chat input[type="text"] {
     border-radius: 8px;
@@ -91,6 +96,44 @@ button.chat-btn {
     padding: 10px;
     width: 80%;
 }
+section.chat-sec {
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.card-footer {
+    position: fixed;
+    bottom: 97px;
+    width: 82%;
+    background: #fff;
+    border-top: 0px !important;
+}
+
+.direct-chat-messages {
+    height: 90vh;
+    overflow: hidden;
+
+}
+.right .direct-chat-text {
+    width: 100%;
+    margin-right: 25px;
+}
+.chat-sec {
+    display: flex;
+}
+.direct-chat-text {
+    margin: 5px 0 0 25px;
+}
+button.chat-btn {
+    border-radius: 10px !important;
+}
+.bottom-chat input {
+    padding: 22px !important;
+    margin-right: 10px;
+    border-radius: 10px !important;
+}
+
+
 button.check-green {
     background-color: #3cb043 !important;
    border: 1px solid #3cb043 !important
@@ -503,8 +546,10 @@ span.weather-degree {
   }
 
 .user-details p {
-    color: #3F70A1;
+    color: #7a7a7a;
     line-height: 2rem;
+    font-weight: 600;
+    font-size: 18px;
 }
 
   .user-details i {
@@ -1231,7 +1276,7 @@ section.flights {
     background-size: cover;
     background-repeat: no-repeat;
     height: 230px;
-    border-radius: 10px;
+    border-radius: 10px 10px 0px 0px;
     position: relative;
     align-items: center;
 }
@@ -1248,6 +1293,22 @@ section.flights {
     border-radius: 8px;
     box-shadow: 0px 0px 15px -5px #0000004a;
     overflow: hidden;
+}
+.down-bg {
+    background-color: #457cb2c7;
+    padding: 15px;
+    color: #fff;
+    border-radius: 0px 0px 10px 10px;
+}
+.down-bg h4 {
+    font-size: 20px;
+}
+.down-bg i.fas.fa-map-marker-alt {
+    font-size: 20px;
+    background-color: #fff;
+    color: #457CB2;
+    padding: 10px 15px;
+    border-radius: 10px;
 }
 .nav-tabs>.nav-item>.nav-link i {
     font-size: 17px;
@@ -1820,6 +1881,12 @@ h4.feedbackTitle {
 .user-chat span {
     font-size: 12px;
 }
+.sender-chat p {
+    font-size: 14px;
+}
+.sender-chat span {
+    font-size: 12px;
+}
 .chat-bg-sender p {
     font-size: 14px;
 }
@@ -1834,8 +1901,9 @@ h4.feedbackTitle {
     width: 70%;
 }
 .bottom-chat {
-    margin: 0 15px 0px 15px;
+       width: 90%;
 }
+
 nav.inner-header {
     padding: 15px;
 }
@@ -1917,6 +1985,16 @@ h5.mb-3.text-left.right-sde:before {
 }
 .user-inOut {
     height: 160px;
+}
+.down-bg h4 {
+    font-size: 16px;
+}
+.down-bg i.fas.fa-map-marker-alt {
+    font-size: 18px;
+    padding: 8px 12px;
+}
+.down-bg {
+    padding: 10px;
 }
 .check-tab h4 {
     font-size: 45px;

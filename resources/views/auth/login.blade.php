@@ -47,7 +47,7 @@
 @endphp 
 <section class="login-page">
 <div class="login-logo">
- <img src="{{ asset('/pages/images/Ongc-Green-Logo1.png') }}" alt="ONGC Logo">
+ <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
  </div>
     <div class="login-box justify-content-center">
         <!-- /.login-logo -->

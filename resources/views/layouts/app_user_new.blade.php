@@ -59,14 +59,18 @@
   <section class="ongc-head desktop ccsticky-nav" id="mainHeader">
     <div class="container">
       @php
-      $currentRouteName = Route::currentRouteName();
+      //$currentRouteName = Route::currentRouteName();
+      $currentUrl = url()->current();
+      $parsedUrl = parse_url($currentUrl);
+      $pageName = str_replace('/', '', $parsedUrl['path']);
+      $showHeader = array("my.dashboard", "my.chat", "my.day_wise", "my.way_finder");
       @endphp
-       @if($currentRouteName == 'my.dashboard')
+      @if(in_array($pageName, $showHeader))
       <nav class="navbar navbar-expand-lg ">
        
         <a class="navbar-brand" href="#">
           <img src="{{ asset('/pages/images/ongc-red-logo.png') }}" alt="ONGC" id="ongc-red">
-          <img src="{{ asset('/pages/images/Ongc-Green-Logo1.png') }}" alt="ONGC Logo">
+          <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
           <img src="{{ asset('/pages/images/logo_1.png') }}" alt="Indian Energy Logo" 
             id="logo-two">
         </a>
@@ -134,7 +138,7 @@ if($embedded != 1){
       </a>
       <a href="{{ route('my.page', ['page'=>'way_finder']) }}" class="nav__link nav__link--active" >
           <i class="material-icons nav__icon"><i class="fas fa-map-marked-alt"></i></i>
-          <span class="nav__text">Way Finder</span>
+          <span class="nav__text">Path Finder</span>
       </a>
      <a href="{{ route('my.page', ['page'=>'day_wise']) }}" class="nav__link">
           <i class="material-icons nav__icon"><i class="far fa-calendar-alt"></i></i>

@@ -1083,7 +1083,7 @@ class ApiUsersController extends Controller
                 $allErrors = implode('<br>', $allErrors);
                 return response()->json(['message' => $allErrors, 'status' => 400], 422);
             }
-            $chatList = DB::table('chattings')->where('chat_user_id', $request->id)->orderBy('created_at', 'desc')->limit(50)->get();
+            $chatList = DB::table('chattings')->where('chat_user_id', $request->id)->orderBy('created_at', 'asc')->limit(50)->get();
             $chatData = [];
             $chatData['chatList']  = $chatList;
             return response()->json(['status' => 200, "response" => $chatData]);

@@ -1,5 +1,6 @@
 be = {
 	getCategory:function(thiss){
+		var div = $(thiss).closest('.userInfo');
 		var hotel_cd = $(thiss).val();
 		var link = $(thiss).attr('data-link');
 		var csrf_token = $('input[name="_token"]').val();
@@ -12,16 +13,16 @@ be = {
 	        },
             success: function (response) {
 				var catList = response.category_list;
-				//console.log(catList);
-				$('.room_categorycd').html(catList);
-				var cat_cd = $('.room_categorycd').attr('data-cat_cd');
+				console.log(catList);
+				div.find('.room_categorycd').html(catList);
+				var cat_cd = div.find('.room_categorycd').attr('data-cat_cd');
 				if(cat_cd > 0){
-					$('.room_categorycd').val(cat_cd);
+					div.find('.room_categorycd').val(cat_cd);
 				}
-				var op_len = $('.room_categorycd').find('option').length;
+				var op_len = div.find('.room_categorycd').find('option').length;
 				//console.log(op_len);
 				if(parseInt(op_len) == 1){
-					$('.room_categorycd option:eq(0)').attr('selected', 'selected');
+					div.find('.room_categorycd option:eq(0)').attr('selected', 'selected');
 				}
 				//$('.room_categorycd').trigger('change');
 				$('.loading-container').css('display', 'none');
@@ -260,6 +261,32 @@ be = {
 		}
 	},*/
 }
+//////////////////////////////////////////////////////////////////////////
+$('.frmEventEmp').on('submit', function(e) {
+    e.preventDefault(); 
+	var urlSave = $(this).attr('action');
+    $.ajax({
+        type: "POST",
+        url: urlSave,
+        data: $(this).serialize(),
+        beforeSend: function(){
+          //$('.loading-container').css('display', 'flex');
+        },
+        success: function(result) {
+        	console.log(result);
+			var status = result.status;
+			var message = result.message;
+        	console.log('message=='+message);
+			show_msgT(status, message);
+			if(parseInt(status) == 1){
+				setTimeout(function(){
+					//location.reload();
+				}, 1500);
+			}
+			$('.loading-container').css('display', 'none');
+        }
+    });
+});
 //////////////////////////////////////////////////////////////////////////
 $('.frmBookEventSave').on('submit', function(e) {
     e.preventDefault(); 

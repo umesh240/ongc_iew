@@ -72,7 +72,7 @@ class EventBookController extends Controller
         // ->where('vacent_rooms', '>', 0)
         $opts = '';
         
-        if(count($hotels_category) > 1){
+        if(count($hotels_category) >= 1){
             $opts .= '<option value="">Select category</option>';
            
         }

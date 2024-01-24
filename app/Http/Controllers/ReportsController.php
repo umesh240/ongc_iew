@@ -106,7 +106,7 @@ class ReportsController extends Controller
                         ->where('event_books_emp.emp_event_cd', $eventcd)->distinct()->get();
         $opts = '';
         if(count($htl_list) > 0){
-            $opts = '<option value="">Select hotel</option>';
+            $opts = '<option value="">Select All</option>';
             foreach ($htl_list as $key => $value) {
                 $htl_id = $htl_list[$key]->htl_id;
                 $hotel_name = $htl_list[$key]->hotel_name;

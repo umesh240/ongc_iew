@@ -52,15 +52,15 @@
                 //echo '<pre>'; print_r($employee_list); die;
                 $cnt++; 
                 $ttlActvUsrRecord = @$employee->total_active_records;
-                $active_hotel_name = @$employee->active_hotel_name;
+                $active_hotel_name = @$employee->active_hotel_names;
                 $status_in_htl = @$employee->status_in_htl;
                 $title = $bkColor = '';
                 if(@$event_code > 0 && $status_in_htl == 0){
                   $bkColor = 'background-color: #ffd7d7;';
                   $title = "Remove from hotel";
-                  if($ttlActvUsrRecord == 1){
-                    $title = "Re-Assign to hotal : <br>".$active_hotel_name;
-                  }
+                }
+                if($ttlActvUsrRecord > 0){
+                  $title = "Assigned to hotal : <br>*".$active_hotel_name;
                 }
               @endphp 
               <tr style="{{ $bkColor }}" title="{{ $title }}" data-toggle="tooltip" data-html="true">

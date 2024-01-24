@@ -45,7 +45,7 @@
     @if($routename == 'employee' && @$event_cd > 0)   
         Hotel
         <select class="custom-select custom-select-sm form-control form-control-sm listHotel" style="width: auto;" onchange="searchRecords(this);">
-            <option value="">Select Hotel</option>
+            <option value="">All Hotel</option>
             @foreach($hotel_list as $hotel)
             <option value="{{ $hotel->htl_id }}" {{ $hotel->htl_id == $hotel_code?'selected':'' }}>{{ $hotel->hotel_name }}</option>
             @endforeach

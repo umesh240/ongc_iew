@@ -57,6 +57,7 @@ input#name {
     font-size: 16px;
     top: 10px;
     left: 15px;
+    z-index: 9;
 }
 input#password {
     border: 1px solid #D9D9D9;
@@ -70,6 +71,7 @@ input#password {
     font-size: 16px;
     top: 10px;
     left: 15px;
+    z-index: 9;
 }
 button.login-btn {
     background-color: #F07E29 !important;
@@ -127,11 +129,13 @@ section.login-page:after {
 .login-logo img {
     float: left;
     width: 100px;
-    position: relative;
-    top: -133px;
+    position: absolute;
+    top: 38px;
     left: 25px;
 }
-
+.wrapper {
+    position: relative;
+}
 
 
 
@@ -185,5 +189,9 @@ section.login-page:after {
 }
 }
 
-
+@media only screen and (min-width : 1025px) and (max-width : 2500px) {
+.login-logo img {
+    top: 35px;
+}
+}
 

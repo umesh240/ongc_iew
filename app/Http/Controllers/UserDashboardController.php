@@ -552,60 +552,71 @@ class UserDashboardController extends Controller
         $response = [];
         $response['status'] = $status;
         $response['message'] = $message;
+        
+        return response()->json($response);
+    }
+    
+    public function listChat(Request $request)
+    {
+        $user = Auth()->user();
+        $userId = $user->id;
+        $token = $user->login_token;
+        $api = new ApiUsersController();
+
         $chats = '';
-        if($status == 200){
-            $apiList = new Request([
-                'id' => $userId,
-                'auth' => $token
-            ]);
-            $resp = $api->saveList($apiList);
-            $responseListData = $resp->getData();
-            //print_r($responseListData); die;
-            $statusList = $responseListData->status;
-            if($statusList == 200){
-                $chatList = $responseListData->response->chatList;
-                foreach ($chatList as $key => $chat) {
-                    $user_id = $chat->user_id;
-                    $message = $chat->message;
-                    $user_type = $chat->user_type;
-                    $chat_user_id = $chat->chat_user_id;
-                    $created_at = $chat->created_at;
+        $apiList = new Request([
+            'id' => $userId,
+            'auth' => $token
+        ]);
+        $resp = $api->saveList($apiList);
+        $responseListData = $resp->getData();
+        $chatList = $responseListData->response->chatList;
+        $statusList = $responseListData->status;
+        //print_r($chatList); die;
+        if($statusList == 200){
+            foreach ($chatList as $key => $chat) {
+                $user_id = $chat->user_id;
+                $message = $chat->message;
+                $user_type = $chat->user_type;
+                $chat_user_id = $chat->chat_user_id;
+                $created_at = $chat->created_at;
 
-                    $chatDate = date('Y-m-d', strtotime($created_at));
-                    if($chatDate == date('Y-m-d')){
-                        $chatDtTm = date('h:i:s A');
-                    }else{
-                        $chatDtTm = date('Y-m-d h:i:s A', strtotime($created_at));
-                    }
+                $chatDate = date('Y-m-d', strtotime($created_at));
+                if($chatDate == date('Y-m-d')){
+                    $chatDtTm = date('h:i:s A');
+                }else{
+                    $chatDtTm = date('j M y h:i:s A', strtotime($created_at));
+                }
 
-                    $divUser = $user_type == 'user'?'':'-sender';
-                    if($user_type == 'user'){
-                        $chats .= '<div class="col-md-12">
-                            <div class="chat-bg">
-                              <div class="user-chat">
-                               <p>'.$message.'</p>
-                               <span>'.$chatDtTm.'</span>
-                              </div>
-                              <i class="fas fa-user"></i>
-                            </div>
-                        </div>';
-                    }else if($user_type == 'admin'){
-                        $chats .= '<div class="col-md-12">
-                          <div class="chat-bg-sender">
-                           <i class="fas fa-user"></i>
-                           <div class="sender-chat">
-                            <p>'.$message.'</p>
-                            <span>'.$chatDtTm.'</span>
-                           </div>
+                $divUser = $user_type == 'user'?'':'-sender';
+                if($user_type == 'user'){
+                    $chats .= '<div class="col-md-12">
+                        <div class="chat-bg">
+                          <div class="user-chat">
+                           <p>'.$message.'</p>
+                           <span>'.$chatDtTm.'</span>
                           </div>
-                        </div>';
-                    }else{
-                        $chats .= '';
-                    }
+                          <i class="fas fa-user"></i>
+                        </div>
+                    </div>';
+                }else if($user_type == 'admin'){
+                    $chats .= '<div class="col-md-12">
+                      <div class="chat-bg-sender">
+                       <i class="fas fa-user"></i>
+                       <div class="sender-chat">
+                        <p>'.$message.'</p>
+                        <span>'.$chatDtTm.'</span>
+                       </div>
+                      </div>
+                    </div>';
+                }else{
+                    $chats .= '';
                 }
             }
         }
+        
         $response['chatList'] = $chats;
+        $response['status'] = $statusList;
         return response()->json($response);
     }
 }

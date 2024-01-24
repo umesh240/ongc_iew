@@ -200,6 +200,7 @@ Route::middleware(['employeeGaurd'])->group(function () {
             Route::post('/save_feedback', 'saveFeedBack')->name('save_feedback');
             Route::get('/menus', 'menuPage')->name('menu.page');
             Route::post('/save_chat', 'saveChat')->name('save_chat');
+            Route::post('/get_chat', 'listChat')->name('get_chat');
 
 
             Route::get('/my.{page}', 'pageIndex')->name('my.page')->where('page','participation|quiz|faq|feedback|flight|helpdesk|local_area|news|change_password|day_wise|date_wise|local_weather|about|way_finder|chat');

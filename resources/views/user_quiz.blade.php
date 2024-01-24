@@ -28,7 +28,7 @@
       <div class="col-sm-10">
         <form action="{{ route('save_quiz') }}" method="post" class="frmQuiz">
           @csrf
-        <table class="tBodyQuiz">
+        <table class="tBodyQuiz" style="width:100%;">
           @php
             $srNo = 0;
             $allQuiz = $quizList->response;
@@ -37,7 +37,7 @@
           @endphp
           @foreach($allQuiz as $key => $quiz)
           <tr class="trQes active">
-            <td>
+            <td style="width:100%;">
               <div class="row">
                 <div class="col-sm-12 col-12 p-0 pl-2">Q{{ ++$srNo }}. {{ $quiz->question }}</div>
                 @foreach($quiz->options as $op => $opt)

@@ -89,7 +89,7 @@
       <div class="card-header">
         <h3 class="card-title">{{ $pageNm }}</h3>
       </div>
-      <form action="{{ route($submit_page) }}" method="post">
+      <form action="{{ route($submit_page) }}" method="post" class="frmEventEmp">
         @csrf
         <input type="hidden" name="cd" value="{{ @$employee->id }}" class="cd">
         <input type="hidden" name="page_type" value="{{ @$page_type }}" class="page_type">
@@ -133,7 +133,7 @@
         @if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event')
         <h4 class="bg-primary pl-3 mb-0">Event Details</h4>
         <div class="card-body pt-0">
-          <div class="row userInfo">
+          <div class="row eventInfo">
             <div class="col-sm-6">
               <input type="hidden" class="intcd" name="intcd" value="{{ @$intcd }}">
               <label for="exampleInputEmail1">Event Name : </label>
@@ -151,9 +151,26 @@
               </select>
               <script> $('.eventcd').val('{{ old("eventcd")?old("eventcd"):$emp_event_cd }}'); </script>
             </div>
+            <div class="col-sm-3">
+                <label>User Pass : </label>
+                <input type="text" class="form-control form-control-sm user_pass" name="user_pass" value="{{ old('user_pass')?old('pass'):@$employee->pass }}">
+            </div>   
+            <div class="col-sm-3">
+                <label>User Trip Id : </label>
+                <input type="text" class="form-control form-control-sm user_trip_id" name="user_trip_id" value="{{ old('trip_id')?old('trip_id'):@$employee->trip_id }}">
+            </div> 
+          </div>
+        </div>
+        <h4 class="bg-primary pl-3 mb-0">Hotel Details</h4>
+        <div class="card-body pt-0">
+          @for($i = 0; $i < 4; $i++)
+          <div class="row userInfo border-bottom pb-2">
+            <div class="col-sm-12">
+              <p class="mb-0 text-primary text-bold">Hotel Details {{ $i+1 }}</p>
+            </div>
             <div class="col-sm-6">
               <label for="exampleInputEmail1">Hotel Name : </label>
-              <select class="form-control form-control-sm hotel_cd" name="hotel_cd" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd')?old('hotel_cd'):$hotel_cd }}" required>
+              <select class="form-control form-control-sm hotel_cd" name="hotel_cd[]" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd')?old('hotel_cd'):$hotel_cd }}">
                 @if(!empty($hotel_list))
                   @if(count($hotel_list) > 1)
                     <option value="">Select hotel</option>
@@ -167,34 +184,149 @@
             </div>
             <div class="col-sm-6">
               <label for="exampleInputEmail1">Room Category : </label>
-              <select class="form-control form-control-sm room_categorycd" name="room_categorycd" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd')?old('room_categorycd'):$room_categorycd }}"  >
+              <select class="form-control form-control-sm room_categorycd" name="room_categorycd[]" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd')?old('room_categorycd'):$room_categorycd }}"  >
                 <option value="">Select category</option>
                
               </select>
             </div>
             <div class="col-sm-6">
               <label>Share Room With : </label>
-              <select class="form-control form-control-sm select2 td_empShareRm emp_ShareRm" name="emp_ShareRm">
+              <select class="form-control form-control-sm select2 td_empShareRm emp_ShareRm" name="emp_ShareRm[]">
                 <option value="">Select employee</option>
               </select>
             </div>   
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <label>Hotel Check-in Date : </label>
-                <input type="datetime-local" class="form-control assign_check_in" name="assign_check_in" value="{{ old('assign_check_in')?old('assign_check_in'):@$assign_check_in }}">
+                <input type="datetime-local" class="form-control form-control-sm assign_check_in" name="assign_check_in[]" value="{{ old('assign_check_in')?old('assign_check_in'):@$assign_check_in }}">
             </div>   
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <label>Hotel Check-out Date : </label>
-                <input type="datetime-local" class="form-control assign_check_out" name="assign_check_out" value="{{ old('assign_check_out')?old('assign_check_out'):@$assign_check_out }}">
-            </div> 
-            <div class="col-sm-6">
-                <label>User Pass : </label>
-                <input type="text" class="form-control user_pass" name="user_pass" value="{{ old('user_pass')?old('pass'):@$employee->pass }}">
-            </div>   
-            <div class="col-sm-6">
-                <label>User Trip Id : </label>
-                <input type="text" class="form-control user_trip_id" name="user_trip_id" value="{{ old('trip_id')?old('trip_id'):@$employee->trip_id }}">
+                <input type="datetime-local" class="form-control form-control-sm assign_check_out" name="assign_check_out[]" value="{{ old('assign_check_out')?old('assign_check_out'):@$assign_check_out }}">
             </div> 
           </div>
+          @endfor
+          {{--
+          <div class="row userInfo border-bottom pb-2">
+            <div class="col-sm-12">
+              <p class="mb-0 text-primary text-bold">Hotel Details 2</p>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Hotel Name : </label>
+              <select class="form-control form-control-sm hotel_cd2" name="hotel_cd2" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd2')?old('hotel_cd2'):@$hotel_cd2 }}" required>
+                @if(!empty($hotel_list))
+                  @if(count($hotel_list) > 1)
+                    <option value="">Select hotel</option>
+                  @endif
+                  @foreach($hotel_list as $hotel)
+                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd2 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
+                  @endforeach
+                @endif
+              </select>
+              <script> $('.hotel_cd2').val('{{ old("hotel_cd2")?old("hotel_cd2"):@$hotel_cd2 }}'); </script>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Room Category : </label>
+              <select class="form-control form-control-sm room_categorycd" name="room_categorycd2" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd2')?old('room_categorycd2'):@$room_categorycd2 }}"  >
+                <option value="">Select category</option>
+               
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label>Share Room With : </label>
+              <select class="form-control form-control-sm select2 td_empShareRm2 emp_ShareRm2" name="emp_ShareRm2">
+                <option value="">Select employee</option>
+              </select>
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-in Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_in2" name="assign_check_in2" value="{{ old('assign_check_in2')?old('assign_check_in2'):@$assign_check_in2 }}">
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-out Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_out2" name="assign_check_out2" value="{{ old('assign_check_out2')?old('assign_check_out2'):@$assign_check_out2 }}">
+            </div> 
+          </div>
+          <div class="row userInfo border-bottom pb-2">
+            <div class="col-sm-12">
+              <p class="mb-0 text-primary text-bold">Hotel Details 3</p>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Hotel Name : </label>
+              <select class="form-control form-control-sm hotel_cd3" name="hotel_cd3" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd3')?old('hotel_cd3'):@$hotel_cd3 }}" required>
+                @if(!empty($hotel_list))
+                  @if(count($hotel_list) > 1)
+                    <option value="">Select hotel</option>
+                  @endif
+                  @foreach($hotel_list as $hotel)
+                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd3 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
+                  @endforeach
+                @endif
+              </select>
+              <script> $('.hotel_cd').val('{{ old("hotel_cd3")?old("hotel_cd3"):@$hotel_cd3 }}'); </script>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Room Category : </label>
+              <select class="form-control form-control-sm room_categorycd" name="room_categorycd3" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd3')?old('room_categorycd3'):@$room_categorycd3 }}"  >
+                <option value="">Select category</option>
+               
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label>Share Room With : </label>
+              <select class="form-control form-control-sm select2 td_empShareRm3 emp_ShareRm3" name="emp_ShareRm3">
+                <option value="">Select employee</option>
+              </select>
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-in Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_in3" name="assign_check_in3" value="{{ old('assign_check_in3')?old('assign_check_in3'):@$assign_check_in3 }}">
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-out Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_out3" name="assign_check_out3" value="{{ old('assign_check_out3')?old('assign_check_out3'):@$assign_check_out3 }}">
+            </div> 
+          </div>
+          <div class="row userInfo border-bottom pb-2">
+            <div class="col-sm-12">
+              <p class="mb-0 text-primary text-bold">Hotel Details 4</p>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Hotel Name : </label>
+              <select class="form-control form-control-sm hotel_cd4" name="hotel_cd4" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd4')?old('hotel_cd4'):@$hotel_cd4 }}" required>
+                @if(!empty($hotel_list))
+                  @if(count($hotel_list) > 1)
+                    <option value="">Select hotel</option>
+                  @endif
+                  @foreach($hotel_list as $hotel)
+                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd4 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
+                  @endforeach
+                @endif
+              </select>
+              <script> $('.hotel_cd').val('{{ old("hotel_cd4")?old("hotel_cd4"):@$hotel_cd4 }}'); </script>
+            </div>
+            <div class="col-sm-6">
+              <label for="exampleInputEmail1">Room Category : </label>
+              <select class="form-control form-control-sm room_categorycd" name="room_categorycd4" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd4')?old('room_categorycd4'):@$room_categorycd4 }}"  >
+                <option value="">Select category</option>
+               
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label>Share Room With : </label>
+              <select class="form-control form-control-sm select2 td_empShareRm4 emp_ShareRm4" name="emp_ShareRm4">
+                <option value="">Select employee</option>
+              </select>
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-in Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_in4" name="assign_check_in4" value="{{ old('assign_check_in4')?old('assign_check_in4'):@$assign_check_in4 }}">
+            </div>   
+            <div class="col-sm-3">
+                <label>Hotel Check-out Date : </label>
+                <input type="datetime-local" class="form-control form-control-sm assign_check_out4" name="assign_check_out4" value="{{ old('assign_check_out4')?old('assign_check_out4'):@$assign_check_out4 }}">
+            </div> 
+          </div>
+          --}}
         </div>
         <h4 class="bg-primary pl-3 mb-0">Flight Details</h4>
         <div class="card-body pt-0">
@@ -214,37 +346,37 @@
             <div class="col-sm-6 pl-0 pr-0">
               <div class="col-sm-12">
                 <label>Arrival Flight Name : </label>
-                <input type="text" class="form-control arv_flight_name" name="arv_flight_name" value="{{ old('arv_flight_name')?old('arv_flight_name'):@$arv_flight_name }}" placeholder="Arrival flight name">
+                <input type="text" class="form-control form-control-sm arv_flight_name" name="arv_flight_name" value="{{ old('arv_flight_name')?old('arv_flight_name'):@$arv_flight_name }}" placeholder="Arrival flight name">
               </div>
               <div class="col-sm-12">
                 <label>Arrival Flight Number : </label>
-                <input type="text" class="form-control arv_flight_number" name="arv_flight_number" value="{{ old('arv_flight_number')?old('arv_flight_number'):@$arv_flight_number }}" placeholder="Arrival flight number">
+                <input type="text" class="form-control form-control-sm arv_flight_number" name="arv_flight_number" value="{{ old('arv_flight_number')?old('arv_flight_number'):@$arv_flight_number }}" placeholder="Arrival flight number">
               </div>     
               <div class="col-sm-12">
                 <label>Arrival Date & Time : </label>
-                <input type="datetime-local" class="form-control arv_date_time" name="arv_date_time" value="{{ old('arv_date_time')?old('arv_date_time'):@$arv_date_time }}">
+                <input type="datetime-local" class="form-control form-control-sm arv_date_time" name="arv_date_time" value="{{ old('arv_date_time')?old('arv_date_time'):@$arv_date_time }}">
               </div>  
               <div class="col-sm-12">
                 <label>Arrival Flight Location : </label>
-                <input type="text" class="form-control arv_flight_location" name="arv_flight_location" value="{{ old('arv_flight_location')?old('arv_flight_location'):@$arv_flight_location }}" placeholder="Arrival flight location">
+                <input type="text" class="form-control form-control-sm arv_flight_location" name="arv_flight_location" value="{{ old('arv_flight_location')?old('arv_flight_location'):@$arv_flight_location }}" placeholder="Arrival flight location">
               </div>   
             </div>  
             <div class="col-sm-6 pl-0 pr-0">
               <div class="col-sm-12">
                 <label>Departure Flight Name : </label>
-                <input type="text" class="form-control dpt_flight_name" name="dpt_flight_name" value="{{ old('dpt_flight_name')?old('dpt_flight_name'):@$dpt_flight_name }}" placeholder="Departure flight name">
+                <input type="text" class="form-control form-control-sm dpt_flight_name" name="dpt_flight_name" value="{{ old('dpt_flight_name')?old('dpt_flight_name'):@$dpt_flight_name }}" placeholder="Departure flight name">
               </div>
               <div class="col-sm-12">
                 <label>Departure Flight Number : </label>
-                <input type="text" class="form-control dpt_flight_number" name="dpt_flight_number" value="{{ old('dpt_flight_number')?old('dpt_flight_number'):@$dpt_flight_number }}" placeholder="Departure flight number">
+                <input type="text" class="form-control form-control-sm dpt_flight_number" name="dpt_flight_number" value="{{ old('dpt_flight_number')?old('dpt_flight_number'):@$dpt_flight_number }}" placeholder="Departure flight number">
               </div>     
               <div class="col-sm-12">
                 <label>Departure Date & Time : </label>
-                <input type="datetime-local" class="form-control dpt_date_time" name="dpt_date_time" value="{{ old('dpt_date_time')?old('dpt_date_time'):@$dpt_date_time }}">
+                <input type="datetime-local" class="form-control form-control-sm dpt_date_time" name="dpt_date_time" value="{{ old('dpt_date_time')?old('dpt_date_time'):@$dpt_date_time }}">
               </div> 
               <div class="col-sm-12">
                 <label>Departure Flight Location : </label>
-                <input type="text" class="form-control dpt_flight_location" name="dpt_flight_location" value="{{ old('dpt_flight_location')?old('dpt_flight_location'):@$dpt_flight_location }}" placeholder="Departure flight location">
+                <input type="text" class="form-control form-control-sm dpt_flight_location" name="dpt_flight_location" value="{{ old('dpt_flight_location')?old('dpt_flight_location'):@$dpt_flight_location }}" placeholder="Departure flight location">
               </div> 
             </div>
           </div>
@@ -253,15 +385,16 @@
         <div class="card-body pt-0">
           <div class="row divDriverInfo">
             <div class="col-sm-6">
-              <label>Driver Name & Number : </label>
-              <div class="input-group">
-                <input type="text" class="form-control drvr_name" name="drvr_name" value="{{ old('drvr_name')?old('drvr_name'):@$drvr_name }}" placeholder="Driver name" maxlength="240">
-                <input type="text" class="form-control drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
-              </div>
+              <label>Driver Name : </label>
+              <input type="text" class="form-control form-control-sm drvr_name" name="drvr_name" value="{{ old('drvr_name')?old('drvr_name'):@$drvr_name }}" placeholder="Driver name" maxlength="240">
             </div>  
             <div class="col-sm-6">
+              <label>Driver Number : </label>
+              <input type="text" class="form-control form-control-sm drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
+            </div>
+            <div class="col-sm-12">
               <label>Vehicle Details : </label>
-              <input type="text" class="form-control vehicle_details" name="vehicle_details" value="{{ old('vehicle_details')?old('vehicle_details'):@$vehicle_details }}" placeholder="Vehicle Details">
+              <textarea class="form-control form-control-sm vehicle_details" name="vehicle_details" placeholder=" Enter Vehicle Details">{{ old('vehicle_details')?old('vehicle_details'):@$vehicle_details }}</textarea>
             </div>
           </div>
           @if($page_type == 'hotel')

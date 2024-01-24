@@ -30,22 +30,23 @@ class ChattingController extends Controller
     {
         //   print_r($request->all());
         //   die;
-        //    $user_id= Auth::user()->id;
-        
+        $userId= Auth::user()->id;
         $user_id= $request->user_id;
+
         $validatedData = $request->validate([
             'chat' => 'required',
-
         ]);
+
         $users = [
         'message' => $request->chat,
-        'user_id' => $user_id,
+        'user_id' => $userId,
         'user_type' => 'admin',
         'chat_user_id' => $user_id,
         'resp_chat_id' => $request->chat_id,
         'created_at' => date('Y-m-d H:i:s'),
         ];
         $rowDataQuery = DB::table('chattings')->insert($users);
+        DB::table('chattings')->where('chat_user_id', $user_id)->where('chat_status', 0)->update(['chat_status' => 1]);
         $responseData = ['status' => 1, 'message' => 'Message sent'];
         return response()->json($responseData, 200);
       // return redirect()->route('chatting.show')->with('success', 'Data inserted successfully');
@@ -76,7 +77,7 @@ class ChattingController extends Controller
     public function show($id)
     {
         $user = Chatting::where('user_type', 'user')->where('user_id', $id)->orderBy('created_at', 'DESC')->first();
-        $chats = Chatting::where('chat_user_id', $id)->orderBy('created_at', 'DESC')->get();
+        $chats = Chatting::leftJoin('users', 'chattings.user_id', '=', 'users.id')->select('chattings.*', 'users.name')->where('chat_user_id', $id)->orderBy('created_at', 'DESC')->get();
         $data=[];
         $data['chatting_list']  = $chats;
         $data['user_info']      = $user;

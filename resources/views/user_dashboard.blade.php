@@ -142,7 +142,7 @@
            <!-- <p class="text-light event-text">Event Name<br>From: {{@$event_datefr1.' - '.@$event_dateto1}} ({{ @$event_name }})</p> -->
            
             <p class="mb-0 text-white" style="font-size: 17px;">
-            <b> {{ @$hotel_name }}</b><br>{{ @$hotel_address }}
+            <b> Accomodation : {{ @$hotel_name }}</b><br>{{ @$hotel_address }}
           </p>
           </div>
           <div class="col-md-2 col-2 text-center" style="align-items: center; display: flex;">
@@ -163,7 +163,7 @@
  <div class="container">
     <div class="row hotel-bg">
       <div class="col-md-12 col-12 event-bg">
-       <p class="text-light event-text" style="display:flex; justify-content: space-between;">{{ @$event_name }}<br><!--From: {{@$event_datefr1.' To '.@$event_dateto1}}--><span> 6-9 Feb 2024</span></p>
+       <p class="text-light event-text" style="display:flex; justify-content: space-between;">Venue : {{ @$event_name }}<br><!--From: {{@$event_datefr1.' To '.@$event_dateto1}}--><span> 6-9 Feb 2024</span></p>
        </div>
         <div  style="align-items: center; display: flex;">
            <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
@@ -274,6 +274,10 @@
                 <div >
                   <div class="row user-inOut" id="checkinOutdates" data-route="{{ route('check_in_out') }}" data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
                     <div class="user-inner"></div>
+                     <!--<div class="hotel-name">
+            		 <h4>{{ @$hotel_address }}</h4>
+           		 <i class="fas fa-map-marker-alt"></i>
+          	    </div>-->
                     <div class="col-md-6 col-6" style="border-right: 1px solid #F07E29;">
                       <div class="check-time check-tab">
                         <h4>{{ $cInD }}<span>{{ $cInM }}</span></h4>
@@ -296,9 +300,66 @@
                         </div>
                       </div>
                     </div>
+
                   </div>
+                    
+                    
+                    <div class="row down-bg">
+                     <div class="col-md-10 col-9" style="align-items:center; display:flex;">
+            		<h4 class="text-left mb-0">{{ @$hotel_name }}</h4>
+            	     </div>
+            	     <div class="col-md-2 col-3">
+            	     	<a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
+            		  <i class="fas fa-map-marker-alt"></i>
+            		</a>
+            	    </div>
+            	    </div>
+         	 
+         	    <div class="row user-inOut mt-4" id="checkinOutdates" data-route="{{ route('check_in_out') }}" data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
+                    <div class="user-inner"></div>
+                     <!--<div class="hotel-name">
+            		 <h4>{{ @$hotel_address }}</h4>
+           		 <i class="fas fa-map-marker-alt"></i>
+          	    </div>-->
+                    <div class="col-md-6 col-6" style="border-right: 1px solid #F07E29;">
+                      <div class="check-time check-tab">
+                        <h4>7<span>Feb</span></h4>
+                        <h5>Wednesday</h5>
+                        <!--<b><p class="mb-0">{{ @$assign_check_in1 }}</p></b>
+                        <p class="text-success">{{ @$assign_check_in1 }}</p>-->
+                        <div class="tab-btn mt-3">
+                          <button class="edit-btn {{ $checkInCls }}" type="button" value="in" {{ $checkInDis }}> {{ $checkInTxt }}</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-6">
+                      <div class="check-time check-tab">
+                        <h4>10<span>Feb</span></h4>
+                        <h5>Saturday</h5>
+                        <!--<b><p class="mb-0">{{ @$assign_check_out1 }}</p></b>
+                        <p class="text-success">{{ @$assign_check_out1 }}</p>-->
+                        <div class="tab-btn mt-3">
+                          <button class="edit-btn {{ $checkOutCls }}" type="button" value="out" {{ $checkOutDis }}> {{ $checkOutTxt }}</button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                    <div class="row down-bg">
+                     <div class="col-md-10 col-9" style="align-items:center; display:flex;">
+            		<h4 class="text-left">{{ @$hotel_name }}</h4>
+            	     </div>
+            	     <div class="col-md-2 col-3">
+            	     <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
+            		<i class="fas fa-map-marker-alt"></i>
+            	     </a>
+            	    </div>
+            	    </div>
+         	 
                 </div>
               </div>
+              
+              
                   <div class="tab-pane" id="flightDetails" role="tabpanel">
                    <div class="row vehicle-bg" style= "align-items: center;">
                       <div class="col-md-6 col-sm-6 pr-1 pl-1 text-white" style="color: #457CB2;">
