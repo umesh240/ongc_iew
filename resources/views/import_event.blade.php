@@ -59,9 +59,9 @@
                 </select>
               </div>
               <div class="col-sm-6">
-                <label for="exampleInputEmail1">Excel File</label>
+                <label for="exampleInputEmail1">CSV File</label>
                 <div class="custom-file">
-                  <input type="file" name="excel_file" class="custom-file-input custom-file-input excel_file" id="customFile">
+                  <input type="file" name="excel_file" class="custom-file-input custom-file-input excel_file" id="customFile" accept=".csv">
                   <label class="custom-file-label" for="customFile" style="margin-top: 0 !important;">Choose file</label>
                 </div>
               </div>

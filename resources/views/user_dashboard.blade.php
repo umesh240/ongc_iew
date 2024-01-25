@@ -142,7 +142,7 @@
            <!-- <p class="text-light event-text">Event Name<br>From: {{@$event_datefr1.' - '.@$event_dateto1}} ({{ @$event_name }})</p> -->
            
             <p class="mb-0 text-white" style="font-size: 17px;">
-            <b> Accomodation : {{ @$hotel_name }}</b><br>{{ @$hotel_address }}
+            <b> Accomodation :<br> {{ @$hotel_name }}</b><!--{{ @$hotel_address }}-->
           </p>
           </div>
           <div class="col-md-2 col-2 text-center" style="align-items: center; display: flex;">
@@ -438,7 +438,7 @@
                  
                   <div class="tab-pane" id="travelSchedule" role="tabpanel">
                    <div class="user-vehicle">
-                    <div class="row" style ="align-items: baseline;">
+                    <div class="row" style ="align-items: center;">
                       <!--div class="col-sm-6 col-6 pr-1 pl-1" style="color: #457CB2;">
                         <h5 class="mb-3">Vehicle Details</h5>
                         <p class="text-left mb-0" style="color: #457CB2;">Veh. No :- {{ @$veh_details }}</p>
@@ -454,16 +454,22 @@
                                   <div class="vehicle-shape">
                                     <img src="{{ asset('/pages/images/bus.png') }}">
                                     <h3>Vehicle Details:-</h3>
-                                    <h3>Traveller Bus</h3>
-                                    <h3>MH-01-2306</h3>
+                                    <h3>Veh Type: Traveller Bus MH-01-2306</h3>
+                                    
                                     </div>
-                                 </div>
-                                 <div class="col-md-6 col-6 ">
+                                     <div class="shuttle-time" style="display:flex; align-items:center;">
+                                            <h3>Detail:</h3>
+                                            <a href="#">Press Here</a></div>
+                                    </div>
+                                      <div class="col-md-6 col-6 ">
                                     <img src="{{ asset('/pages/images/taxi-driver.png') }}" id="driver-img">
                                     <div class="transport-icon">
                                      <i class="fas fa-phone-alt"></i>
                                     </div>
+                                     
                                  </div>
+                                 </div>
+                               
                              </div>
                     </div>
                   </div>

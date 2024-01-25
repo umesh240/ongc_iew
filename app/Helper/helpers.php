@@ -32,7 +32,10 @@ if (! function_exists('dateConvert')) {
     }
 }
 if (! function_exists('timeDifference')) {
-    function timeDifference($startDate, $endDate = date('Y-m-d h:i:s')) {
+    function timeDifference($startDate, $endDate = '') {
+        if(empty($endDate) || $endDate == null){
+            $endDate = date('Y-m-d h:i:s');
+        }
         $startTimestamp = strtotime($startDate);
         $endTimestamp = strtotime($endDate);
 
@@ -55,6 +58,26 @@ if (! function_exists('timeDifference')) {
         }
         $dayDiff .= $minutes.($minutes > 1?' mins':'mins');
         return $dayDiff;
+    }
+}
+if (! function_exists('vacentRoomCalculation')) {
+    function vacentRoomCalculation() {
+        
+        $roomCatList = DB::table('hotels_category')->where('soft_delete_yn', 0)->orderBy('htl_cat_id')->get();
+        foreach ($roomCatList as $key => $roomCat) {
+            $htl_cat_id = $roomCat->htl_cat_id;
+            $htl_idd = $roomCat->htl_idd;
+            $total_rooms = $roomCat->total_rooms;
+            $occupied_rooms = $roomCat->occupied_rooms;
+            $vacent_rooms = $roomCat->vacent_rooms;
+
+            $occupiedRooms = DB::table('event_books_emp')->where('emp_hotel_cd', $htl_idd)->where('emp_hotel_cat_cd', $htl_cat_id)
+                            ->where('status_in_htl', 1)->count();
+            //echo '>>|'.$roomCatList.'-'.$htl_cat_id.'-'.$htl_idd;
+            $vacent_rooms = $total_rooms - $occupiedRooms;               
+            DB::table('hotels_category')->where('htl_cat_id', $htl_cat_id)->update(['occupied_rooms' => $occupiedRooms, 'vacent_rooms' => $vacent_rooms]);
+        }
+        return 1;
     }
 }
 ?>

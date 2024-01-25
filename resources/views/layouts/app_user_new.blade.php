@@ -71,7 +71,7 @@
         <a class="navbar-brand" href="#">
           <img src="{{ asset('/pages/images/ongc-red-logo.png') }}" alt="ONGC" id="ongc-red">
           <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
-          <img src="{{ asset('/pages/images/logo_1.png') }}" alt="Indian Energy Logo" 
+          <img src="{{ asset('/pages/images/logo-iew-new.png') }}" alt="Indian Energy Logo" 
             id="logo-two">
         </a>
 

@@ -94,20 +94,26 @@ class ImportController extends Controller
                     $depart_dt          = $row[22];
                     $depart_tm          = $row[23];
                     $depart_flightno    = $row[24];
-                    $transport_service  = $row[25];
-                    $transport_service  = str_replace(',', '', $transport_service);
-                    $row[25]            = $transport_service;
-                    $travelling_details = $row[26];
-                    $travelling_details = str_replace(',', '', $travelling_details);
-                    $row[26]            = $travelling_details;
-                    $trip_id            = $row[27];
+                    $driver_name        = $row[25];
+                    $driver_name        = str_replace(',', '', $driver_name);
+                    $row[25]            = $driver_name;
+                    $driver_number      = $row[26];
+                    $driver_number      = str_replace(',', '', $driver_number);
+                    $row[26]            = $driver_number;
+                    $vehicle_type       = $row[27];
+                    $vehicle_details    = $row[28];
+                    $vehicle_details    = str_replace('-', '', $vehicle_details);
+                    $row[28]            = $vehicle_details;
+                    $trip_id            = $row[29];
+                    //$present_in_hotel   = $row[30];
+                    $row[30]            = 1;
                     if(empty($cpfno)){
                         $cpfno = $mobile;
                     }
                     $isEmail = str_contains($email, '@');
                     if((empty(trim($email)) || !$isEmail) && empty(trim($mobile)) && empty(trim($cpfno) )){
-                        $row[28] = 4;
-                        $row[29] = "end_of_line";
+                        $row[31] = 4;
+                        $row[32] = "end_of_line";
                         $invalidRows[] = $row;
                     }else{
                         $result = DB::table('event_books_emp')
@@ -124,8 +130,8 @@ class ImportController extends Controller
                                 //$emp_booking_exist = 2;
                             }
                         }
-                        $row[28] = $emp_booking_exist;
-                        $row[29] = "end_of_line";
+                        $row[31] = $emp_booking_exist;
+                        $row[32] = "end_of_line";
                         $excelRows[] = $row;
                         //$excelRows[] = trim($row,",");
                     }
@@ -199,9 +205,11 @@ class ImportController extends Controller
         $depart_dt          = trim($row[22]);
         $depart_tm          = trim($row[23]);
         $depart_flightno    = trim($row[24]);
-        $transport_service  = trim($row[25]);
-        $travelling_details = trim($row[26]);
-        $trip_id            = $row[27];
+        $driver_name        = $row[25];
+        $driver_number      = $row[26];
+        $vehicle_type       = $row[27];
+        $vehicle_details    = $row[28];
+        $trip_id            = $row[29];
         /*
         $arrival_dt         = $row[14];
         $arrival_tm         = $row[15];
@@ -212,7 +220,8 @@ class ImportController extends Controller
         $vehile_details     = $row[20];
         $driver_no          = $row[21];
         */
-        $row_status         = $row[28];
+        $present_in_hotel   = $row[30];
+        $row_status         = $row[31];
         $user = Auth()->user();
         $userId = $user->id;
         $today = date('Y-m-d H:i:s');
@@ -347,6 +356,7 @@ class ImportController extends Controller
                 $share_room_with = $shareUserFind->id;
             }
         }
+        //$status_in_htl = $present_in_hotel == 'NO'?0:1;
         $row_data = [];   /// book event
         $row_data['user_name']              = $name;
         $row_data['user_cpfno']             = $cpfno;
@@ -372,15 +382,17 @@ class ImportController extends Controller
         $row_data['assign_check_in']        = $from_dt;
         $row_data['assign_check_out']       = $to_dt;
         $row_data['flight_create_date']     = $today;
-        $row_data['drvr_name']              = '';
-        $row_data['drvr_number']            = $travelling_details;
-        $row_data['drvr_veh_details']       = $transport_service;
+        $row_data['drvr_name']              = $driver_name;
+        $row_data['drvr_number']            = $driver_number;
+        $row_data['vehicle_type']           = $vehicle_type;
+        $row_data['drvr_veh_details']       = $vehicle_details;
         $row_data['share_room_with_empcd']  = $share_room_with;
         $row_data['created_at']             = $today;
         $row_data['updated_at']             = $today;
         $row_data['status_in_htl']          = 1;
         $dataMsg = [];
         //print_r($row_data);
+        /*
         $findAvt = DB::table('event_books_emp')->where('emp_event_cd', $event_id)->where('emp_cd', $emp_id)
                     ->where('status_in_htl', 1)->first(); // check active emp's event
         $intcd = @$findAvt->emp_ev_book_id;
@@ -388,7 +400,7 @@ class ImportController extends Controller
             /*
             $findAvt = DB::table('event_books_emp')->where('emp_event_cd', $event_id)->where('emp_cd', $emp_id)
                     ->where('emp_hotel_cd', $htl_id)->where('status_in_htl', 0)->first();
-                    /// find deactive event with same(imported hotel) hotel*/
+                    /// find deactive event with same(imported hotel) hotel*//*
         }
         //$intcd = @$findAvt->emp_ev_book_id;
         $prv_emp_event_cd = @$findAvt->emp_event_cd;
@@ -398,6 +410,13 @@ class ImportController extends Controller
             $queryTrfHtl = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $event_id)->where('emp_cd', $emp_id)->update(['status_in_htl' => 0, 'updated_at' => $today]);
             $findAvt = 0;
         }
+        */
+        $updateEvent = DB::table('event_books_emp')->where('emp_event_cd', $event_id)->where('emp_cd', $emp_id)
+                        ->update(['status_in_htl' => 0, 'updated_at' => $today]);
+
+        $findAvt = DB::table('event_books_emp')->where('emp_event_cd', $event_id)->where('emp_cd', $emp_id)
+                    ->where('emp_hotel_cd', $htl_id)->first();
+        $intcd = @$findAvt->emp_ev_book_id;
         //echo '<pre>'; print_r($row_data); die;
         $new_insert = 0;
         if ($intcd > 0) {

@@ -10,6 +10,9 @@
 figure img{
   width: 100%;
 }
+@media only screen and (max-width: 768px) {
+  td{ width:86vw; float: left; padding:0 !important; margin:0 auto; }
+}
 </style>
 <!--<section class="local-bg">
  <div class="local-inner-bg"></div>

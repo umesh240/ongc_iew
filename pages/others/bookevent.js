@@ -5,6 +5,7 @@ be = {
 		var link = $(thiss).attr('data-link');
 		var csrf_token = $('input[name="_token"]').val();
 		$.ajax({
+			async: false,
             type: "POST",
             url: link,
             data: { hotel_cd : hotel_cd, _token: csrf_token },
@@ -13,7 +14,7 @@ be = {
 	        },
             success: function (response) {
 				var catList = response.category_list;
-				console.log(catList);
+				//console.log('catList = '+catList);
 				div.find('.room_categorycd').html(catList);
 				var cat_cd = div.find('.room_categorycd').attr('data-cat_cd');
 				if(cat_cd > 0){
@@ -25,6 +26,10 @@ be = {
 					div.find('.room_categorycd option:eq(0)').attr('selected', 'selected');
 				}
 				//$('.room_categorycd').trigger('change');
+				
+				setTimeout(function(){
+						be.getShareRoom(thiss);
+				}, 200);
 				$('.loading-container').css('display', 'none');
             },
             error: function (error) {
@@ -65,7 +70,7 @@ be = {
 				$('.hotel_cd').html(hotel_list);
 				var hotel_cd = $('.hotel_cd').attr('data-hotel_cd');
 				if(hotel_cd > 0){
-					$('.hotel_cd').val(hotel_cd);
+					//$('.hotel_cd').val(hotel_cd);
 				}
 				$('.hotel_cd').trigger('change');
 				$('.loading-container').css('display', 'none');
@@ -101,14 +106,17 @@ be = {
 		trr.find('.td_empShareRm').trigger('change');
 	},
 	getShareRoom:function(thiss){
-		$('.td_empShareRm ').html('');
-		var link = $(thiss).attr('data-link');
+		var div = $(thiss).closest('.userInfo');
+		div.find('.td_empShareRm').html('');
+		var link = div.find('.room_categorycd').attr('data-link');
 		var eventcd = $('.eventcd').val();
-		var hotel_cd = $('.hotel_cd').val();
-		var room_categorycd = $('.room_categorycd').val();
+		var hotel_cd = div.find('.hotel_cd').val();
+		var room_categorycd = div.find('.room_categorycd').val();
 		var csrf_token = $('input[name="_token"]').val();
+		console.log('hotel_cd = '+hotel_cd+', room_categorycd = '+room_categorycd+', link = '+link);
 		if(parseInt(room_categorycd) > 0){
 			$.ajax({
+				async: false,
 				type: "POST",
 				url: link,
 				data: { hotel_cd : hotel_cd, eventcd: eventcd, categorycd: room_categorycd, _token: csrf_token },
@@ -116,11 +124,15 @@ be = {
 		          $('.loading-container').css('display', 'flex');
 		        },
 				success: function (response) {
-					//console.log(response);
 					var rmList = response.result;
 					var status = response.status;
 					if(parseInt(status) == 1){
-						$('.td_empShareRm ').html(rmList);
+						div.find('.td_empShareRm').html(rmList);
+					}
+					var shared_cd = div.find('.td_empShareRm').attr('data-shared_cd');
+					if(shared_cd > 0){
+						div.find('.td_empShareRm').val(shared_cd);
+						div.find('.td_empShareRm').trigger('change');
 					}
 					$('.loading-container').css('display', 'none');
 				},
@@ -270,17 +282,17 @@ $('.frmEventEmp').on('submit', function(e) {
         url: urlSave,
         data: $(this).serialize(),
         beforeSend: function(){
-          //$('.loading-container').css('display', 'flex');
+          $('.loading-container').css('display', 'flex');
         },
         success: function(result) {
         	console.log(result);
 			var status = result.status;
 			var message = result.message;
-        	console.log('message=='+message);
+        	//console.log('message=='+message);
 			show_msgT(status, message);
 			if(parseInt(status) == 1){
 				setTimeout(function(){
-					//location.reload();
+					location.reload();
 				}, 1500);
 			}
 			$('.loading-container').css('display', 'none');
@@ -318,12 +330,28 @@ $('.frmBookEventSave').on('submit', function(e) {
     });
 });
 ////////////////////////////////////////////////////////////////////////////
+/*
 var cat_cd = $('.room_categorycd').attr('data-cat_cd');
 if(cat_cd > 0){
 	be.getCategory('.hotel_cd');
 	setTimeout(function(){
 		be.getShareRoom('.room_categorycd');
 	}, 1000);
-}
+}*/
 /////////////////////////////////////////////////////////////
 be.getCategory('.hotel_cd');
+
+///////////////////////////////////////
+$('.hotel_cd').each(function(index){
+	var thiss = this;
+	var div = $(this).closest('.userInfo');
+	var hotel_cd = div.find('.hotel_cd').attr('data-hotel_cd');
+	hotel_cd     = parseInt(hotel_cd);
+	//console.log('hotel_cd = '+hotel_cd);
+	if(hotel_cd > 0){
+		div.find('.hotel_cd').val(hotel_cd);
+		setTimeout(function(){
+			be.getCategory(thiss);
+		}, 200);
+	}
+});

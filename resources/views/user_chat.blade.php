@@ -9,18 +9,16 @@
 @section('content')
 
 <section class="chat-sec">
-  <div class="container">
    <!--<div class="row chatList"></div>-->
-   <div class="row">
      <!--<div class="bottom-chat divChat" data-action="{{ route('save_chat') }}" data-action_list="{{ route('get_chat') }}">
        <input type="text" class="chat_msg" placeholder="Type a message....">
        <button class="chat-btn btnSaveChat" type="button"> Send</button>
      </div>-->
      
-     <div class="card direct-chat direct-chat-primary">
+     <div class="card">
      <div class="card-body pt-2">
  
-         <div class="direct-chat-messages">
+         <div class="direct-chat-messages chatList">
  
              <div class="direct-chat-msg">
                  <div class="direct-chat-infos clearfix">
@@ -61,21 +59,21 @@
  
      </div>
  
+ </div>
+ <a href="#" class="emergency-call">
+ <i class="fas fa-phone-alt"></i>
+ </a>
      <div class="card-footer">
          <form action="#" method="post">
-             <div class="input-group bottom-chat">
-                 <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+             <div class="input-group bottom-chat divChat" data-action="{{ route('save_chat') }}" data-action_list="{{ route('get_chat') }}">
+                 <input type="text" name="message" placeholder="Type Message ..." class="form-control chat_msg">
                  <span class="input-group-append">
-                     <button type="button" class="btn btn-primary chat-btn">Send</button>
+                     <button type="button" class="btn btn-primary chat-btn btnSaveChat">Send</button>
                  </span>
              </div>
          </form>
      </div>
- 
  </div>
- 
-   </div>
-  </div>
  
  </section>
 @endsection

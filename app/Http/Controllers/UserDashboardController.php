@@ -574,6 +574,7 @@ class UserDashboardController extends Controller
         $statusList = $responseListData->status;
         //print_r($chatList); die;
         if($statusList == 200){
+            $chats = '';
             foreach ($chatList as $key => $chat) {
                 $user_id = $chat->user_id;
                 $message = $chat->message;
@@ -583,34 +584,36 @@ class UserDashboardController extends Controller
 
                 $chatDate = date('Y-m-d', strtotime($created_at));
                 if($chatDate == date('Y-m-d')){
-                    $chatDtTm = date('h:i:s A');
+                    $chatDtTm = date('h:i A');
                 }else{
-                    $chatDtTm = date('j M y h:i:s A', strtotime($created_at));
+                    $chatDtTm = date('j M y h:i A', strtotime($created_at));
                 }
-
-                $divUser = $user_type == 'user'?'':'-sender';
-                if($user_type == 'user'){
-                    $chats .= '<div class="col-md-12">
-                        <div class="chat-bg">
-                          <div class="user-chat">
-                           <p>'.$message.'</p>
-                           <span>'.$chatDtTm.'</span>
-                          </div>
-                          <i class="fas fa-user"></i>
-                        </div>
-                    </div>';
-                }else if($user_type == 'admin'){
-                    $chats .= '<div class="col-md-12">
-                      <div class="chat-bg-sender">
-                       <i class="fas fa-user"></i>
-                       <div class="sender-chat">
-                        <p>'.$message.'</p>
-                        <span>'.$chatDtTm.'</span>
-                       </div>
-                      </div>
-                    </div>';
-                }else{
-                    $chats .= '';
+                
+                $image = asset('/images/chat_' .$user_type.'.png');
+                if($user_type == 'user') {           
+                    $userChat = '<div class="direct-chat-msg right">
+                            <div class="chat-sec">
+                                <div class="direct-chat-text user-chat">'.$message.'
+                                    <p class="mb-0 mt-0" style="font-size: 9px;">'.$chatDtTm.',  You</p>
+                                </div>
+                                <div class="chat-bg">
+                                    <img class="direct-chat-img" src="'.$image.'" alt="user image">
+                                </div>
+                            </div>
+                        </div>';
+                    $chats .= $userChat;
+                }else if($user_type == 'admin') { 
+                    $adminChat = '<div class="direct-chat-msg">
+                            <div class="sender-sec mb-2" style="display:flex;">
+                                <div class="chat-bg-sender">
+                                    <img class="direct-chat-img" src="'.$image.'" alt="support image">
+                                </div>
+                                <div class="direct-chat-text sender-chat">'.$message.'
+                                    <p class="mb-0 mt-0" style="font-size: 9px;">'.$chatDtTm.', Support</p>
+                                </div>
+                            </div>
+                        </div>';
+                    $chats .= $adminChat;
                 }
             }
         }

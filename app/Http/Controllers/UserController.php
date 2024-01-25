@@ -145,6 +145,8 @@ class UserController extends Controller
     {
       //  print_r($id);
         $data = [];
+        $data['activeHotels'] = [];
+        $data['deleteHotels'] = [];
         if($id > 0){
             $employee = DB::table('users')->where('actv_status', 1)->where('id', $id)->first();
            // $emp_event_cd = $employee->cur_event;
@@ -159,9 +161,20 @@ class UserController extends Controller
             }
             $event = $query->first();
 
-            $data['employee'] = $employee;
-             $data['event'] =  $event ;
+            $data['employee']   = $employee;
+            $data['event']      =  $event ;
             // echo '<pre>';  print_r($event); die;
+
+            $activeHotels = DB::table('event_books_emp')->where('status_in_htl', 1)->where('emp_cd', $id)
+                                ->select('emp_ev_book_id', 'emp_cd', 'emp_event_cd', 'emp_hotel_cd', 'emp_hotel_cat_cd', 'share_room_with_empcd', 'assign_check_in', 'assign_check_out')->get();
+            $deleteHotels = DB::table('event_books_emp')->where('status_in_htl', 0)->where('emp_cd', $id)
+                                ->leftJoin('hotels_category', 'event_books_emp.emp_hotel_cat_cd', '=', 'hotels_category.htl_cat_id')
+                                ->leftJoin('hotels', 'event_books_emp.emp_hotel_cd', '=', 'hotels.htl_id')
+                                ->select('event_books_emp.emp_ev_book_id', 'event_books_emp.emp_cd', 'event_books_emp.emp_event_cd', 'event_books_emp.emp_hotel_cd', 'event_books_emp.emp_hotel_cat_cd', 'event_books_emp.share_room_with_empcd', 'event_books_emp.assign_check_in', 'event_books_emp.assign_check_out', 'hotels_category.hotel_category', 'hotels.hotel_name')->get();
+
+            $data['activeHotels']   = $activeHotels;
+            $data['deleteHotels']   = $deleteHotels;
+
         }
         
         $event_list = DB::table('events')->where('actv_event', 1)->get();
@@ -175,6 +188,7 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        //print_r($request->all()); die;
         $cd = @$request->cd;
         $page_type = @$request->page_type;
         $validateData = Validator::make($request->all(), [
@@ -209,29 +223,32 @@ class UserController extends Controller
         // Iterate through the records
         foreach ($hotelCd as $key => $value) {
             //echo '---->>'.$hotelCd[$key];
-            $hotelKey = $key + 1;
-            $validator = Validator::make($request->all(), [
-                'room_categorycd.' . $key => 'required_if:hotel_cd.' . $key . ',>,0,0|integer',
-                'assign_check_in.' . $key => 'required_if:hotel_cd.' . $key . ',>,0,0|date',
-                'assign_check_out.' . $key => 'required|date|after:assign_check_in.' . $key,
-            ], [
-                'room_categorycd.*.required_if' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
-                'room_categorycd.*.integer' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
-                'assign_check_in.*.required' => 'The check-in date is required for hotel '.$hotelKey,
-                'assign_check_in.*.date' => 'The check-in date must be a valid date for hotel '.$hotelKey,
-                'assign_check_out.*.required' => 'The check-out date is required for hotel '.$hotelKey,
-                'assign_check_out.*.date' => 'The check-out date must be a valid date for hotel '.$hotelKey,
-                'assign_check_out.*.after' => 'The check-out date must be after the check-in date for hotel '.$hotelKey,
-            ]);
+            $hotel_cd           = @$hotelCd[$key];
+            if($hotel_cd > 0){
+                $hotelKey = $key + 1;
+                $validator = Validator::make($request->all(), [
+                    'room_categorycd.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|integer',
+                    'assign_check_in.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date',
+                    'assign_check_out.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date|after:assign_check_in.' . $key,
+                ], [
+                    'room_categorycd.*.required_if' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
+                    'room_categorycd.*.integer' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
+                    'assign_check_in.*.required' => 'The check-in date is required for hotel '.$hotelKey,
+                    'assign_check_in.*.date' => 'The check-in date must be a valid date for hotel '.$hotelKey,
+                    'assign_check_out.*.required_if' => 'The check-out date is required for hotel '.$hotelKey,
+                    'assign_check_out.*.date' => 'The check-out date must be a valid date for hotel '.$hotelKey,
+                    'assign_check_out.*.after' => 'The check-out date must be after the check-in date for hotel '.$hotelKey,
+                ]);
 
-            if ($validator->fails()) {
-                $errors = $validator->errors()->all();
-                $response = [
-                    'message' => implode('<br>', $errors),
-                    'status' => 2,
-                ];
+                if ($validator->fails()) {
+                    $errors = $validator->errors()->all();
+                    $response = [
+                        'message' => implode('<br>', $errors),
+                        'status' => 2,
+                    ];
 
-                return response()->json($response);
+                    return response()->json($response);
+                }
             }
         }
         $eventcd = @$request->eventcd;
@@ -256,6 +273,8 @@ class UserController extends Controller
 
         $drvr_number            = @$request->drvr_number;
         $vehicle_details        = @$request->vehicle_details;
+        $vehicle_type           = @$request->vehicle_type;
+        $vehicle_type           = strtoupper($vehicle_type);
         //$assign_check_in        = @$request->assign_check_in;
         //$assign_check_out       = @$request->assign_check_out;
         $user_pass              = @$request->user_pass;
@@ -278,11 +297,15 @@ class UserController extends Controller
         $row_data['trip_id']      = @$user_trip_id;
         //$row_data['password']      = Hash::make('AS@$$*(&DSHsd345'); //'AS@$$*(&DSHsd345';
         //print_r($row_dataE);
+        $dataMsg = [];
         $intcd = @$request->intcd;
         if($cd > 0){
             $emp_cd = $cd;
             $row_data['updated_at'] = $today;
             $sqlQuery_run = DB::table('users')->where('id', $cd)->update($row_data);
+            $dataMsg['status'] = 1;
+            $dataMsg['message'] = "Update Successfully";
+            $sqlQuery_run = 1;
         }else{
             $password = substr(str_shuffle(time()), 0, 6);
             $password = 'admin123';
@@ -292,6 +315,9 @@ class UserController extends Controller
             $row_data['actv_status'] = 1;
             $row_data['password'] = Hash::make($password);
             $emp_cd = $sqlQuery_run = DB::table('users')->insertGetId($row_data);
+
+            $dataMsg['status'] = 1;
+            $dataMsg['message'] = "Saved Successfully";
         }
         if($sqlQuery_run){
             $queryTrfHtl = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
@@ -301,6 +327,7 @@ class UserController extends Controller
                 $share_room_with    = @$share_room_with_empcd = $empShareRm[$key];
                 $assign_check_in    = @$assignCheckIn[$key];
                 $assign_check_out   = @$assignCheckOut[$key];
+                //print_r($hotelCd); die;
 
                 if($hotel_cd > 0 && $room_categorycd > 0){
                 
@@ -326,6 +353,7 @@ class UserController extends Controller
                         //$row_data['cur_event']          = @$eventcd;
                         //$row_data['cur_hotel']          = @$hotel_cd;
                         //$row_data['cur_category']       = @$room_categorycd;
+                        $row_dataE['vehicle_type']      = $vehicle_type;
                         $row_dataE['assign_check_in']   = date('Y-m-d H:i:s', strtotime(@$assign_check_in));
                         $row_dataE['assign_check_out']   = date('Y-m-d H:i:s', strtotime(@$assign_check_out));
                         $row_dataE['user_pass']         = @$user_pass;
@@ -374,6 +402,7 @@ class UserController extends Controller
                         $row_dataE['share_room_with_empcd'] = $share_room_with_empcd;
                         // ->where('emp_ev_book_id', $intcd)
                         $findAvt = DB::table('event_books_emp')->where('emp_hotel_cd', $hotel_cd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->first();
+                        $intcd = @$findAvt->emp_ev_book_id;
                         $prv_emp_event_cd = @$findAvt->emp_event_cd;
                         $prv_emp_hotel_cd = @$findAvt->emp_hotel_cd;
                         $prv_emp_hotel_cat_cd = @$findAvt->emp_hotel_cat_cd;
@@ -382,11 +411,13 @@ class UserController extends Controller
                             $queryTrfHtl = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
                             $findAvt = 0;
                         }*/
-                        if ($findAvt) {
+                        //print_r($row_dataE); die;
+                        if ($intcd > 0) {
                                 $shareRoomUpdt = $findAvt->share_room_with_empcd;
                                 $row_dataE['updated_at']     = $today;
                                 $row_dataE['status_in_htl']  = 1;
                                 $subQueryRun = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update($row_dataE);
+                                $dataMsg['message'] = "Update Successfully"; 
                         }else{
                             $row_dataE['ev_emp_create_by']  = $userId;
                             $row_dataE['status_in_htl']     = 1;

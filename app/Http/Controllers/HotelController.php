@@ -259,18 +259,23 @@ class HotelController extends Controller
             // if($prv_cd > 0 && trim($prv_cd) != ''){
             //     $SoftDel = DB::table('hotels_category')->where('htl_idd', $row_id)->where('soft_delete_yn', 0)->update(['soft_delete_yn' => 1, 'soft_delete_date' => $today]);
             // }
+            $noofrooms = $request->hotel_noofrooms ?? 1;
             if (DB::table('hotels_category')->where('htl_idd', $row_id)->exists()) {
+                $htls = DB::table('hotels_category')->where('htl_idd', $row_id)->first();
+                $occupied_rooms = $htls->occupied_rooms;
                 $categoryData = [];
                 $categoryData['created_at']     = $today;
-                $categoryData['occupied_rooms'] = 0;
-                $categoryData['vacent_rooms']   = $request->hotel_noofrooms ?? 1;
+                $categoryData['total_rooms']    = $noofrooms;
+                //$categoryData['occupied_rooms'] = 0;
+                $categoryData['vacent_rooms']   = $noofrooms - $occupied_rooms;
                 $subQueryRun = DB::table('hotels_category')->where('htl_idd', $row_id)->update($categoryData);
             } else {
                 $categoryData = [];
                 $categoryData['htl_idd']        = $row_id;
                 $categoryData['created_at']     = $today;
+                $categoryData['total_rooms']    = $noofrooms;
                 $categoryData['occupied_rooms'] = 0;
-                $categoryData['vacent_rooms']   = $request->hotel_noofrooms ?? 1;
+                $categoryData['vacent_rooms']   = $noofrooms;
                 $subQueryRun = DB::table('hotels_category')->insert($categoryData);
             }
 

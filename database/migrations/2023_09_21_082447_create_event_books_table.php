@@ -42,6 +42,7 @@ return new class extends Migration
             $table->longText('drvr_name')->nullable();
             $table->longText('drvr_number')->nullable();
             $table->longText('drvr_veh_details')->nullable();
+            $table->string('vehicle_type', 50)->nullable();
             $table->integer('ev_emp_create_by', false, false)->length(10)->default(0);
             $table->integer('status_in_htl', false, false)->length(1)->comment('1:Active, 0:Deactive')->default(1);
             $table->timestamps();

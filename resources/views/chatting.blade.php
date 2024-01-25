@@ -70,15 +70,8 @@
             <div class="card direct-chat direct-chat-primary">
               <div class="direct-chat-messages">
                 @foreach($chatting_list as $chatting)
-                    <div class="direct-chat-msg {{ $chatting->user_type == 'admin' ? 'right' : '' }}">
-                        <div class="direct-chat-infos clearfix">
-                            {{-- <span class="direct-chat-name float-{{ $chatting->user_type == 'admin' ? 'right' : 'left' }}">
-                                {{ $chatting->user_type == 'admin' ? 'Admin' : 'User' }}
-                            </span> --}}
-                            {{-- <span class="direct-chat-timestamp float-{{ $chatting->user_type == 'admin' ? 'left' : 'right' }}">
-                                {{ $chatting->created_at->format('d M h:i a') }}
-                            </span> --}}
-                        </div>
+                      <div class="direct-chat-msg {{ $chatting->user_type == 'admin' ? 'right' : '' }}">
+  
                          <img class="direct-chat-img" src="{{ asset('/images/chat_' . ($chatting->user_type == 'admin' ? 'admin.png' : 'user.png')) }}" alt="message user image">
 
                         @if($chatting->user_type == 'user' && $chatting->chat_status == 0)

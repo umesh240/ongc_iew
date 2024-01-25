@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-  //echo '<pre>'; print_r($event); die;
+  //echo '<pre>'; print_r($deleteHotels); die;
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Employee Master ';
   $pgArr = array('add' => 'Add', 'edit' => 'Update', 'hotel' => '', 'driver' => '', 'event' => '');
@@ -18,6 +18,15 @@
     }
   }
   $intcd = $emp_ShareRmAll = $room_categorycd = $hotel_cd = $eventcd = $emp_hotel_cat_cd = $emp_hotel_cd = $emp_event_cd = '';
+  $delHtlList = [];
+  $delHtlListCnt = 0;
+  foreach($deleteHotels as $delHtl){
+    $hotel_name = $delHtl->hotel_name;
+    $hotel_category = $delHtl->hotel_category;
+    $delHtlList[] = $hotel_name.' ('.$hotel_category.')';
+    $delHtlListCnt++;
+  }
+  $delHtlList = implode(', ', $delHtlList);
 @endphp
 @section('title', $pageNm)
 @section('content')
@@ -66,6 +75,7 @@
       $dpt_flight_location = @$event->dptr_location;
       $drvr_name = @$event->drvr_name;
       $drvr_number = @$event->drvr_number;
+      $vehicle_type = @$event->vehicle_type;
       $vehicle_details = @$event->drvr_veh_details;
       $assign_check_out = @$event->assign_check_out;
       $assign_check_in = @$event->assign_check_in;
@@ -163,7 +173,21 @@
         </div>
         <h4 class="bg-primary pl-3 mb-0">Hotel Details</h4>
         <div class="card-body pt-0">
+          @if($delHtlListCnt > 0)
+          <div class="row pb-2 border-bottom">
+            <div class="col-sm-12">
+              <p class="mb-0 text-danger text-bold">Removed from hotel(s) : <font style="font-size: 12px;">{{ $delHtlList }}</font></p>
+            </div>
+          </div>
+          @endif
           @for($i = 0; $i < 4; $i++)
+          @php
+            $hotel_cd         = @$activeHotels[$i]->emp_hotel_cd; 
+            $room_categorycd  = @$activeHotels[$i]->emp_hotel_cat_cd;
+            $emp_ShareRm      = @$activeHotels[$i]->share_room_with_empcd;
+            $assign_check_in  = @$activeHotels[$i]->assign_check_in;
+            $assign_check_out = @$activeHotels[$i]->assign_check_out;
+          @endphp
           <div class="row userInfo border-bottom pb-2">
             <div class="col-sm-12">
               <p class="mb-0 text-primary text-bold">Hotel Details {{ $i+1 }}</p>
@@ -191,7 +215,7 @@
             </div>
             <div class="col-sm-6">
               <label>Share Room With : </label>
-              <select class="form-control form-control-sm select2 td_empShareRm emp_ShareRm" name="emp_ShareRm[]">
+              <select class="form-control form-control-sm select2 td_empShareRm emp_ShareRm" name="emp_ShareRm[]" data-shared_cd="{{ old('emp_ShareRm')?old('emp_ShareRm'):$emp_ShareRm }}">
                 <option value="">Select employee</option>
               </select>
             </div>   
@@ -205,128 +229,6 @@
             </div> 
           </div>
           @endfor
-          {{--
-          <div class="row userInfo border-bottom pb-2">
-            <div class="col-sm-12">
-              <p class="mb-0 text-primary text-bold">Hotel Details 2</p>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Hotel Name : </label>
-              <select class="form-control form-control-sm hotel_cd2" name="hotel_cd2" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd2')?old('hotel_cd2'):@$hotel_cd2 }}" required>
-                @if(!empty($hotel_list))
-                  @if(count($hotel_list) > 1)
-                    <option value="">Select hotel</option>
-                  @endif
-                  @foreach($hotel_list as $hotel)
-                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd2 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
-                  @endforeach
-                @endif
-              </select>
-              <script> $('.hotel_cd2').val('{{ old("hotel_cd2")?old("hotel_cd2"):@$hotel_cd2 }}'); </script>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Room Category : </label>
-              <select class="form-control form-control-sm room_categorycd" name="room_categorycd2" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd2')?old('room_categorycd2'):@$room_categorycd2 }}"  >
-                <option value="">Select category</option>
-               
-              </select>
-            </div>
-            <div class="col-sm-6">
-              <label>Share Room With : </label>
-              <select class="form-control form-control-sm select2 td_empShareRm2 emp_ShareRm2" name="emp_ShareRm2">
-                <option value="">Select employee</option>
-              </select>
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-in Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_in2" name="assign_check_in2" value="{{ old('assign_check_in2')?old('assign_check_in2'):@$assign_check_in2 }}">
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-out Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_out2" name="assign_check_out2" value="{{ old('assign_check_out2')?old('assign_check_out2'):@$assign_check_out2 }}">
-            </div> 
-          </div>
-          <div class="row userInfo border-bottom pb-2">
-            <div class="col-sm-12">
-              <p class="mb-0 text-primary text-bold">Hotel Details 3</p>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Hotel Name : </label>
-              <select class="form-control form-control-sm hotel_cd3" name="hotel_cd3" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd3')?old('hotel_cd3'):@$hotel_cd3 }}" required>
-                @if(!empty($hotel_list))
-                  @if(count($hotel_list) > 1)
-                    <option value="">Select hotel</option>
-                  @endif
-                  @foreach($hotel_list as $hotel)
-                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd3 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
-                  @endforeach
-                @endif
-              </select>
-              <script> $('.hotel_cd').val('{{ old("hotel_cd3")?old("hotel_cd3"):@$hotel_cd3 }}'); </script>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Room Category : </label>
-              <select class="form-control form-control-sm room_categorycd" name="room_categorycd3" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd3')?old('room_categorycd3'):@$room_categorycd3 }}"  >
-                <option value="">Select category</option>
-               
-              </select>
-            </div>
-            <div class="col-sm-6">
-              <label>Share Room With : </label>
-              <select class="form-control form-control-sm select2 td_empShareRm3 emp_ShareRm3" name="emp_ShareRm3">
-                <option value="">Select employee</option>
-              </select>
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-in Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_in3" name="assign_check_in3" value="{{ old('assign_check_in3')?old('assign_check_in3'):@$assign_check_in3 }}">
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-out Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_out3" name="assign_check_out3" value="{{ old('assign_check_out3')?old('assign_check_out3'):@$assign_check_out3 }}">
-            </div> 
-          </div>
-          <div class="row userInfo border-bottom pb-2">
-            <div class="col-sm-12">
-              <p class="mb-0 text-primary text-bold">Hotel Details 4</p>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Hotel Name : </label>
-              <select class="form-control form-control-sm hotel_cd4" name="hotel_cd4" onchange="javascript:be.getCategory(this);" data-link="{{ route('gethtlcategory') }}" data-hotel_cd="{{ old('hotel_cd4')?old('hotel_cd4'):@$hotel_cd4 }}" required>
-                @if(!empty($hotel_list))
-                  @if(count($hotel_list) > 1)
-                    <option value="">Select hotel</option>
-                  @endif
-                  @foreach($hotel_list as $hotel)
-                    <option value="{{ $hotel->htl_id }}"  {{ @$emp_hotel_cd4 == $hotel->htl_id?'selected':''  }}>{{ $hotel->hotel_name }}</option>
-                  @endforeach
-                @endif
-              </select>
-              <script> $('.hotel_cd').val('{{ old("hotel_cd4")?old("hotel_cd4"):@$hotel_cd4 }}'); </script>
-            </div>
-            <div class="col-sm-6">
-              <label for="exampleInputEmail1">Room Category : </label>
-              <select class="form-control form-control-sm room_categorycd" name="room_categorycd4" onchange="be.getShareRoom(this);" data-link="{{ route('geteventemp') }}" data-cat_cd="{{ old('room_categorycd4')?old('room_categorycd4'):@$room_categorycd4 }}"  >
-                <option value="">Select category</option>
-               
-              </select>
-            </div>
-            <div class="col-sm-6">
-              <label>Share Room With : </label>
-              <select class="form-control form-control-sm select2 td_empShareRm4 emp_ShareRm4" name="emp_ShareRm4">
-                <option value="">Select employee</option>
-              </select>
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-in Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_in4" name="assign_check_in4" value="{{ old('assign_check_in4')?old('assign_check_in4'):@$assign_check_in4 }}">
-            </div>   
-            <div class="col-sm-3">
-                <label>Hotel Check-out Date : </label>
-                <input type="datetime-local" class="form-control form-control-sm assign_check_out4" name="assign_check_out4" value="{{ old('assign_check_out4')?old('assign_check_out4'):@$assign_check_out4 }}">
-            </div> 
-          </div>
-          --}}
         </div>
         <h4 class="bg-primary pl-3 mb-0">Flight Details</h4>
         <div class="card-body pt-0">
@@ -384,14 +286,23 @@
         <h4 class="bg-primary pl-3 mb-0">Driver & Vehicle Details</h4>
         <div class="card-body pt-0">
           <div class="row divDriverInfo">
+            <div class="col-sm-3">
+              <label>Vehicle Type : </label>
+              <select class="form-control form-control-sm vehicle_type" name="vehicle_type">
+                <option value="">NA</option>
+                <option value="Bus">Bus</option>
+                <option value="light-weight">light-Weight </option>
+              </select>
+              <script> $('.vehicle_type').val("{{ old('vehicle_type')?old('vehicle_type'):@$vehicle_type }}"); </script>
+            </div>
+            <div class="col-sm-3">
+              <label>Driver Number : </label>
+              <input type="text" class="form-control form-control-sm drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
+            </div>
             <div class="col-sm-6">
               <label>Driver Name : </label>
               <input type="text" class="form-control form-control-sm drvr_name" name="drvr_name" value="{{ old('drvr_name')?old('drvr_name'):@$drvr_name }}" placeholder="Driver name" maxlength="240">
             </div>  
-            <div class="col-sm-6">
-              <label>Driver Number : </label>
-              <input type="text" class="form-control form-control-sm drvr_number int" name="drvr_number" value="{{ old('drvr_number')?old('drvr_number'):@$drvr_number }}" placeholder="Driver number" maxlength="10">
-            </div>
             <div class="col-sm-12">
               <label>Vehicle Details : </label>
               <textarea class="form-control form-control-sm vehicle_details" name="vehicle_details" placeholder=" Enter Vehicle Details">{{ old('vehicle_details')?old('vehicle_details'):@$vehicle_details }}</textarea>

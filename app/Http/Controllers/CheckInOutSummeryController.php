@@ -62,6 +62,7 @@ class CheckInOutSummeryController extends Controller
         $rpt = new ReportsController();
         $event_list = $rpt->eventList();
         $data['event_list'] = $event_list;
+        vacentRoomCalculation();
         return view('room_availability', $data);
     }
     public function room_available(Request $request)

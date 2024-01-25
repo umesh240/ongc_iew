@@ -32,8 +32,8 @@ class ApiUsersController extends Controller
             $new_token = '';
             $loginValue = $request->email;
             $password = $request->pass;
-            $user1 = User::where(['mobile' => $loginValue, 'actv_status' => 1])->first();
-            $user2 = User::where(['cpf_no' => $loginValue, 'actv_status' => 1])->first();
+            $user1 = User::where(['mobile' => $loginValue, 'actv_status' => 1])->where('user_type', '>', 1)->first();
+            $user2 = User::where(['cpf_no' => $loginValue, 'actv_status' => 1])->where('user_type', '>', 1)->first();
 
             if ($user1 || $user2) {
                 if ($user1) {

@@ -24,7 +24,7 @@ figure img{
     <div class="container">
       <div class="row" style="justify-content: center;">
         <div class="col-md-10">
-          <div class="indian-energy pt-4">
+          <div class="indian-energy pt-4 pb-5">
             @php
             echo $aboutIEW;
             @endphp
