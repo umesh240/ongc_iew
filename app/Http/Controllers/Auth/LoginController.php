@@ -68,6 +68,12 @@ class LoginController extends Controller
             if($userType == 0 || $userType == 1){
                 return redirect()->route('dashboard');
             }elseif($userType == 2 || $userType == 2){
+                $first_login = 0;
+                if($password == 'admin123'){
+                    $first_login = 1;
+                }
+                session(['first_login' => $first_login]);
+                //echo $first_login; die;
                 return redirect()->route('my.dashboard');
             }else{
                 Session::flush();

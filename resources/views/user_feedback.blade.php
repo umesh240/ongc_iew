@@ -75,7 +75,7 @@ div#breadcrumb_wrapper h6 {
           $id = $feedbackList->id;
           $feedbacks = $feedbackList->feedbacks;
         @endphp
-        <div class="feedback-content">
+        <div class="feedback-content mt-0">
         <h4 class="feedbackTitle">{{ $title }}</h4>
         @foreach($feedbacks as $key => $fdb)
         @php

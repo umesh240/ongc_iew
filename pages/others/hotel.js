@@ -83,32 +83,35 @@ htl = {
 		trrH.find('.hotel_noofrooms').attr('value', total_rooms).val(total_rooms);
 	},
 	delImage:function(thiss, image){
-		var cnf = confirm('Are you sure to delete this image..?');
+		var cnf = confirm('Are you sure to permanently delete this image..?');
 		if(cnf){
+			var csrf_token = $('input[name="_token"]').val();
+			var htl_id = $('.cd').val();
 			//var input = '<input type="hidden" name="delImg[]" class="delImg" value="'+image+'" />';
 			var link = $(thiss).attr('data-delete-image-link');
-			 	console.log(link);
-				console.log(image);
-				$.ajax({
-					type: "POST",
-					url: link,
-					data: { image : image },
-					beforeSend: function(){
-					  $('.loading-container').css('display', 'flex');
-					},
-					success: function (response) {
-						//console.log(response); 
-					  	var message = response.message;
-						var status = response.status;
-						if(parseInt(status) == 1){
-							$('.td_empShareRm').html(message);
-						}
-						$('.loading-container').css('display', 'none');
-					},
-					error: function (error) {
-						console.log(error);
+		 	console.log(link);
+			$.ajax({
+				type: "POST",
+				url: link,
+				data: { image : image, htl_id: htl_id, _token: csrf_token },
+				beforeSend: function(){
+				  $('.loading-container').css('display', 'flex');
+				},
+				success: function (response) {
+					//console.log(response); 
+				  	var message = response.message;
+					var status = response.status;
+					if(parseInt(status) == 1){
+						$(thiss).closest('.img-wraps').remove();
+						location.reload();
 					}
-				});
+					show_msgT(status, message);
+					$('.loading-container').css('display', 'none');
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
 			$('.divDelImg').append(input);
 			$(thiss).closest('.img-wraps').remove();
 		}

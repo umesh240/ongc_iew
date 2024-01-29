@@ -1464,6 +1464,7 @@ section.chat-sec {
    }
    section.change-password {
        padding: 50px 0px 100px 0px;
+       height: 90vh;
    }
    #hotelName input {
        padding: 5px 40px;
@@ -1696,7 +1697,7 @@ section.chat-sec {
        text-align: center;
        z-index: 1;
        text-align: left;
-       padding-left: 60px;
+       padding-left: 30px;
    }
    
    #sidebar-btn {
@@ -1994,6 +1995,10 @@ section.chat-sec {
    .shuttle-time h3 {
     font-size: 14px;
    } */
+   #hotelName i.fas.fa-lock {
+    top: 63%;
+    left: 6%;
+}
    .sos-img h3 {
     font-size: 11px !important;
     text-align: center;
@@ -2488,7 +2493,7 @@ section.chat-sec {
    #sidebar ul li a {
        height: 63px;
        width: 184px;
-           padding: 10px 60px;
+           padding: 10px 33px;
    }
    .card-tabs {
        border: 1px solid #F07E29 !important;
@@ -2497,8 +2502,13 @@ section.chat-sec {
        padding: 10px 0px;
    }
    #sidebar ul li a .icon i {
-       top: 30px;
+    top: 33px;
+    font-size: 14px;
+    left: 9px;
    }
+   span.title {
+    font-size: 14px;
+}
    #sidebar.visible {
        right: -39px;
    }
@@ -2792,7 +2802,16 @@ section.chat-sec {
    
    
    @media only screen and (min-width : 414px) and (max-width : 896px) {
-    
+    #hotelName input {
+        padding: 5px 45px;
+    }
+    #hotelName i.fas.fa-lock {
+        top: 63%;
+        left: 5%;
+    }
+    .eye-icon i {
+        left: 90%;
+    }
     .row.shuttle-service {
         padding: 15px;
     }
@@ -2911,8 +2930,11 @@ section.chat-sec {
        top: 30px;
    }
    #sidebar ul li a {
-       padding: 10px 60px;
-   }
+    padding: 10px 33px;
+}
+#sidebar ul li a .icon i {
+    top: 33px;
+}
    .local-news h5 {
        font-size: 16px;
    }
@@ -2974,9 +2996,12 @@ section.chat-sec {
        width: 230px;
            top: -11px;
    }
-   #sidebar.visible {
-       right: -29px;
-   }
+   #sidebar ul li a {
+    width: 197px;
+}
+#sidebar.visible {
+    right: -23px;
+}
    div#last-col {
     display: none;
    }

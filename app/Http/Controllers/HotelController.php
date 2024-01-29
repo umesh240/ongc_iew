@@ -358,7 +358,7 @@ class HotelController extends Controller
 
     public function delete_image(Request $request)
     {
-        $cd = $request->id;
+        $htl_id = $request->htl_id;
         $del_img = $request->image;
         // if ($request->has('delImg')) {
         //     $deleted_Imgs = $request->delImg;
@@ -367,21 +367,29 @@ class HotelController extends Controller
         //         File::delete($directory.'/'.$del_img);
         //     }
         // }
-        $getHtl = DB::table('hotels')->where('htl_id', $cd)->first();
+        $getHtl = DB::table('hotels')->where('htl_id', $htl_id)->first();
         $saved_hotel_image = $getHtl->hotel_image;
         if (trim(@$saved_hotel_image) != '') {
             $saved_hotel_imageAll = explode('||', $saved_hotel_image);
-        }
-        $remains_Photo = array_diff($saved_hotel_imageAll, $request->del_img);
-
-
-        $runQuery = DB::table('hotels')->where('htl_id', $cd)->update(['hotel_image' => implode('||', $remains_Photo)]);
-        if ($runQuery) {
-            $status = 1;
-            $message = "Delete successfully";
+            $keyToRemove = array_search($del_img, $saved_hotel_imageAll);
+            if ($keyToRemove !== false) {
+                unset($saved_hotel_imageAll[$keyToRemove]);
+                $remains_Photo = array_values($saved_hotel_imageAll);
+                $runQuery = DB::table('hotels')->where('htl_id', $htl_id)->update(['hotel_image' => implode('||', $remains_Photo)]);
+                if ($runQuery) {
+                    $status = 1;
+                    $message = "Delete successfully";
+                } else {
+                    $status = 3;
+                    $message = "Not delete";
+                }
+            } else {
+                $status = 3;
+                $message = "Image not found.";
+            }
         } else {
             $status = 3;
-            $message = "Not delete";
+            $message = "Image not found.";
         }
         return trim('||' . $message . '||' . $status);
     }

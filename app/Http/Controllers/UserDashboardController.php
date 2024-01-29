@@ -264,6 +264,10 @@ class UserDashboardController extends Controller
 
         $resp = $api->changePassword($api_data);
         $responseData = $resp->getData();
+        $status = $responseData->status;
+        if($status == 200){
+            session(['first_login' => 0]);
+        }
         return response()->json($responseData);
     }
     

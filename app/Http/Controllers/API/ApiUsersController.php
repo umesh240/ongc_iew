@@ -46,6 +46,10 @@ class ApiUsersController extends Controller
                 // $new_token = '';
                 // $status = 400;
                 // $result = "Something went wrong.";
+                $first_login = 0;
+                if($password == 'admin123'){
+                    $first_login = 1;
+                }
                 if ($user && Hash::check($password, @$user->password)) {
                     $pre_login_token = @$user->login_token;
                     if (is_null($pre_login_token) || empty($pre_login_token)) {
@@ -64,7 +68,7 @@ class ApiUsersController extends Controller
                     $wheather = $event->eventWheather($emp_event_cd);
                     $status = 200;
                     $result = $user;
-                    return response()->json(['status' => $status, "response" => $result, "token" => $new_token]);
+                    return response()->json(['status' => $status, "response" => $result, "token" => $new_token, "first_login" => $first_login]);
                 } else {
                     $status = 401;
                     $result = 'Password mismatch.';
@@ -523,13 +527,14 @@ class ApiUsersController extends Controller
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
                 'old_password' => 'required',
-                'new_password' => 'required|min:6',
+                'new_password' => 'required|min:6|not_in:admin123',
                 'confirm_password' => 'required|same:new_password'
             ], [
                 'id.required' => 'User not logged-in.',
                 'old_password.required' => 'Old password is required field.',
                 'new_password.required' => 'New password is required field.',
                 'new_password.min' => 'New password will be minimum 6 char long.',
+                'new_password.not_in' => 'Make new password as different password.',
                 'confirm_password.same' => 'Confirm password mismatch with new password.'
             ]);
 
@@ -903,7 +908,7 @@ class ApiUsersController extends Controller
             foreach ($feedback_list as $key0 => $feed) {
                 foreach ($feed->feedbacks as $key1 => $feedback) {
                     $fb_id = $feedback->fb_id;
-                    $rating = $all_feedbacks[$fb_id]['rating'];
+                    $rating = @$all_feedbacks[$fb_id]['rating'];
                     $rating = $rating > 0 ? $rating : 0;
                     $feedback->rating = $rating;
                 }

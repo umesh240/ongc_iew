@@ -1,5 +1,6 @@
 @extends('layouts.app_user_new')
 @php
+  $first_login = @session('first_login');
   $embedded = session()->get('embedded'); 
   @$curRouteNm = Route::currentRouteName();
   @$pageNm = 'Dashboard';
@@ -18,12 +19,12 @@
  
 
 
-    $hotel_imageAll = [];
+  $hotel_imageAll = [];
   $hotel_imageAll[] = 'default.png';
   $image_path = asset('/storage/app/hotel_image').'/';
   $hotel_imageCnt = 1;
   $emp_ev_book_id = @$event_pdf_file = '';
-  $cod = 0;
+  $flight_status = $cod = 0;
   $all_hotels = [];
   $user_name = '';  
   if(@$status == 200){  
@@ -63,6 +64,7 @@
     $hospitalityFPR = @$hosp_fpr_name.', '.@$hosp_fpr_mob_no;
 
 
+    $flight_status      = @$userData->flight_status;
     $arv_flight_name    = @$userData->arv_flight_name;
     $arv_flight_no      = @$userData->arv_flight_no;
     $arv_date_time      = @$userData->arv_date_time;
@@ -156,11 +158,11 @@
           </p>
           </div>
           <div class="col-md-2 col-2 text-center" style="align-items: center; display: flex;">
-            <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
+            <!-- <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location"> -->
               <div class="icon-event">
                 <i class="fa-solid fa-location-dot"></i>
               </div>
-            </a>
+            <!-- </a> -->
           </div>
 
         </div>
@@ -173,7 +175,7 @@
  <div class="container">
     <div class="row hotel-bg">
       <div class="col-md-12 col-12 event-bg">
-       <p class="text-light event-text" style="display:flex; justify-content: space-between;">Venue : {{ @$event_name }}<br><!--From: {{@$event_datefr1.' To '.@$event_dateto1}}--><span> 6-9 Feb 2024</span></p>
+       <p class="text-light event-text" style="display:flex; justify-content: space-between;">Venue : {{ @$event_name }}<br><!--From: {{@$event_datefr1.' To '.@$event_dateto1}}--><span> 06-09 Feb 2024</span></p>
        </div>
         <div  style="align-items: center; display: flex;">
            <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
@@ -231,7 +233,7 @@
             @php
             @endphp
             <div class="tab-content text-center"> 
-              <div class="tab-pane active" id="checkInOut " role="tabpanel">
+              <div class="tab-pane active" id="checkInOut" role="tabpanel">
                 @foreach($all_hotels as $htl)
                 @php
                   $checkOutCls = $checkInCls = 'check-grey';
@@ -339,6 +341,7 @@
               
                   <div class="tab-pane" id="flightDetails" role="tabpanel">
                    <div class="row vehicle-bg" style= "align-items: center;">
+                      @if($flight_status == 1)
                       <div class="col-md-6 col-sm-6 pr-1 pl-1 text-white" style="color: #457CB2;">
                         <h5 class="mb-3 desktop-left">Arrival</h5>
                            <h3>{{ @$arv_flight_no }}</h3>
@@ -351,9 +354,6 @@
 
                            </ul>
                       </div>
-
-                      
-                      
                       <div class="col-md-6 col-sm-6 pr-1 pl-1 mt-1 text-white" style="color: #457CB2;">
                         <h5 class="mb-3 desktop-right">Departure</h5>
                            <h3>{{ @$dptr_flight_no }}</h3>
@@ -362,23 +362,28 @@
 
                             <li><i class="fas fa-map-marker-alt"></i>{{ @$dptr_location }}</li>
                          
-                          <li> <i class="fas fa-calendar-alt"></i>{{ @$arv_date_time1 }}</li>
+                          <li> <i class="fas fa-calendar-alt"></i>{{ @$dptr_date_time1 }}</li>
                             
                            </ul>
                       </div>
-             
-                      <div class="col-md-12">
+                      
+                      <div class="col-md-12 h-10">
                         <div class="tab-btn pt-3">
                           <a href="{{ route('my.page', ['page'=>'flight']) }}"><button class=" edit-btn" type="submit">Edit Details</button></a>
                         </div>
-                        
-                   </div>
+                      </div>
+                      @else
+                      <div class="col-md-12">
+                        <h4 class="text-white">Not Available</h4>
+                      </div>
+                      @endif
                    
                     </div>
                  <div class="row flight-mobile">
                <div class="center-plane">
                 <i class="fas fa-plane"></i>
                </div>
+                    @if($flight_status == 1)
                     <div class="col-md-6 col-6 text-white pr-2" >
                       <div class="check-time check-tab">
                         <h5 class="mb-3 text-left left-sde">Arrival</h5>
@@ -391,23 +396,28 @@
                              <li><i class="fas fa-calendar-alt"></i>{{ @$arv_date_time1 }}</li>
                            </ul>
                       </div>
+                    </div>
+                    <div class="col-md-6 col-6 text-white pr-2" style="justify-content: end; display: flex;">
+                      <div class="check-time check-tab">
+                        <h5 class="mb-3 text-left right-sde">Departure</h5>
+                           <h3 class="text-left">{{ @$dptr_flight_no }}</h3>
+                         <ul>
+                          <li> <i class="fas fa-fighter-jet"></i>{{ @$dptr_flight_name }}</li>
+                         
+                          <li> <i class="fas fa-map-marker-alt"></i>{{ @$dptr_location }}</li>
+                          
+                           <li><i class="fas fa-calendar-alt"></i>{{ @$dptr_date_time1 }}</li>
+                         </ul>
                       </div>
-                      <div class="col-md-6 col-6 text-white pr-2" style="justify-content: end; display: flex;">
-                        <div class="check-time check-tab">
-                          <h5 class="mb-3 text-left right-sde">Departure</h5>
-                             <h3 class="text-left">{{ @$dptr_flight_no }}</h3>
-                           <ul>
-                            <li> <i class="fas fa-fighter-jet"></i>{{ @$dptr_flight_name }}</li>
-                           
-                            <li> <i class="fas fa-map-marker-alt"></i>{{ @$dptr_location }}</li>
-                            
-                             <li><i class="fas fa-calendar-alt"></i>{{ @$dptr_date_time1 }}</li>
-                           </ul>
-                        </div>
-                        </div>
-                         <div class="tab-btn pt-3" style="margin: 0 auto">
-                          <a href="{{ route('my.page', ['page'=>'flight']) }}"><button class=" edit-btn" type="submit">Edit Details</button></a>
-                        </div>
+                    </div>
+                    <div class="tab-btn pt-3" style="margin: 0 auto">
+                      <a href="{{ route('my.page', ['page'=>'flight']) }}"><button class=" edit-btn" type="submit">Edit Details</button></a>
+                    </div>
+                    @else
+                    <div class="col-md-12 h-10">
+                      <h4 class="text-white">Not Available</h4>
+                    </div>
+                    @endif
                     </div>
                     
                       </div>
@@ -423,6 +433,9 @@
                         $drvr_name = @$userData->drvr_name;
                         $drvr_number = @$userData->drvr_number;
                         $drvr_veh_details = @$userData->drvr_veh_details;
+                      }
+                      if(empty($vehicle_type) == ''){
+                        $vehicle_type = "Not Applicable";
                       }
                       $shuttle_timing = @$userData->shuttle_timing;
                       @endphp
@@ -692,7 +705,7 @@
 
 </section>
  
-<div id="mdlWelCome" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+<div id="mdlWelCome" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false" data-cpg="{{ route('my.page', ['page'=>'change_password']) }}" data-flg="{{ $first_login }}">
   <div class="modal-dialog" style="margin: auto auto; width: 90%;" >
     <div class="modal-content" style="border-radius: 20px; box-shadow: 0px 6px 20px -5px #457cb26b;  border: none;">
       <div class="modal-body" style="text-align: center;">
@@ -703,7 +716,7 @@
         <div class="ongc-user">
           <h5 class="mb-4" style="color:#457CB2;">Mr/Mrs {{ $user_name }}</h5>
         </div>
-        <button type="button" class="btn  welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+        <button type="button" class="btn welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
       </div>
     </div>
 

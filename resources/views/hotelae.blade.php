@@ -170,7 +170,7 @@ $emp_event_cd = '';
             @endphp
             @foreach($hotel_imageAll as $img)
             <div class="img-wraps">
-              <!-- <span class="closes" title="Delete"  data-delete-image-link="{{ route('hotel.delete_image') }}" onclick="htl.delImage(this, '{{ $img }}')">×</span>  -->
+              <span class="closes" title="Delete"  data-delete-image-link="{{ route('hotel.delete_image') }}" onclick="htl.delImage(this, '{{ $img }}')">×</span> 
               <img class="img-responsive" src="{{ asset('storage/app/hotel_image/'.$img) }}">
             </div>
             @endforeach

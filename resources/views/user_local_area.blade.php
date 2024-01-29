@@ -3,7 +3,7 @@
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Local Area';
 @endphp
-@section('pageName', 'Local Area')
+@section('pageName', 'About Goa')
 @section('title', $pageNm)
 @section('content')
 <style type="text/css">

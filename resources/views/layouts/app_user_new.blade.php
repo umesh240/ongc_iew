@@ -59,6 +59,7 @@
   <section class="ongc-head desktop ccsticky-nav" id="mainHeader">
     <div class="container">
       @php
+      $first_login = @session('first_login');
       //$currentRouteName = Route::currentRouteName();
       $currentUrl = url()->current();
       $parsedUrl = parse_url($currentUrl);
@@ -71,7 +72,7 @@
         <a class="navbar-brand" href="#">
           <img src="{{ asset('/pages/images/ongc-red-logo.png') }}" alt="ONGC" id="ongc-red">
           <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
-          <img src="{{ asset('/pages/images/logo-iew-new.png') }}" alt="Indian Energy Logo" 
+          <img src="{{ asset('/pages/images/white-new-iew.png') }}" alt="Indian Energy Logo" 
             id="logo-two">
         </a>
 
@@ -87,13 +88,19 @@
               <ul>
                 <li>
 		              <a href="{{ route('my.page', ['page'=>'feedback']) }}">
-                    <span class="icon">  <i class="far fa-comment-dots"></i></span>
+                    <!-- <span class="icon">  <i class="far fa-comment-dots"></i></span> -->
                     <span class="title">Feedback</span>
+                  </a>
+                </li>
+                <li>
+		              <a href="{{ route('my.page', ['page'=>'change_password']) }}">
+                    <!-- <span class="icon">  <i class="fas fa-lock-open"></i></span> -->
+                    <span class="title">Change Password</span>
                   </a>
                 </li>
 		            <li>
 		              <a href="{{ route('logout'); }}">
-                    <span class="icon">  <i class="fas fa-sign-out-alt"></i></span>
+                    <!-- <span class="icon">  <i class="fas fa-sign-out-alt"></i></span> -->
                     <span class="title">Log Out</span>
                   </a>
 		            </li>
@@ -112,7 +119,10 @@
         @else
         <nav class="inner-header">
             <div class="inner-head">
-                <i class="fas fa-arrow-left" style="cursor: pointer;"  onclick="goBackToHomePage()"></i><h5>@yield('pageName')</h5>
+                @if($first_login != 1)
+                <i class="fas fa-arrow-left" style="cursor: pointer;"  onclick="goBackToHomePage()"></i>
+                @endif
+                <h5>@yield('pageName')</h5>
           </div>
         </nav>
         @endif
@@ -124,7 +134,7 @@
  
 @php
 $embedded = session()->get('embedded'); 
-if($embedded != 1){
+if($embedded != 1 && ($first_login != 1 && $pageName == 'my.change_password')){
 @endphp
 
 <!--- footer nav--->
