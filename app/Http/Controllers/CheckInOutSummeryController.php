@@ -67,85 +67,61 @@ class CheckInOutSummeryController extends Controller
     }
     public function room_available(Request $request)
     {
-        /*
-         SELECT `hc`.`htl_cat_id`,`hc`.`htl_idd`,`hc`.`evv_id`,`hc`.`hotel_category`,`hc`.`room_level`,`ht`.`hotel_name`, `eb`.`check_in`, `eb`.`check_out`, `eb`.`share_room_with_empcd` 
-FROM `hotels_category` as `hc` 
-LEFT JOIN `hotels` as `ht` ON `hc`.`htl_idd` = `ht`.`htl_id` 
-LEFT JOIN `event_books_emp` as `eb` ON `hc`.`htl_cat_id` = `eb`.`emp_hotel_cat_cd` 
-WHERE `hc`.`evv_id` = 1 and `eb`.`emp_event_cd` = 1 and `eb`.`status_in_htl` = 1 and `hc`.`soft_delete_yn` = 0 
-GROUP BY IF(`eb`.share_room_with_empcd IS NOT NULL, `eb`.share_room_with_empcd, `eb`.emp_ev_book_id)
-ORDER BY `ht`.`hotel_name`, `eb`.`share_room_with_empcd` DESC
-
-//// Final with date
-SELECT count(`eb`.`emp_hotel_cat_cd`) AS `rows`, `hc`.`htl_cat_id`,`hc`.`htl_idd`,`hc`.`evv_id`,`hc`.`hotel_category`,`hc`.`room_level`,`ht`.`hotel_name`, MIN(`eb`.`check_in`) AS `check_in`, MAX(`eb`.`check_out`) AS `check_out`,
- `eb`.`share_room_with_empcd`
-FROM `hotels_category` as `hc` 
-LEFT JOIN `hotels` as `ht` ON `hc`.`htl_idd` = `ht`.`htl_id` 
-LEFT JOIN `event_books_emp` as `eb` ON `hc`.`htl_cat_id` = `eb`.`emp_hotel_cat_cd` 
-WHERE (  (`eb`.`check_in` is Null AND `eb`.`check_out` is null) OR ( 
-           `eb`.`check_in` NOT BETWEEN '2023-12-05 15:20:00' AND '2023-12-07 15:00:00' 
-           AND `eb`.`check_out` NOT BETWEEN '2023-12-05 15:20:00' AND '2023-12-07 15:00:00' 
-       	) 
-       	AND ( date(`eb`.`check_in`) > '2023-12-05 15:20:00' AND date(`eb`.`check_out`) < '2023-12-07 16:00:00')  
-       	OR ( date(`eb`.`check_out`) < '2023-12-05 15:20:00') 
-    ) 
-	AND `hc`.`evv_id` = 1 and `eb`.`emp_event_cd` = 1 and `eb`.`status_in_htl` = 1 
-    and `hc`.`soft_delete_yn` = 0 
-GROUP BY IF(`eb`.share_room_with_empcd IS NOT NULL, `eb`.share_room_with_empcd, `eb`.emp_ev_book_id)
-ORDER BY `ht`.`hotel_name`, `eb`.`share_room_with_empcd` DESC;
-        */
         $eventcd = $request->eventcd;
         $hotel_cd = @$request->hotel_cd;
-        $fr_date = @$request->fr_date;
-        $fr_date = date('Y-m-d H:i:s', strtotime($fr_date));
-        $to_date = @$request->to_date;
-        $to_date = date('Y-m-d H:i:s', strtotime($to_date));
+        $fr_date = $request->fr_date;
+        $fr_date = date('Y-m-d', strtotime($fr_date));
+        $to_date = $request->to_date;
+        $to_date = date('Y-m-d', strtotime($to_date));
 
         $data = [];
-/*
-        $report_data = DB::table('hotels_category as hc')
-                    ->select(DB::raw('count(eb.emp_hotel_cat_cd) as rows'), 'hc.htl_cat_id', 'hc.htl_idd', 'hc.evv_id', 'hc.hotel_category', 'hc.room_level', 'ht.hotel_name', DB::raw('MIN(eb.check_in) as check_in'), DB::raw('MAX(eb.check_out) as check_out'), 'eb.share_room_with_empcd')
-                    ->leftJoin('hotels as ht', 'hc.htl_idd', '=', 'ht.htl_id')
-                    ->leftJoin('event_books_emp as eb', 'hc.htl_cat_id', '=', 'eb.emp_hotel_cat_cd')
-                    ->where(function($query) use ($fr_date, $to_date) {
-                        $query->whereNull('eb.check_in')
-                            ->whereNull('eb.check_out')
-                            ->orWhere(function($query) use ($fr_date, $to_date) {
-                                $query->whereNotBetween('eb.check_in', [$fr_date, $to_date])
-                                    ->whereNotBetween('eb.check_out', [$fr_date, $to_date])
-                                    ->orWhere(function($query) use ($fr_date, $to_date) {
-                                        $query->whereDate('eb.check_in', '>', $fr_date)
-                                            ->whereDate('eb.check_out', '<', $to_date);
-                                    })
-                                    ->orWhere(function($query) use ($fr_date, $to_date) {
-                                        $query->whereDate('eb.check_out', '<', $fr_date);
+
+        $report_data = DB::table('hotels_category')
+            ->leftJoin('hotels', 'hotels_category.htl_idd', '=', 'hotels.htl_id')
+            ->leftJoin('event_books_emp', function ($join) use ($fr_date, $to_date) {
+                $join->on('hotels_category.htl_cat_id', '=', 'event_books_emp.emp_hotel_cat_cd')
+                    ->where('event_books_emp.status_in_htl', '=', 1)
+                    ->where(function ($query) use ($fr_date, $to_date) {
+                        $query->whereNull('event_books_emp.check_in')
+                            ->whereNull('event_books_emp.check_out')
+                            ->orWhere(function ($query) use ($fr_date, $to_date) {
+                                $query->whereNotNull('event_books_emp.check_in')
+                                    ->whereNotNull('event_books_emp.check_out')
+                                    ->where(function ($query) use ($fr_date, $to_date) {
+                                        $query->where('event_books_emp.check_out', '<', "$fr_date")
+                                            ->orWhere('event_books_emp.check_in', '>', "$to_date");
                                     });
+                            })
+                            ->orWhere(function ($query) use ($fr_date, $to_date) {
+                                $query->whereNull('event_books_emp.check_in')
+                                    ->whereNotNull('event_books_emp.check_out')
+                                    ->where('event_books_emp.check_out', '<', "$fr_date");
+                            })
+                            ->orWhere(function ($query) use ($fr_date, $to_date) {
+                                $query->whereNotNull('event_books_emp.check_in')
+                                    ->whereNull('event_books_emp.check_out')
+                                    ->where('event_books_emp.check_in', '>', "$to_date");
                             });
-                    })
-                    ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {
-                        $query->where('hc.htl_idd', $hotel_cd);
-                        $query->where('eb.emp_hotel_cat_cd', $hotel_cd);
-                    })
-                    ->where('hc.evv_id', '=', $eventcd)->where('eb.emp_event_cd', '=', $eventcd)->where('eb.status_in_htl', '=', 1)->where('hc.soft_delete_yn', '=', 0)
-                    ->groupBy(DB::raw('IFNULL(eb.share_room_with_empcd, eb.emp_ev_book_id)'))
-                    ->orderBy('ht.hotel_name')->orderByDesc('eb.share_room_with_empcd')->get();
-                    */
-        $report_data = DB::statement("SELECT count(`eb`.`emp_hotel_cat_cd`) AS `rows`, `hc`.`htl_cat_id`,`hc`.`htl_idd`,`hc`.`evv_id`,`hc`.`hotel_category`,`hc`.`room_level`,`ht`.`hotel_name`, MIN(`eb`.`check_in`) AS `check_in`, MAX(`eb`.`check_out`) AS `check_out`,
- `eb`.`share_room_with_empcd`
-FROM `hotels_category` as `hc` 
-LEFT JOIN `hotels` as `ht` ON `hc`.`htl_idd` = `ht`.`htl_id` 
-LEFT JOIN `event_books_emp` as `eb` ON `hc`.`htl_cat_id` = `eb`.`emp_hotel_cat_cd` 
-WHERE (  (`eb`.`check_in` is Null AND `eb`.`check_out` is null) OR ( 
-           `eb`.`check_in` NOT BETWEEN '2023-12-05 15:20:00' AND '2023-12-07 15:00:00' 
-           AND `eb`.`check_out` NOT BETWEEN '2023-12-05 15:20:00' AND '2023-12-07 15:00:00' 
-        ) 
-        AND ( date(`eb`.`check_in`) > '2023-12-05 15:20:00' AND date(`eb`.`check_out`) < '2023-12-07 16:00:00')  
-        OR ( date(`eb`.`check_out`) < '2023-12-05 15:20:00') 
-    ) 
-    AND `hc`.`evv_id` = 1 and `eb`.`emp_event_cd` = 1 and `eb`.`status_in_htl` = 1 
-    and `hc`.`soft_delete_yn` = 0 
-GROUP BY IF(`eb`.`share_room_with_empcd` IS NOT NULL, `eb`.`share_room_with_empcd`, `eb`.`emp_ev_book_id`)
-ORDER BY `ht`.`hotel_name`, `eb`.`share_room_with_empcd` DESC") ;
+                    });
+            })
+            ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {
+                $query->where('hotels_category.htl_idd', $hotel_cd);
+            })
+            ->where('hotels_category.total_rooms', '>', 0)
+            ->groupBy(DB::raw("IF(event_books_emp.share_room_with_empcd IS NOT NULL, event_books_emp.share_room_with_empcd, event_books_emp.emp_hotel_cat_cd)"))
+            ->orderBy('hotels.hotel_name')
+            ->select(
+                'hotels.hotel_name',
+                'hotels_category.hotel_category',
+                'hotels_category.total_rooms',
+                'hotels_category.htl_cat_id',
+                'hotels_category.htl_idd',
+                'event_books_emp.emp_hotel_cat_cd',
+                'event_books_emp.emp_hotel_cd',
+                DB::raw('count(event_books_emp.emp_hotel_cd) as occupied_room'),
+                DB::raw('(hotels_category.total_rooms - count(event_books_emp.emp_hotel_cd)) as vacent_room')
+            )
+            ->get();
 
 
                     

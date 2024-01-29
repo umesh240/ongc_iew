@@ -31,6 +31,27 @@ if (! function_exists('dateConvert')) {
         return date($formet, strtotime($date));
     }
 }
+/*
+if (! function_exists('dateFormat')) {
+    function dateFormat($originalTime) {
+        //$originalTime = "22/01/2024 11:32:17 PM";
+
+        if(trim($originalTime) == ''){
+            $dateTime = null;
+        }else{
+            $originalTime = strtoupper($originalTime);
+            $dtType = strpos($originalTime, '-');
+            if($dtType > 0){
+                $dttm = DateTime::createFromFormat('d-m-Y h:i:s A', $originalTime);
+            }else{
+                $dttm = DateTime::createFromFormat('d/m/Y h:i:s A', $originalTime);
+            }
+            $dateTime = $dttm->format('Y-m-d H:i:s');
+        }
+        // Output the result
+        return $dateTime;
+    }
+}*/
 if (! function_exists('timeDifference')) {
     function timeDifference($startDate, $endDate = '') {
         if(empty($endDate) || $endDate == null){

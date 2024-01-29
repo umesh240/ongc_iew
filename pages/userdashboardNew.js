@@ -1,6 +1,6 @@
 ud = {
   getCheckin: function(thiss, in_out) {
-    var div = $(thiss).closest('#checkinOutdates');
+    var div = $(thiss).closest('.checkinOutdates');
     var emp_ev_book_id = div.data('emp-ev-book-id');
     var route = div.data('route');
     var csrf_token = div.data('csrf-token');
@@ -157,6 +157,7 @@ ud = {
 /////////////////////////////////////////////////////////////////
 $(".cnfCkInOut").click(function() {
   var in_out = $(this).val();
+  //console.log(in_out);
   ud.getCheckin(this, in_out);
 });
 ud.getRoomTypeList('.hotel_cd');

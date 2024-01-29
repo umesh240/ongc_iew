@@ -205,7 +205,7 @@ $(".tableExport").DataTable({
     {
       extend: 'excel',
       title: $(".tableExport").attr('data-pgNam'),
-      text: '<i class="fa fa-file-excel"></i> Export to Excel', // Optional custom button text
+      text: '<i class="fa fa-file-excel"></i> Export to csv', // Optional custom button text
       exportOptions: {
         modifier: {
           page: 'all'

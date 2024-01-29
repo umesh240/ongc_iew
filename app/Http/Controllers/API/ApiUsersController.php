@@ -116,8 +116,17 @@ class ApiUsersController extends Controller
                 //     $inew = explode("||", asset('/storage/app/hotel_image') . '/' . $user1['hotelDetails']['hotel_image']);
                 //     $user1['hotelDetails'] = array_merge((array)$user1['hotelDetails'], ['hotel_image' => $inew]);
                 // }
+
+                $emp_event_cd = $user1->emp_event_cd;
+                $hotelList = EventBook::where('emp_cd', $idd)->where('status_in_htl', 1)->where('emp_event_cd', $emp_event_cd)
+                            ->leftJoin('hotels', 'event_books_emp.emp_hotel_cd', '=', 'hotels.htl_id')
+                            ->leftJoin('hotels_category', 'event_books_emp.emp_hotel_cat_cd', '=', 'hotels_category.htl_cat_id')
+                            ->select("event_books_emp.emp_ev_book_id", "event_books_emp.emp_cd", "event_books_emp.emp_event_cd", "event_books_emp.emp_hotel_cd", "event_books_emp.emp_hotel_cat_cd", "event_books_emp.assign_check_in", "event_books_emp.assign_check_out", "event_books_emp.check_in", "event_books_emp.check_out", "event_books_emp.status_in_htl", "hotels.hotel_name", "hotels.hotel_address", "hotels.hotel_geolocation", "hotels.hotel_image", "hotels.image_path", "hotels_category.hotel_category")
+                            ->orderBy('assign_check_in', 'ASC')->get();
+                $user1->all_hotels = $hotelList;
+                $user1->shuttle_timing = "https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:332572e6-2810-471b-80cf-e6bb7b13ca67";
                  
-                } else {
+            } else {
                 $data = NUll;
             }
             return response()->json(['status' => $status, "response" => $data]);
@@ -256,7 +265,10 @@ class ApiUsersController extends Controller
                 $flightArr['flight_create_date']    = $today;
                 $flight_type = "departure";
             }
-            $flightArr['flight_status'] = 2;
+            $flightArr['updated_at']    = $today;
+            $flightArr['flight_status'] = 1;
+            //$flightArr['flight_status'] = 2; // old code
+
 
             $queryRun = DB::table('event_books_emp')->where('emp_ev_book_id', $emp_ev_book_id)->where('emp_cd', $user_id)
                 ->update($flightArr);

@@ -62,11 +62,20 @@
               <label for="exampleInputEmail1">Hotel Name</label>
               <select class="form-control form-control-sm hotel_cd" name="hotel_cd" data-hotel_cd="{{ $hotel_cd }}"></select>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
+              <label for="withCkInOut"></label>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input custom-control-input-success custom-control-input-outline with_ck_inout" type="checkbox" id="withCkInOut" value="1" name="with_ck_inout" {{ @$with_ck_inout==1?'checked':'' }}>
+                  <label for="withCkInOut" class="custom-control-label">With Checked-In/Out</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1">
               <label for="exampleInputEmail1">&nbsp;</label>
               <button type="submit" name="submit_btn" value="submit" class="btn btn-sm btn-block btn-success"><i class="fa fa-search"></i> Filter</button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
               <label for="exampleInputEmail1">&nbsp;</label>
               <div id="export-button-container"></div>
             </div>
@@ -98,8 +107,12 @@
                 <th>Share With</th>
                 <th>Hotel Name</th>
                 <th>Room Category</th>
-                <th>Check-in</th>
-                <th>Check-out</th>
+                <th>Assigned Check-in</th>
+                <th>Assigned Check-out</th>
+                @if(@$with_ck_inout == 1)
+                <th>Confirmed Check-in</th>
+                <th>Confirmed Check-out</th>
+                @endif
                 <th>Last Update</th>
                 <th>Status</th>
               </tr>
@@ -117,15 +130,26 @@
                   }else{
                     $status_htl = '';
                   }
-                  $checkin = $checkout = '';
+                  $asn_checkin = $asn_checkout = '';
                   $assign_check_in = $data->assign_check_in;
                   $assign_check_out = $data->assign_check_out;
                   if($assign_check_in != null && strtotime($assign_check_in) > 0){
-                    $checkin = date('d/m/Y h:i A', strtotime($assign_check_in));
+                    $asn_checkin = date('d/m/Y h:i A', strtotime($assign_check_in));
                   }
                   if($assign_check_out != null && strtotime($assign_check_out) > 0){
-                    $checkout = date('d/m/Y h:i A', strtotime($assign_check_out));
+                    $asn_checkout = date('d/m/Y h:i A', strtotime($assign_check_out));
                   }
+
+                  $checkin = $checkout = '';
+                  $check_in = $data->check_in;
+                  $check_out = $data->check_out;
+                  if($assign_check_in != null && strtotime($check_in) > 0){
+                    $checkin = date('d/m/Y h:i A', strtotime($check_in));
+                  }
+                  if($check_out != null && strtotime($check_out) > 0){
+                    $checkout = date('d/m/Y h:i A', strtotime($check_out));
+                  }
+
                   $created_at = $data->created_at;
                   $updated_at = $data->updated_at;
                   $lastUpdate = '';
@@ -146,8 +170,12 @@
                   <td></td>
                   <td>{{ @$data->hotelDetails->hotel_name }}</td>
                   <td>{{ @$data->categoryDetails->hotel_category }}</td>
+                  <td>{{ @$asn_checkin }}</td>
+                  <td>{{ @$asn_checkout }}</td>
+                  @if(@$with_ck_inout == 1)
                   <td>{{ @$checkin }}</td>
                   <td>{{ @$checkout }}</td>
+                  @endif
                   <td>{{ @$lastUpdate }}</td>
                   <td>{{ @$status_htl }}</td>
                 </tr>

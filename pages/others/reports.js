@@ -19,13 +19,25 @@ rpt = {
                     if(parseInt(hotel_cd) > 0){
                         $('.hotel_cd').val(hotel_cd);
                     }
+                    var fr_date = $('.fr_date').attr('data-frdt');
+                    var to_date = $('.to_date').attr('data-todt');
 					var frdt = $(thiss).find('option:selected').attr('data-frdt');
 					var todt = $(thiss).find('option:selected').attr('data-todt');
 					if(frdt != undefined && frdt != ''){
-						$('.fr_date').val(frdt).attr('min', frdt).attr('max', todt).removeAttr('disabled');
+						$('.fr_date').attr('min', frdt).attr('max', todt).removeAttr('disabled');
+                        if(fr_date != undefined && fr_date != ''){
+                            $('.to_date').val(fr_date);
+                        }else{
+                            $('.to_date').val(frdt);
+                        }
 					}
 					if(todt != undefined && todt != ''){
-						$('.to_date').val(todt).attr('min', frdt).attr('max', todt).removeAttr('disabled');
+						$('.to_date').attr('min', frdt).attr('max', todt).removeAttr('disabled');
+                        if(to_date != undefined && to_date != ''){
+                            $('.to_date').val(to_date);
+                        }else{
+                            $('.to_date').val(todt); 
+                        }
 					}
                     $('.loading-container').css('display', 'none');
 				}

@@ -145,7 +145,7 @@
           <li class="nav-item @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show']) ? 'menu-open' : ''; @endphp ">
             <a href="#" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show']) ? 'active' : ''; @endphp ">
               <i class="nav-icon fas fa-file-alt"></i>
-              <p> Reports <i class="right fas fa-angle-left"></i> </p>
+              <p> Export <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -154,12 +154,14 @@
                   <p>Event-Hotel Wise</p>
                 </a>
               </li>
+              {{--
               <li class="nav-item">
                 <a href="{{ route('check_inout_summery') }}" class="nav-link  @php echo in_array($curRouteNm, ['check_inout_summery', 'check_inout_summery_show']) ? 'active' : ''; @endphp">
                   <i class="far fa-circle nav-icon text-success"></i>
                   <p>Check-In/Out Summary</p>
                 </a>
               </li>
+              --}}
             </ul>
           </li>
           <li class="nav-item @php echo in_array($curRouteNm, ['quiz', 'quiz.ae', 'quiz.import']) ? 'menu-open' : ''; @endphp">

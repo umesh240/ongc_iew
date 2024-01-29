@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @php
-  $pageNm = 'Check-In/Out Summery';
+  $pageNm = 'Room Availability';
   $hotel_cd = $emp_event_cd = '';
-  $to_date = $fr_date = date('Y-m-d H:i:s');
-  if(@$eventcd > 0){
-    $emp_event_cd = $eventcd;
+  $to_date = $fr_date = date('Y-m-d');
+  $emp_event_cd = @$eventcd;
+  if($emp_event_cd > 0){
     $hotel_cd = $hotelcd;
     //echo '<pre>';  print_r($report_data); die;
     $to_date = $todate; 
@@ -53,8 +53,8 @@
                   @endif
                   @foreach($event_list as $event)
                     @php 
-                    $frDate = date('Y-m-d H:i:s', strtotime($event->event_datefr ." - 4 day"));
-                    $toDate = date('Y-m-d H:i:s', strtotime($event->event_dateto ." + 4 day"));
+                    $frDate = date('Y-m-d', strtotime($event->event_datefr ." - 4 day"));
+                    $toDate = date('Y-m-d', strtotime($event->event_dateto ." + 4 day"));
                     @endphp
                     <option value="{{ $event->ev_id }}" data-frdt="{{ $frDate }}"  data-todt="{{ $toDate }}" {{ $emp_event_cd == $event->ev_id?'selected':''  }}>
                     {{ $event->event_name.' ('.date('d/m/Y', strtotime($event->event_datefr)).' - '.date('d/m/Y', strtotime($event->event_dateto)).')' }}
@@ -70,14 +70,16 @@
             </div>
             <div class="col-sm-3">
               <label for="exampleInputEmail1">From Date</label>
-              <input type="datetime-local" class="form-control form-control-sm fr_date" name="fr_date" value="{{ @$fr_date }}" disabled>
+              <input type="date" class="form-control form-control-sm fr_date" name="fr_date" value="{{ @$fr_date }}" data-frdt="{{ @$fr_date }}" disabled>
             </div>
             <div class="col-sm-3">
               <label for="exampleInputEmail1">To Date</label>
-              <input type="datetime-local" class="form-control form-control-sm to_date" name="to_date" value="{{ @$to_date }}" disabled>
+              <input type="date" class="form-control form-control-sm to_date" name="to_date" value="{{ @$to_date }}" data-todt="{{ @$to_date }}" disabled>
             </div>
-            <div class="col-sm-12 mt-3">
+            <div class="col-sm-1 mt-3">
               <button type="submit" name="submit_btn" value="submit" class="btn btn-sm btn-success"><i class="fa fa-search"></i> Filter</button>
+            </div>
+            <div class="col-sm-3 mt-3">
               <div id="export-button-container"></div>
             </div>
           </div>
@@ -99,7 +101,11 @@
             <thead>
               <tr class="bg-dark">
                 <th>Sr.No.</th>
-                <th>Room Category</th>
+                <th>Hotel Name</th>
+                <th>Room Type</th>
+                <th>Total Rooms</th>
+                <th>Occupied Rooms</th>
+                <th>Vacent Rooms</th>
               </tr>
             </thead>
             <tbody>
@@ -107,22 +113,18 @@
                 $keyy = 0; 
                 $htlArr = [];
               @endphp
-              @for($i = 0; $i < 1; $i++)
-              @foreach ($report_data as $key => $data)
+              @foreach ($report_data as $keyy => $data)
                 @php
-                  $string = 'htl_'.$data->htl_idd;
-                  if (array_key_exists($string, $htlArr)) {
-                    $htlArr[$string] = $string;
-                    $keyy = 0; 
-                    echo '<tr><td colspan="2">'.$data->hotel_name.'</td></tr>';
-                  }
                 @endphp
                 <tr style="">
                   <td>{{ ($keyy+1) }}</td>
+                  <td>{{ $data->hotel_name }}</td>
                   <td>{{ $data->hotel_category }}</td>
+                  <td>{{ $data->total_rooms }}</td>
+                  <td>{{ $data->occupied_room }}</td>
+                  <td>{{ $data->vacent_room }}</td>
                 </tr>
               @endforeach
-              @endfor
             </tbody>
           </table>
         </div>

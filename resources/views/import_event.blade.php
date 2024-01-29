@@ -22,7 +22,7 @@
             <h1 class="m-0">{{ $pageNm }}<font class="activePg"></font></h1>
           </div>
           <div class="col-sm-6">
-            <a href="{{ asset('/storage/app/event_book_fromat.csv') }}"  class="btn btn-success btn-sm float-right" download>Export Format</a>
+            <a href="{{ asset('/storage/app/event_book_fromat.csv') }}"  class="btn btn-success btn-sm float-right" download>Import Template Format</a>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -136,7 +136,7 @@
                   $arrv_dttm = $row[17].' '.$row[18];
                   $dept_dttm = $row[22].' '.$row[23];
 
-                  $row_status = $row[28];
+                  $row_status = $row[31];
                   $rowInfo = implode(',', $row);
                   $rowInfo = trim($rowInfo,",");
                   @endphp 

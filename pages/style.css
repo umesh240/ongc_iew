@@ -21,14 +21,28 @@ body {
        font-weight: 600;
    }
    /*end*/
-.shuttle-time a {
+
+
+   /* shuttle services */
+   .row.shuttle-service {
+    background-color: #457CB2;
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 20px -5px #457CB2;
+}
+.time-btn a {
+    color: #fff;
     background-color: #F07E29;
     padding: 10px;
     border-radius: 10px;
-    color: #fff;
-    font-weight: 600;
-    margin-left: 10px;
+    text-decoration: none;
 }
+.time-service h3 {
+    font-size: 25px;
+}
+/*end*/
+
    .chat-bg {
        display: flex;
        justify-content: end;
@@ -161,6 +175,9 @@ section.chat-sec {
        background-color: #3cb043 !important;
       border: 1px solid #3cb043 !important
    }
+   button.check-grey {
+    background-color: #7A7A7A !important;
+}
    .flight-mobile {
        display: none;
    }
@@ -184,6 +201,10 @@ section.chat-sec {
    .transport-icon {
        margin-top: -16px;
    }
+   .transport-icon p {
+    font-size: 20px !important;
+    font-weight: 700;
+}
    .vehicle-shape img {
        width: 100%;
    }
@@ -194,7 +215,13 @@ section.chat-sec {
        color: #fff;
        padding: 10px;
    }
-   button.welcome-button:focus {
+   .welcome-button i.fa.fa-long-arrow-right {
+    margin-left: 20px;
+}
+.welcome-button i.fa.fa-long-arrow-right:hover {
+    color: #fff !important;
+}
+   button.welcome-button:hover {
        background-color: #F07E29 !important;
        color: #fff !important
        }
@@ -1315,11 +1342,11 @@ section.chat-sec {
        height: 100%;
    }
    .user-vehicle {
-       padding: 10px;
-       border-radius: 8px;
-       box-shadow: 0px 0px 15px -5px #0000004a;
-       overflow: hidden;
-   }
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px -5px #0000004a;
+    overflow: hidden;
+}
    .down-bg {
        background-color: #457cb2c7;
        padding: 15px;
@@ -1344,16 +1371,16 @@ section.chat-sec {
        padding: 0px 50px;
    }
    .vehicle-shape:before {
-       content: '';
-       background: url(/pages/images/vehicle-shape.png);
-       background-repeat: no-repeat;
-       background-size: contain;
-       width: 100%;
-       height: 100%;
-       left: -73px;
-       position: absolute;
-       bottom: -62px;
-   }
+    content: '';
+    background: url(/pages/images/vehicle-shape.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 246px;
+    height: 204px;
+    left: -30px;
+    position: absolute;
+    bottom: -48px;
+}
    .vehicle-shape {
        position: relative;
    }
@@ -1367,8 +1394,8 @@ section.chat-sec {
        padding: 10px;
    }
    .vehicle-shape h3 {
-       font-size: 25px;
-   }
+    font-size: 20px;
+}
    .tab-pane ul li {
        list-style-type: none;
        text-align: left;
@@ -1842,29 +1869,93 @@ section.chat-sec {
    }
    
    .btnApp img {
-       width: 40%;
-   }
+    width: 100%;
+}
    img#contact-img {
        width: 30px;
    }
    .contactUs {
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       width: 40%;
-       margin: 0 auto;
-       background-color: #457CB2;
-       padding: 15px;
-       border-radius: 8px;
-   }
-   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    margin: 0 auto;
+    background-color: #457CB2;
+    padding: 10px;
+    border-radius: 8px;
+}
    .contactUs-app a {
        
    }
    .btnApp {
-       display: flex;
-   }
-   
+    display: flex;
+    margin: 0 auto;
+    width: 50%;
+}
+   /* .sos-btn {
+    background-color: #a41d23;
+    width: 50%;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sos-btn img {
+    width: 35px;
+}
+.sos-btn a {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 10px;
+} */
+
+
+.sos-img i.fas.fa-phone-volume {
+    background-color: #A41D23;
+    border-radius: 50px;
+    padding: 20px;
+    color: #fff;
+}
+.sos-img {
+    position: relative;
+}
+.sos-img:before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: red;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    animation: live1 2.4s ease-in-out infinite;
+    z-index: -1;
+    left: 2px;
+    top: 2px;
+}
+@keyframes live1 {
+    0% {
+        transform: scale(1);
+    }
+    
+    80% {
+        transform: scale(2.4);
+        background-color: #fff0;
+    }
+    
+    100% {
+        transform: scale(1.2);
+        background-color: #fff0;
+    }
+    }
+
+
+
+
+
+
    /*footer*/
    footer {
        padding: 20px 0px;
@@ -1895,6 +1986,30 @@ section.chat-sec {
    }    
     
    @media only screen and (min-width : 320px) and (max-width : 767px) {
+   
+   /* .shuttle-time a {
+    white-space: nowrap;
+    font-size: 10px;
+    }
+   .shuttle-time h3 {
+    font-size: 14px;
+   } */
+   .sos-img h3 {
+    font-size: 11px !important;
+    text-align: center;
+}
+   .row.shuttle-service {
+    padding: 15px;
+    }
+   .time-service h3 {
+    font-size: 16px;
+   }
+   .time-btn a {
+    font-size: 12px;
+   }
+   section.time-sec {
+    padding: 0px 15px;
+   }
    h4.feedbackTitle {
        font-size: 18px;
    }
@@ -1903,7 +2018,7 @@ section.chat-sec {
    }
    input.form-control.chat_msg::placeholder {
     font-size: 13px;
-}
+   }
     button.chat-btn {
     font-size: 13px;
    }
@@ -1972,7 +2087,7 @@ section.chat-sec {
    .tab-pane ul li {
        text-align: left;
        margin-bottom: 10px;
-       font-size: 10px;
+       font-size: 11px;
    }
    .tab-pane ul li i {
        margin-right: 5px;
@@ -2148,7 +2263,7 @@ section.chat-sec {
        padding-left: 0px !important;
    }
    p.event-text {
-       font-size: 15px;
+       font-size: 12px;
        margin-bottom: 0;
        font-weight: 700;
        line-height: 21px;
@@ -2197,13 +2312,13 @@ section.chat-sec {
        left: -25px;
    }
    .carousel-wrap h3 {
-       font-size: 16px;
+       font-size: 20px;
    }
    .carousel-wrap h3:before {
     display: none;
    }
    .local-head h3 {
-       font-size: 16px;
+       font-size: 20px;
    }
    .local-head h3:before {
      display: none;
@@ -2212,7 +2327,7 @@ section.chat-sec {
     display: none;
    }
    .wall-head h3 {
-       font-size: 16px;
+       font-size: 20px;
    }
    .user-details p {
        font-size: 13px;
@@ -2344,7 +2459,7 @@ section.chat-sec {
        font-size: 20px;
    }
    h3.fpr-detail {
-       font-size: 16px;
+       font-size: 20px;
        margin:0px;
    }
    #sidebar-btn {
@@ -2355,7 +2470,7 @@ section.chat-sec {
        text-align: center;
    }
    button.edit-btn {
-       padding: 10px 25px;
+       padding: 10px;
        font-size: 10px;
    }
    button.flickity-button.flickity-prev-next-button.previous {
@@ -2419,22 +2534,27 @@ section.chat-sec {
        width: 18px;
    }
    .btnApp img {
-       width: 90%;
-   }
-   .contactUs a {
-       font-size: 14px !important;
-   }
+    width: 100px;
+}
+.contactUs a {
+    font-size: 11px !important;
+    margin-left: 4px !important;
+}
+.btnApp {
+    margin: 0px !important;
+}
    .download-app h3 {
-       font-size: 16px !important;
+       font-size: 11px !important;
        text-align: center;
        padding-top: 10px;
    }
    .contactUs {
-       width: 100%;
-       padding: 10px;
-   }
+    width: 87px;
+    padding: 10px;
+    white-space: nowrap;
+}
    h3.contact-text {
-       font-size: 16px !important;
+       font-size: 11px !important;
        text-align: center;
        padding-top: 10px;
    }
@@ -2458,8 +2578,8 @@ section.chat-sec {
        font-size: 10px !important;
    }
    .transport-icon i.fas.fa-phone-alt {
-    padding: 6px;;
-    font-size: 10px;
+    padding: 10px;
+    font-size: 20px;
 }
    .nav-tabs>.nav-item>.nav-link.active {
        box-shadow: 0px 6px 20px -5px #f07e296e !important;
@@ -2478,12 +2598,15 @@ section.chat-sec {
        padding: 10px;
    }
    .vehicle-shape:before {
-       left: -23px;
-       bottom: -42px;
-       top: 3px;
-       width: 190px;
-       height: 177px;
-   }
+    left: -11px;
+    bottom: -42px;
+    top: -24px;
+    width: 176px;
+    height: 164px;
+}
+.user-vehicle {
+    padding: 40px 10px;
+}
    .user-details i.fas.fa-user {
        font-size: 17px;
        margin-right: 10px;
@@ -2498,8 +2621,11 @@ section.chat-sec {
        width: 55%;
    }
    .vehicle-shape h3 {
-       font-size: 12px;
+       font-size: 11px;
    }
+   .transport-icon p {
+    font-size: 12px !important;
+}
    .vehicle-shape img {
        width: 135px;
    }
@@ -2666,24 +2792,28 @@ section.chat-sec {
    
    
    @media only screen and (min-width : 414px) and (max-width : 896px) {
-      .shuttle-time h3 {
-    font-size: 15px;
-}
-.shuttle-time a {
-    font-size: 12px;
-}
+    
+    .row.shuttle-service {
+        padding: 15px;
+    }
+    .time-btn a {
+        font-size: 13px;
+    }
    img#logo-two {
     width: 63px;
 }
 .contactUs {
-    padding: 12px;
+    padding: 10px;
 }
 .vehicle-shape:before {
-    left: -10px;
-    bottom: 3px;
-    top: 3px;
-    width: 231px;
-    height: 222px;
+    left: -11px;
+    bottom: 0;
+    top: -37px;
+    width: 174px;
+    height: 175px;
+}
+.user-vehicle {
+    padding: 40px 10px;
 }
    .nav-tabs>.nav-item>.nav-link {
        font-size: 13px !important;
@@ -2701,7 +2831,7 @@ section.chat-sec {
        margin-bottom: 20px;
    }
    p.event-text {
-       font-size: 11px;
+       font-size: 13px;
        margin-bottom: 0;
        font-weight: 700;
        line-height: 21px;
@@ -2866,7 +2996,17 @@ section.chat-sec {
        font-size: 17px;
    }
    .vehicle-shape:before {
-       left: -10px;
+    left: -11px;
+    bottom: 0px;
+    top: -34px;
+    width: 212px;
+    height: 216px;
+}
+   .shuttle-time h3 {
+    font-size: 20px;
+   }
+   .shuttle-time a {
+    font-size: 13px;
    }
    .transport-icon i.fas.fa-phone-alt {
        padding: 15px;
@@ -2876,12 +3016,15 @@ section.chat-sec {
        width: 40%;
    }
    .btnApp img {
-       width: 50%;
-   }
-   .contactUs {
-       width: 53%;
-       padding: 10px;
-   }
+    width: 170px;
+}
+.contactUs {
+    width: 100%;
+    padding: 10px;
+}
+.btnApp {
+    margin: 0px !important;
+}
    .download-help-btn h3 {
        font-size: 20px !important;
    }

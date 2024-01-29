@@ -4,9 +4,17 @@
   @$curRouteNm = Route::currentRouteName();
   @$pageNm = 'Dashboard';
   @$boardDirectors = @$hotel_imageAll = [];
-  //echo '<pre>'; print_r(@$userData); die;
+ // echo '<pre>'; print_r(@$sos_contact); die;
 
 
+	$sos_info = $sos_phone = $sos_email = '';
+	$status_sos = @$sos_contact->status;
+	if($status_sos === 200){
+		$sos_info = @$sos_contact->response->sos_info;
+		$sos_phone = @$sos_contact->response->phone_no;
+		$sos_email = @$sos_contact->response->email_id;
+	}
+	
  
 
 
@@ -16,8 +24,10 @@
   $hotel_imageCnt = 1;
   $emp_ev_book_id = @$event_pdf_file = '';
   $cod = 0;
+  $all_hotels = [];
   $user_name = '';  
   if(@$status == 200){  
+    $all_hotels = @$userData->all_hotels;
     $user_name = @$userData->user_name;
     $emp_ev_book_id = @$userData->emp_ev_book_id;
     $boardDirectors = @$userData->boardDirectors;
@@ -219,144 +229,111 @@
           <div class="card-body">
             <!-- Tab panes -->
             @php
-              $checkOutCls = $checkInCls = '';
-              $checkInTxt = 'Check-in';
-              $checkOutTxt = 'Check-out';
-              $today              = strtotime(date('Y-m-d'));
-              $assign_check_in    = @$userData->assign_check_in;
-              $assign_check_in    = date('Y-m-d', strtotime($assign_check_in));
-              $assign_checkInMili = strtotime($assign_check_in);
-              $cInD               = date('d', $assign_checkInMili);
-              $cInM               = date('M', $assign_checkInMili);
-              $cInDN              = date('l', $assign_checkInMili);
-              $assign_check_out   = @$userData->assign_check_out;
-              $assign_check_out   = date('Y-m-d', strtotime($assign_check_out));
-              $assign_checkOtMili = strtotime($assign_check_out);
-              $cOtD               = date('d', $assign_checkOtMili);
-              $cOtM               = date('M', $assign_checkOtMili);
-              $cOtDN              = date('l', $assign_checkOtMili);
-
-              $user_check_in      = $user_check_in2      = @$userData->check_in;
-              $user_check_out     = $user_check_out2     = @$userData->check_out;
-              $user_check_in      = date('Y-m-d', strtotime($user_check_in));
-              $userCheckInMili    = strtotime($user_check_in);
-              $user_check_out     = date('Y-m-d', strtotime($user_check_out));
-              $userCheckOutMili   = strtotime($user_check_out);
-              $checkOutDis = $checkInDis = 'disabled';
-              if($assign_checkInMili <= $today){
-                $checkInCls = 'cnfCkInOut';
-                $checkInDis = '';
-                if($userCheckInMili > 0 && $user_check_out2 == null){
-                  $checkOutDis = '';
-                  $checkOutCls = 'cnfCkInOut';
-                }
-              }
-              if($userCheckInMili > 0 && $user_check_in2 != '' && $assign_checkInMili <= $today){
-                $cInD               = date('d', $userCheckInMili);
-                $cInM               = date('M', $userCheckInMili);
-                $cInDN              = date('l', $userCheckInMili);
-                $checkInCls = 'check-green';
-                $checkInTxt = 'Confirmed';
-                $checkInDis = 'disabled';
-                if($userCheckOutMili > 0 && $userCheckOutMili >= $userCheckInMili){
-                  $checkOutDis = 'disabled';
-                  $checkOutCls = 'check-green';
-                  $checkOutTxt = 'Confirmed';
-
-                  $cOtD               = date('d', $userCheckOutMili);
-                  $cOtM               = date('M', $userCheckOutMili);
-                  $cOtDN              = date('l', $userCheckOutMili);
-                }
-              }
             @endphp
             <div class="tab-content text-center"> 
-              <div class="tab-pane active" id="checkInOut" role="tabpanel">
-                <div >
-                  <div class="row user-inOut" id="checkinOutdates" data-route="{{ route('check_in_out') }}" data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
-                    <div class="user-inner"></div>
-                     <!--<div class="hotel-name">
-            		 <h4>{{ @$hotel_address }}</h4>
-           		 <i class="fas fa-map-marker-alt"></i>
-          	    </div>-->
-                    <div class="col-md-6 col-6" style="border-right: 1px solid #F07E29;">
-                      <div class="check-time check-tab">
-                        <h4>{{ $cInD }}<span>{{ $cInM }}</span></h4>
-                        <h5>{{ $cInDN }}</h5>
-                        <!--<b><p class="mb-0">{{ @$assign_check_in1 }}</p></b>
-                        <p class="text-success">{{ @$assign_check_in1 }}</p>-->
-                        <div class="tab-btn mt-3">
-                          <button class="edit-btn {{ $checkInCls }}" type="button" value="in" {{ $checkInDis }}> {{ $checkInTxt }}</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="check-time check-tab">
-                        <h4>{{ $cOtD }}<span>{{ $cOtM }}</span></h4>
-                        <h5>{{ $cOtDN }}</h5>
-                        <!--<b><p class="mb-0">{{ @$assign_check_out1 }}</p></b>
-                        <p class="text-success">{{ @$assign_check_out1 }}</p>-->
-                        <div class="tab-btn mt-3">
-                          <button class="edit-btn {{ $checkOutCls }}" type="button" value="out" {{ $checkOutDis }}> {{ $checkOutTxt }}</button>
-                        </div>
-                      </div>
-                    </div>
+              <div class="tab-pane active" id="checkInOut " role="tabpanel">
+                @foreach($all_hotels as $htl)
+                @php
+                  $checkOutCls = $checkInCls = 'check-grey';
+                  $checkInTxt = 'Check-in';
+                  $checkOutTxt = 'Check-out';
+                  $today              = strtotime(date('Y-m-d'));
+                  $assign_check_in    = @$htl->assign_check_in;
+                  $assign_check_in    = date('Y-m-d', strtotime($assign_check_in));
+                  $assign_checkInMili = strtotime($assign_check_in);
+                  $cInD               = date('d', $assign_checkInMili);
+                  $cInM               = date('M', $assign_checkInMili);
+                  $cInDN              = date('l', $assign_checkInMili);
+                  $assign_check_out   = @$htl->assign_check_out;
+                  $assign_check_out   = date('Y-m-d', strtotime($assign_check_out));
+                  $assign_checkOtMili = strtotime($assign_check_out);
+                  $cOtD               = date('d', $assign_checkOtMili);
+                  $cOtM               = date('M', $assign_checkOtMili);
+                  $cOtDN              = date('l', $assign_checkOtMili);
 
-                  </div>
-                    
-                    
-                    <div class="row down-bg">
-                     <div class="col-md-10 col-9" style="align-items:center; display:flex;">
-            		<h4 class="text-left mb-0">{{ @$hotel_name }}</h4>
-            	     </div>
-            	     <div class="col-md-2 col-3">
-            	     	<a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
-            		  <i class="fas fa-map-marker-alt"></i>
-            		</a>
-            	    </div>
-            	    </div>
-         	 
-         	    <div class="row user-inOut mt-4" id="checkinOutdates" data-route="{{ route('check_in_out') }}" data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
-                    <div class="user-inner"></div>
-                     <!--<div class="hotel-name">
-            		 <h4>{{ @$hotel_address }}</h4>
-           		 <i class="fas fa-map-marker-alt"></i>
-          	    </div>-->
-                    <div class="col-md-6 col-6" style="border-right: 1px solid #F07E29;">
-                      <div class="check-time check-tab">
-                        <h4>7<span>Feb</span></h4>
-                        <h5>Wednesday</h5>
-                        <!--<b><p class="mb-0">{{ @$assign_check_in1 }}</p></b>
-                        <p class="text-success">{{ @$assign_check_in1 }}</p>-->
-                        <div class="tab-btn mt-3">
-                          <button class="edit-btn {{ $checkInCls }}" type="button" value="in" {{ $checkInDis }}> {{ $checkInTxt }}</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="check-time check-tab">
-                        <h4>10<span>Feb</span></h4>
-                        <h5>Saturday</h5>
-                        <!--<b><p class="mb-0">{{ @$assign_check_out1 }}</p></b>
-                        <p class="text-success">{{ @$assign_check_out1 }}</p>-->
-                        <div class="tab-btn mt-3">
-                          <button class="edit-btn {{ $checkOutCls }}" type="button" value="out" {{ $checkOutDis }}> {{ $checkOutTxt }}</button>
-                        </div>
-                      </div>
-                    </div>
+                  $user_check_in      = $user_check_in2      = @$htl->check_in;
+                  $user_check_out     = $user_check_out2     = @$htl->check_out;
+                  $user_check_in      = date('Y-m-d', strtotime($user_check_in));
+                  $userCheckInMili    = strtotime($user_check_in);
+                  $user_check_out     = date('Y-m-d', strtotime($user_check_out));
+                  $userCheckOutMili   = strtotime($user_check_out);
+                  $checkOutDis = $checkInDis = 'disabled';
+                  if($assign_checkInMili <= $today){
+                    $checkInCls = 'cnfCkInOut';
+                    $checkInTxt = 'Confirm Check-in';
+                    $checkInDis = '';
+                    if($userCheckInMili > 0 && $user_check_out2 == null){
+                      $checkOutDis = '';
+                      $checkOutCls = 'cnfCkInOut';
+                      $checkOutTxt = 'Confirm Check-out';
+                    }
+                  }
+                  if($userCheckInMili > 0 && $user_check_in2 != '' && $assign_checkInMili <= $today){
+                    $cInD               = date('d', $userCheckInMili);
+                    $cInM               = date('M', $userCheckInMili);
+                    $cInDN              = date('l', $userCheckInMili);
+                    $checkInCls = 'check-green';
+                    $checkInTxt = 'Check-in Confirmed';
+                    $checkInDis = 'disabled';
+                    if($userCheckOutMili > 0 && $userCheckOutMili >= $userCheckInMili){
+                      $checkOutDis = 'disabled';
+                      $checkOutCls = 'check-green';
+                      $checkOutTxt = 'Check-out Confirmed';
 
+                      $cOtD               = date('d', $userCheckOutMili);
+                      $cOtM               = date('M', $userCheckOutMili);
+                      $cOtDN              = date('l', $userCheckOutMili);
+                    }
+                  }
+
+                  $hotel_name = @$htl->hotel_name;
+                  $hotel_map  = @$htl->hotel_geolocation;
+                  $emp_ev_book_id  = @$htl->emp_ev_book_id;
+                @endphp
+                <div class="row user-inOut checkinOutdates" data-route="{{ route('check_in_out') }}"
+                  data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
+                  <div class="user-inner"></div>
+                  <!--<div class="hotel-name">
+                               <h4>{{ @$hotel_address }}</h4>
+                             <i class="fas fa-map-marker-alt"></i>
+                              </div>-->
+                  <div class="col-md-6 col-6" style="border-right: 1px solid #F07E29;">
+                    <div class="check-time check-tab">
+                      <h4>{{ $cInD }}<span>{{ $cInM }}</span></h4>
+                      <h5>{{ $cInDN }}</h5>
+                      <!--<b><p class="mb-0">{{ @$assign_check_in1 }}</p></b>
+                                      <p class="text-success">{{ @$assign_check_in1 }}</p>-->
+                      <div class="tab-btn mt-3">
+                        <button class="edit-btn {{ $checkInCls }}" type="button" value="in" {{ $checkInDis }}> {{ $checkInTxt
+                          }}</button>
+                      </div>
+                    </div>
                   </div>
-                    <div class="row down-bg">
-                     <div class="col-md-10 col-9" style="align-items:center; display:flex;">
-            		<h4 class="text-left">{{ @$hotel_name }}</h4>
-            	     </div>
-            	     <div class="col-md-2 col-3">
-            	     <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
-            		<i class="fas fa-map-marker-alt"></i>
-            	     </a>
-            	    </div>
-            	    </div>
-         	 
+                  <div class="col-md-6 col-6">
+                    <div class="check-time check-tab">
+                      <h4>{{ $cOtD }}<span>{{ $cOtM }}</span></h4>
+                      <h5>{{ $cOtDN }}</h5>
+                      <!--<b><p class="mb-0">{{ @$assign_check_out1 }}</p></b>
+                                      <p class="text-success">{{ @$assign_check_out1 }}</p>-->
+                      <div class="tab-btn mt-3">
+                        <button class="edit-btn {{ $checkOutCls }} " type="button" value="out" {{ $checkOutDis }}> {{ $checkOutTxt
+                          }}</button>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+                <div class="row down-bg  mb-3">
+                  <div class="col-md-10 col-9" style="align-items:center; display:flex;">
+                    <h4 class="text-left mb-0">{{ @$hotel_name }}</h4>
+                  </div>
+                  <div class="col-md-2 col-3">
+                    <a href="{{ @$hotel_map }}" target="_blank" title="Event Map Location">
+                      <i class="fas fa-map-marker-alt"></i>
+                    </a>
+                  </div>
+                </div>
+                @endforeach
               </div>
               
               
@@ -439,36 +416,41 @@
                   <div class="tab-pane" id="travelSchedule" role="tabpanel">
                    <div class="user-vehicle">
                     <div class="row" style ="align-items: center;">
-                      <!--div class="col-sm-6 col-6 pr-1 pl-1" style="color: #457CB2;">
-                        <h5 class="mb-3">Vehicle Details</h5>
-                        <p class="text-left mb-0" style="color: #457CB2;">Veh. No :- {{ @$veh_details }}</p>
-                        <p class="text-left mb-0" style="color: #457CB2;">Veh. Type :- {{ @$veh_details }}</p>
-                      </div>
-                      <div class="col-sm-6 col-6 pr-1 pl-1 mt-1" style="color: #457CB2;">
-                        <h5 class="mb-3">Driver Details</h5>
-                        <p class="text-left mb-0" style="color: #457CB2;">Name :- {{ @$drvr_name}}</p>
-                        <p class="text-left mb-0" style="color: #457CB2;">Phone :- {{@$drvr_number}}</p>
-                      </div>-->
+                      @php
+                      $drvr_veh_details = $drvr_number = $drvr_name = "Not Applicable";
+                      $vehicle_type = ucwords(strtolower(@$userData->vehicle_type));
+                      if($vehicle_type == 'Light-weight'){
+                        $drvr_name = @$userData->drvr_name;
+                        $drvr_number = @$userData->drvr_number;
+                        $drvr_veh_details = @$userData->drvr_veh_details;
+                      }
+                      $shuttle_timing = @$userData->shuttle_timing;
+                      @endphp
                       
-                                  <div class="col-md-6 col-6 text-left" style="color: #457CB2;">
-                                  <div class="vehicle-shape">
-                                    <img src="{{ asset('/pages/images/bus.png') }}">
-                                    <h3>Vehicle Details:-</h3>
-                                    <h3>Veh Type: Traveller Bus MH-01-2306</h3>
-                                    
+                                  <div class="col-md-8 col-8 text-left" style="color: #457CB2;">
+                                    <div class="vehicle-shape">
+                                      <h3>Vehicle Type: {{ $vehicle_type }}</h3>
+                                      <h3>Vehicle Details: {{ $drvr_veh_details }}</h3>
+                                      <h3>Driver Name: {{ $drvr_name }}</h3>
+                                      <h3>Driver Number: {{ $drvr_number }}</h3>
+                                      
                                     </div>
-                                     <div class="shuttle-time" style="display:flex; align-items:center;">
-                                            <h3>Detail:</h3>
-                                            <a href="#">Press Here</a></div>
-                                    </div>
-                                      <div class="col-md-6 col-6 ">
-                                    <img src="{{ asset('/pages/images/taxi-driver.png') }}" id="driver-img">
+                                  </div>
+                                  <div class="col-md-4 col-4 ">
+                                    <!-- <img src="{{ asset('/pages/images/taxi-driver.png') }}" id="driver-img"> -->
                                     <div class="transport-icon">
-                                     <i class="fas fa-phone-alt"></i>
+                                     <i class="fas fa-phone-alt"></i> 
+                                     <p class="mt-2">Call Now</p>
                                     </div>
                                      
                                  </div>
-                                 </div>
+                                  <!-- <div class="col-md-12 col-12 ">
+                                    <div class="shuttle-time" style="display:flex; align-items:center;">
+                                      <h3>Detail:</h3>
+                                      <a href="{{ $shuttle_timing }}" target="_blank" style="text-decoration: none;">Press Here</a>
+                                    </div>
+                                 </div> -->
+                    </div>
                                
                              </div>
                     </div>
@@ -481,6 +463,27 @@
       </div>
     </div>
   </div>
+
+
+<!-- shuttle timmings -->
+<section class="time-sec">
+  <div class="container">
+    <div class="row mt-5 shuttle-service">
+
+     <div class="col-md-9 col-7">
+        <div class="time-service">
+          <h3 class="mb-0">For Shuttle Service</h3>
+        </div>
+        </div>
+        <div class="col-md-3 col-5" style="justify-content:end; display:flex; align-items:center;">
+          <div class="time-btn">
+            <a href="{{ $shuttle_timing }}" target="_blank">Click Here</a>
+          </div>
+        </div>             
+      
+    </div>
+  </div>
+</section>
 
 
   <!------minsters----->
@@ -555,7 +558,7 @@
            <a href="{{ route('my.page', ['page'=>'local_area']) }}"> <i class="fa-solid fa-location-dot"></i></a>
           </div>
           <div class="local-content">
-            <b><p>Local Area</p></b>
+            <b><p>About Goa</p></b>
           </div>
         </div>
       </div>
@@ -577,7 +580,7 @@
            <a href="{{ route('my.page', ['page'=>'local_weather']) }}"><i class="fas fa-cloud-rain"></i></a>
           </div>
           <div class="local-content">
-            <b><p>Local Weather</p></b>
+            <b><p>Goa Weather</p></b>
           </div>
         </div>
       </div>
@@ -658,7 +661,7 @@
           <div class="download-help-btn">
                <div class="row" style="justify-content: center;">
                
-                    <div class="col-md-6 col-6">
+                    <div class="col-md-4 col-4">
                          <div class="btnApp">
                               <div class="download-app">
                                    <img src="{{ asset('/pages/images/play22.png') }}">
@@ -666,7 +669,17 @@
                               </div>
                          </div>
                     </div>
-                    <div class="col-md-6 col-6">
+                    <div class="col-md-4 col-4" style="justify-content:center; display:flex;">
+                       <div class="sos-img" onclick="openDialPad('{{ $sos_phone }}')">
+                       <i class="fas fa-phone-volume"></i>
+                       <h3 style="font-size: 25px; color: #457CB2; padding-top: 10px;">SOS</h3>
+                      </div><br clear="all">
+                     
+                      <!-- <div class="sos-btn">
+                        <a href="#">SOS</a>
+                        </div> -->
+                    </div>
+                    <div class="col-md-4 col-4" >
                          <div class="contactUs">
                               <img src="{{ asset('/pages/images/customer-service.png') }}" id="contact-img">
                               <a href="{{ route('my.page', ['page'=>'chat']) }}"  style="color: #fff; margin-left: 12px;  font-size: 20px;">Contact Us</a>
@@ -688,9 +701,9 @@
       </div>
         <h4 class="modal-title mb-3" style="color:#457CB2;">Welcome To IEW</h4>
         <div class="ongc-user">
-          <h5 class="mb-4" style="color:#457CB2;">{{ $user_name }}</h5>
+          <h5 class="mb-4" style="color:#457CB2;">Mr/Mrs {{ $user_name }}</h5>
         </div>
-        <button type="button" class="btn btn-warning welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+        <button type="button" class="btn  welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
       </div>
     </div>
 

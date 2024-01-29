@@ -96,8 +96,8 @@
                 <th>Mobile No.</th>
                 <th>Hotel Name</th>
                 <th>Room Category</th>
-                <th width="8%">Check-In</th>
-                <th width="8%">Check-Out</th>
+                <th width="8%">Checked-In</th>
+                <th width="8%">Checked-Out</th>
               </tr>
             </thead>
             <tbody>
@@ -119,15 +119,15 @@
                 @endphp
                 <tr style="{{ $color  }}">
                   <td>{{ ($key+1) }}</td>
-                  <td>{{ $data->userDetails->name }}</td>
-                  <td>{{ $data->userDetails->designation }}</td>
-                  <td>{{ $data->userDetails->level }}</td>
-                  <td>{{ $data->userDetails->email }}</td>
-                  <td>{{ $data->userDetails->mobile }}</td>
-                  <td>{{ $data->hotelDetails->hotel_name }}</td>
-                  <td>{{ $data->categoryDetails->hotel_category }}</td>
-                  <td>{{ $check_inDt }}</td>
-                  <td>{{ $check_outDt }}</td>
+                  <td>{{ @$data->userDetails->name }}</td>
+                  <td>{{ @$data->userDetails->designation }}</td>
+                  <td>{{ @$data->userDetails->level }}</td>
+                  <td>{{ @$data->userDetails->email }}</td>
+                  <td>{{ @$data->userDetails->mobile }}</td>
+                  <td>{{ @$data->hotelDetails->hotel_name }}</td>
+                  <td>{{ @$data->categoryDetails->hotel_category }}</td>
+                  <td>{{ @$check_inDt }}</td>
+                  <td>{{ @$check_outDt }}</td>
                 </tr>
               @endforeach
               @endfor

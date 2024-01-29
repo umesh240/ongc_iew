@@ -18,7 +18,7 @@
             <div class="card-body">
               <h5 class="card-title">STRATEGIC CONFERENCE SESSIONS</h5>
               <p class="card-text">Developed in line with India’s global priorities and net-zero vision, the Strategic Conference will invite global energy ministers, CEOs, policymakers and business leaders to contemplate, deliberate and take decisive steps to navigate the ever-evolving energy landscape across a wide range of ministerial, leadership and spotlight sessions, delegates will hear vital insights into the trends, challenges and opportunities shaping the energy sector</p>
-              <a href="https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:437da81a-6b99-4572-9177-e47c48d6ff5a" target="_blank" class="btn btn-primary">Find Out More</a>
+              <a href="https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:f3232517-a1a4-4fcc-9a80-6dc1a33f8dcf" target="_blank" class="btn btn-primary">Find Out More</a>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
               <h5 class="card-title">Technical Conference</h5>
               <p class="card-text">Offering invaluable technical expertise for the engineers,
 project managers and innovators driving India’s energy transition.</p>
-              <a href="https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:a4a652f9-be34-42e3-883b-417bb11d4499" target="_blank" class="btn btn-primary">Find Out More</a>
+              <a href="https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:9d927ad6-b4c7-43b1-9aa6-e850811a5e68" target="_blank" class="btn btn-primary">Find Out More</a>
             </div>
           </div>
         </div>

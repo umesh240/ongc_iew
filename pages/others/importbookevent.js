@@ -13,6 +13,7 @@ $('.frmBookEventSave').on('submit', function(e) {
 		var thiss = this;
 		var info = $(thiss).val();
 		$.ajax({
+			async: false,
 			type: "POST",
 			url: urlSave,
 			data: { info : info, bok_ev_id: bok_ev_id, _token: csrf_token },
@@ -35,7 +36,7 @@ $('.frmBookEventSave').on('submit', function(e) {
 				$('.btnSubmit').removeAttr('disabled');
 			}
 		});
-		
+		$('.btnSubmit').removeAttr('disabled');
 	});
 });
 //////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,8 @@ $('.frmQuizSave').on('submit', function(e) {
 				console.log(result);
 				var status = result.status;
 				var message = result.message;
+					message = message.split('^');
+					message = message[0];
 				var clr = 'text-dander';
 				if(status == '1'){
 					clr = 'text-success';

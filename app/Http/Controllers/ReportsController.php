@@ -50,11 +50,13 @@ class ReportsController extends Controller
         $submit_btn = $request->submit_btn;
         $eventcd = $request->eventcd;
         $hotel_cd = $request->hotel_cd;
+        $with_ck_inout = @$request->with_ck_inout;
         $data = [];
         
         //$event_list = DB::table('events')->where('actv_event', 1)->get();
         $event_list = $this->eventList();
         $data['event_list'] = $event_list;
+        $data['with_ck_inout'] = $with_ck_inout;
 
         $emp1 = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)
                         ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {

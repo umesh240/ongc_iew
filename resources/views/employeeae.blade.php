@@ -182,11 +182,22 @@
           @endif
           @for($i = 0; $i < 4; $i++)
           @php
+            $empIdd           = $employee->id;
             $hotel_cd         = @$activeHotels[$i]->emp_hotel_cd; 
             $room_categorycd  = @$activeHotels[$i]->emp_hotel_cat_cd;
             $emp_ShareRm      = @$activeHotels[$i]->share_room_with_empcd;
             $assign_check_in  = @$activeHotels[$i]->assign_check_in;
             $assign_check_out = @$activeHotels[$i]->assign_check_out;
+            if(!empty(trim($emp_ShareRm))){
+              $emp_ShareRmAll = explode(",", $emp_ShareRm);
+              $keyToRemove = array_search($empIdd, $emp_ShareRmAll);
+              if ($keyToRemove !== false) {
+                unset($emp_ShareRmAll[$keyToRemove]);
+                $emp_ShareRmAll = array_values($emp_ShareRmAll);
+                $emp_ShareRm = $emp_ShareRmAll[0];
+              }
+            }
+
           @endphp
           <div class="row userInfo border-bottom pb-2">
             <div class="col-sm-12">
