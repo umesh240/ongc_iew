@@ -194,10 +194,10 @@ class UserController extends Controller
         $validateData = Validator::make($request->all(), [
             'cpf_no' => ['required', 'unique:users,cpf_no, '.$cd.',id'],
             'name' => ['required'],
-            'email' => ['required', 'unique:users,email, '.$cd.',id'],
-            'level' => ['required'],
-            'designation' => ['required'],
-            'category' => ['required']
+            //'email' => ['required', 'unique:users,email, '.$cd.',id'],
+            //'level' => ['required'],
+            //'designation' => ['required'],
+            //'category' => ['required']
         ], [
             'cpf_no.required' => 'CPF no. is required field.',
             'name.required' => 'Name is required field.',

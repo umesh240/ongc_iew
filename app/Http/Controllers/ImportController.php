@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 use Illuminate\Database\QueryException;
 use DateTime;
+use Carbon\Carbon;
 
 
 use App\Http\Controllers\EmailController;
@@ -337,7 +338,7 @@ class ImportController extends Controller
                     $arrv_dt = $arrival_dtAll[2].'-'.sprintf("%02d", $arrival_dtAll[1]).'-'.sprintf("%02d", $arrival_dtAll[0]);
                     //$arrv_dt = date($arrv_dt.' '.$arrival_tm);
                     //$arrv_dt = date('Y-m-d H:i:s', strtotime($arrv_dt));
-                    $arrival_tm = strtoupper($arrival_tm);
+                    $arrival_tm = trim(strtoupper($arrival_tm));
                     /*
                     $tmType = strpos($arrival_tm, 'PM');
                     if($tmType > 0){
@@ -350,10 +351,12 @@ class ImportController extends Controller
                         $newTime = trim($newTime);
                         $arrv_dt = date($arrv_dt.' '.$newTime);
                     }*/
-
-                    $dateTime = DateTime::createFromFormat('h:i:s A', $arrival_tm);
+                    /*
+                    $dateTime = Carbon::createFromFormat('h:i:s A', $arrival_tm);
                     $newTime = $dateTime->format('H:i:s');
                     $arrv_dt = date($arrv_dt.' '.$newTime);
+                    */
+                    $arrv_dt = date($arrv_dt.' '.$arrival_tm);
                 }else{
                     $arrv_dt = Null;
                 }
@@ -372,7 +375,7 @@ class ImportController extends Controller
                     //$dept_dt = date('Y-m-d H:i:s', strtotime($dept_dt));
                     //$dept_dt = date('Y-m-d H:i:s', strtotime($dept_dt));
 
-                    $depart_tm = strtoupper($depart_tm);
+                    $depart_tm = trim(strtoupper($depart_tm));
                     /*
                     $tmType = strpos($depart_tm, 'PM');
                     if($tmType > 0){
@@ -385,9 +388,12 @@ class ImportController extends Controller
                         $newTime = trim($newTime);
                         $dept_dt = date($dept_dt.' '.$newTime);
                     }*/
-                    $dateTime = DateTime::createFromFormat('h:i:s A', $depart_tm);
+                    /*
+                    $dateTime = Carbon::createFromFormat('h:i:s A', $depart_tm);
                     $newTime = $dateTime->format('H:i:s');
                     $dept_dt = date($dept_dt.' '.$newTime);
+                    */
+                    $dept_dt = date($dept_dt.' '.$depart_tm);
                 }else{
                     $dept_dt = Null;
                 }

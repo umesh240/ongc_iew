@@ -66,7 +66,7 @@
      <div class="card-footer">
          <form action="#" method="post">
              <div class="input-group bottom-chat divChat" data-action="{{ route('save_chat') }}" data-action_list="{{ route('get_chat') }}">
-                 <input type="text" name="message" placeholder="Type Message ..." class="form-control chat_msg">
+                 <input type="text" name="message" placeholder="Type Message ..." class="form-control chat_msg" style="text-transform: lowercase;">
                  <span class="input-group-append">
                      <button type="button" class="btn btn-primary chat-btn btnSaveChat">Send</button>
                  </span>
@@ -91,7 +91,7 @@ $('.btnSaveChat').click(function () {
       type: 'POST',
       data: {chat_msg:chat_msg , _token: "{{ csrf_token() }}" },
       success: function (response) {
-        console.log(response);
+        //console.log(response);
         var status  = response.status;
         var message = response.message;
         if(status == '200'){
@@ -133,5 +133,13 @@ function getChats() {
   });
 }
 getChats();
+//////////////////////////////////////////////////////////////
+$('form').on('keypress', function(e) {
+    if (e.which === 13) {
+        // If Enter key is pressed, prevent form submission
+        e.preventDefault();
+        $('.btnSaveChat').trigger('click');
+    }
+});
 </script>
 @endsection
