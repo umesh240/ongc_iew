@@ -435,30 +435,41 @@ class ApiUsersController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email'
+            'cpf_mob' => 'required'
         ]);
 
         if ($validator->fails()) {
             $allErrors = $validator->errors()->all();
             $allErrors = implode('<br>', $allErrors);
-            return response()->json(['message' => $allErrors, 'status' => 400], 422);
+            return response()->json(['message' => $allErrors, 'status' => 400]);
         }
 
-        /*
-        $email_test = @$request->email_test;
-        if(trim($email_test) != ''){
-            $email = $email_test;
-        }*/
-        // Send the password reset email
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $cpf_mob = $request->cpf_mob;
 
-        // Check the response and provide appropriate feedback to the user
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['status' => 200, 'message' => 'Password reset link sent!']);
-        } else {
-            return response()->json(['status' => 400, 'message' => 'Unable to send reset link. Please try again later.']);
+        $user = User::where(function ($query) use ($cpf_mob) {
+                    $query->where('cpf_no', $cpf_mob)
+                    ->when(strlen($cpf_mob) >= 10, function ($query) use ($cpf_mob) {
+                        $query->orWhere('mobile', $cpf_mob);
+                    });
+                })->where('actv_status', 1)->first();
+        $user_email = @$user->email;
+        if($user_email == null || $user_email == ''){
+            $sos_contact = DB::table('contactsos')->select('phone_no')->first();
+            $phone_no = $sos_contact->phone_no;
+            $message = "To reset password send a text message at mobile no. ".$phone_no."  [CPF/Mobile No Reset Password]";
+            
+            return response()->json(['status' => 200, 'message' => $message]);
+
+        }else{
+            // Send the password reset email
+            $status = Password::sendResetLink(['email' => $user_email]);
+
+            // Check the response and provide appropriate feedback to the user
+            if ($status === Password::RESET_LINK_SENT) {
+                return response()->json(['status' => 200, 'message' => 'Password reset link sent on your email.']);
+            } else {
+                return response()->json(['status' => 400, 'message' => 'Unable to send reset link. Please try again later.']);
+            }
         }
     }
 

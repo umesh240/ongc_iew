@@ -714,7 +714,7 @@
       </div>
         <h4 class="modal-title mb-3" style="color:#457CB2;">Welcome To IEW</h4>
         <div class="ongc-user">
-          <h5 class="mb-4" style="color:#457CB2;">Mr/Mrs {{ $user_name }}</h5>
+          <h5 class="mb-4" style="color:#457CB2;">{{ $user_name }}</h5>
         </div>
         <button type="button" class="btn welcome-button mdlWelComeClose" >Get Started<i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
       </div>

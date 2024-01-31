@@ -51,16 +51,21 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <form method="POST" action="{{ route('password.email') }}">
                     @csrf
                     <div class="input-group login-pg mb-3">
-                        <input id="name" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="CPF No. or Mobile No." autofocus>
-                        <div class="input-icon">
+                        <input id="name" type="text" class="form-control @error('cpf_mob') is-invalid @enderror" name="cpf_mob" value="{{ old('cpf_mob') }}" required autocomplete="off" placeholder="CPF No. or Mobile No." autofocus>
+                        <div class="input-icon" style="text-transform: lowercase;">
                             <i class="fas fa-user"></i>
                         </div>
-                        @error('email')
+                        @error('cpf_mob')
                             <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
+                                <strong>@php echo  $message @endphp</strong>
                             </span>
                         @enderror
                     </div>

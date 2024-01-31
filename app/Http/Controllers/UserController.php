@@ -213,74 +213,73 @@ class UserController extends Controller
                 $allErrors = implode('<br>', $allErrors);
                 return response()->json(['message' => $allErrors, 'status' => 2]);
         }
-
-        $hotelCd = $request->input('hotel_cd');
-        $roomCategoryCd = $request->input('room_categorycd');
-        $empShareRm = $request->input('emp_ShareRm');
-        $assignCheckIn = $request->input('assign_check_in');
-        $assignCheckOut = $request->input('assign_check_out');
-
-        // Iterate through the records
-        foreach ($hotelCd as $key => $value) {
-            //echo '---->>'.$hotelCd[$key];
-            $hotel_cd           = @$hotelCd[$key];
-            if($hotel_cd > 0){
-                $hotelKey = $key + 1;
-                $validator = Validator::make($request->all(), [
-                    'room_categorycd.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|integer',
-                    'assign_check_in.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date',
-                    'assign_check_out.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date|after:assign_check_in.' . $key,
-                ], [
-                    'room_categorycd.*.required_if' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
-                    'room_categorycd.*.integer' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
-                    'assign_check_in.*.required' => 'The check-in date is required for hotel '.$hotelKey,
-                    'assign_check_in.*.date' => 'The check-in date must be a valid date for hotel '.$hotelKey,
-                    'assign_check_out.*.required_if' => 'The check-out date is required for hotel '.$hotelKey,
-                    'assign_check_out.*.date' => 'The check-out date must be a valid date for hotel '.$hotelKey,
-                    'assign_check_out.*.after' => 'The check-out date must be after the check-in date for hotel '.$hotelKey,
-                ]);
-
-                if ($validator->fails()) {
-                    $errors = $validator->errors()->all();
-                    $response = [
-                        'message' => implode('<br>', $errors),
-                        'status' => 2,
-                    ];
-
-                    return response()->json($response);
-                }
-            }
-        }
         $eventcd = @$request->eventcd;
-
         $name = ucwords(@$request->name);
         $email = @$request->email;
         $cpf_no = @$request->cpf_no;
-        $eventcd = @$request->eventcd;
-        //$hotel_cd = @$request->hotel_cd;
-        //$room_categorycd = @$request->room_categorycd;
-        //$share_room_with = $share_room_with_empcd = @$request->emp_ShareRm;
+        if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
+            $hotelCd = $request->input('hotel_cd');
+            $roomCategoryCd = $request->input('room_categorycd');
+            $empShareRm = $request->input('emp_ShareRm');
+            $assignCheckIn = $request->input('assign_check_in');
+            $assignCheckOut = $request->input('assign_check_out');
 
-        $arv_flight_name        = @$request->arv_flight_name;
-        $arv_flight_number      = @$request->arv_flight_number;
-        $arv_date_time          = @$request->arv_date_time;
-        $arv_flight_location    = @$request->arv_flight_location;
+            // Iterate through the records
+            foreach ($hotelCd as $key => $value) {
+                //echo '---->>'.$hotelCd[$key];
+                $hotel_cd           = @$hotelCd[$key];
+                if($hotel_cd > 0){
+                    $hotelKey = $key + 1;
+                    $validator = Validator::make($request->all(), [
+                        'room_categorycd.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|integer',
+                        'assign_check_in.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date',
+                        'assign_check_out.' . $key => 'required_if:hotel_cd.' . $key . ',>,' . 0 . ',0|date|after:assign_check_in.' . $key,
+                    ], [
+                        'room_categorycd.*.required_if' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
+                        'room_categorycd.*.integer' => 'The room category is required when the hotel is selected for hotel '.$hotelKey,
+                        'assign_check_in.*.required' => 'The check-in date is required for hotel '.$hotelKey,
+                        'assign_check_in.*.date' => 'The check-in date must be a valid date for hotel '.$hotelKey,
+                        'assign_check_out.*.required_if' => 'The check-out date is required for hotel '.$hotelKey,
+                        'assign_check_out.*.date' => 'The check-out date must be a valid date for hotel '.$hotelKey,
+                        'assign_check_out.*.after' => 'The check-out date must be after the check-in date for hotel '.$hotelKey,
+                    ]);
 
-        $dpt_flight_name        = @$request->dpt_flight_name;
-        $dpt_flight_number      = @$request->dpt_flight_number;
-        $dpt_date_time          = @$request->dpt_date_time;
-        $dpt_flight_location    = @$request->dpt_flight_location;
+                    if ($validator->fails()) {
+                        $errors = $validator->errors()->all();
+                        $response = [
+                            'message' => implode('<br>', $errors),
+                            'status' => 2,
+                        ];
 
-        $drvr_number            = @$request->drvr_number;
-        $vehicle_details        = @$request->vehicle_details;
-        $vehicle_type           = @$request->vehicle_type;
-        $vehicle_type           = strtoupper($vehicle_type);
-        //$assign_check_in        = @$request->assign_check_in;
-        //$assign_check_out       = @$request->assign_check_out;
-        $user_pass              = @$request->user_pass;
-        $user_trip_id           = @$request->user_trip_id;
-        $drvr_name              = @$request->drvr_name;
+                        return response()->json($response);
+                    }
+                }
+            }
+            $eventcd = @$request->eventcd;
+            //$hotel_cd = @$request->hotel_cd;
+            //$room_categorycd = @$request->room_categorycd;
+            //$share_room_with = $share_room_with_empcd = @$request->emp_ShareRm;
 
+            $arv_flight_name        = @$request->arv_flight_name;
+            $arv_flight_number      = @$request->arv_flight_number;
+            $arv_date_time          = @$request->arv_date_time;
+            $arv_flight_location    = @$request->arv_flight_location;
+
+            $dpt_flight_name        = @$request->dpt_flight_name;
+            $dpt_flight_number      = @$request->dpt_flight_number;
+            $dpt_date_time          = @$request->dpt_date_time;
+            $dpt_flight_location    = @$request->dpt_flight_location;
+
+            $drvr_number            = @$request->drvr_number;
+            $vehicle_details        = @$request->vehicle_details;
+            $vehicle_type           = @$request->vehicle_type;
+            $vehicle_type           = strtoupper($vehicle_type);
+            //$assign_check_in        = @$request->assign_check_in;
+            //$assign_check_out       = @$request->assign_check_out;
+            $user_pass              = @$request->user_pass;
+            $user_trip_id           = @$request->user_trip_id;
+            $drvr_name              = @$request->drvr_name;
+        }
         $user = Auth()->user();
         $userId = $user->id;
         $today = date('Y-m-d H:i:s');
@@ -320,147 +319,157 @@ class UserController extends Controller
             $dataMsg['message'] = "Saved Successfully";
         }
         if($sqlQuery_run){
-            $queryTrfHtl = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
-            foreach ($hotelCd as $key => $value) {
-                $hotel_cd           = @$hotelCd[$key];
-                $room_categorycd    = @$roomCategoryCd[$key];
-                $share_room_with    = @$share_room_with_empcd = $empShareRm[$key];
-                $assign_check_in    = @$assignCheckIn[$key];
-                $assign_check_out   = @$assignCheckOut[$key];
-                //print_r($hotelCd); die;
+            if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
+                $queryTrfHtl = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
+                foreach ($hotelCd as $key => $value) {
+                    $hotel_cd           = @$hotelCd[$key];
+                    $room_categorycd    = @$roomCategoryCd[$key];
+                    $share_room_with    = @$share_room_with_empcd = $empShareRm[$key];
+                    $assign_check_in    = @$assignCheckIn[$key];
+                    $assign_check_out   = @$assignCheckOut[$key];
+                    //print_r($hotelCd); die;
 
-                if($hotel_cd > 0 && $room_categorycd > 0){
-                
-                    if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
-                        $validateEvent = Validator::make($request->all(), [
-                            'eventcd' => ['required'],
-                            'hotel_cd' => ['required'],
-                           // 'room_categorycd' => ['required']
-                        ], [
-                            'eventcd.required' => 'Event name is required field.',
-                            'hotel_cd.required' => 'Hotel name is required field.',
-                            //'room_categorycd.required' => 'Hotel category is required field.'
-                        ]); 
-                 
-                        if($validateEvent->fails()){
-                            //return redirect()->back()->withErrors($validateEvent)->withInput();
-                            $allErrors = $validateEvent->errors()->all();
-                            $allErrors = implode('<br>', $allErrors);
-                            return response()->json(['message' => $allErrors, 'status' => 2]);
-                        }
-                    }
-                    if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
-                        //$row_data['cur_event']          = @$eventcd;
-                        //$row_data['cur_hotel']          = @$hotel_cd;
-                        //$row_data['cur_category']       = @$room_categorycd;
-                        $row_dataE['vehicle_type']      = $vehicle_type;
-                        $row_dataE['assign_check_in']   = date('Y-m-d H:i:s', strtotime(@$assign_check_in));
-                        $row_dataE['assign_check_out']   = date('Y-m-d H:i:s', strtotime(@$assign_check_out));
-                        $row_dataE['user_pass']         = @$user_pass;
-                        $row_dataE['user_trip_id']      = @$user_trip_id;
-                        if(!empty(trim($arv_flight_number))){
-                            $row_dataE['arv_flight_name']    = ucwords(@$arv_flight_name);
-                            $row_dataE['arv_flight_no']      = @$arv_flight_number;
-                            $row_dataE['arv_date_time']      = date('Y-m-d H:i:s', strtotime(@$arv_date_time));
-                            $row_dataE['arv_location']       = ucwords(@$arv_flight_location);
-                            $row_dataE['flight_create_date'] = $today;
-                        }
-                        if(!empty(trim($dpt_flight_number))){
-                            $row_dataE['dptr_flight_name']    = ucwords(@$dpt_flight_name);
-                            $row_dataE['dptr_flight_no']      = @$dpt_flight_number;
-                            $row_dataE['dptr_date_time']      = date('Y-m-d H:i:s', strtotime(@$dpt_date_time));
-                            $row_dataE['dptr_location']       = ucwords(@$dpt_flight_location);
-                        }
-                        if(!empty(trim($drvr_number))){
-                            $row_dataE['drvr_number']        = $drvr_number;
-                            $row_dataE['drvr_veh_details']   = strtoupper($vehicle_details);
-                            $row_dataE['drvr_name']          = ucwords($drvr_name);
-                        }
-                    }
-                    if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
-                        $findUser = DB::table('users')->where('id', $emp_cd)->first();
-                        $user_cpfno         = $findUser->cpf_no;
-                        $user_name          = $findUser->name;
-                        $user_email         = $findUser->email;
-                        $user_mobile        = $findUser->mobile;
-                        $user_level         = $findUser->level;
-                        $user_designation   = $findUser->designation;
-                        $user_category      = $findUser->category;
-                        $user_location      = $findUser->location;
-                        $row_dataE['user_name']         = $user_name;
-                        $row_dataE['user_cpfno']        = $user_cpfno;
-                        $row_dataE['user_email']        = $user_email;
-                        $row_dataE['user_mobile']       = $user_mobile;
-                        $row_dataE['user_level']        = $user_level;
-                        $row_dataE['user_designation']  = $user_designation;
-                        $row_dataE['user_category']     = $user_category;
-                        $row_dataE['user_location']     = $user_location;
-
-                        $row_dataE['event_book_id'] = 0;
-                        $row_dataE['emp_hotel_cd'] = $hotel_cd??0;
-                        $row_dataE['emp_hotel_cat_cd'] = $room_categorycd??0;
-                        $row_dataE['share_room_with_empcd'] = $share_room_with_empcd;
-                        // ->where('emp_ev_book_id', $intcd)
-                        $findAvt = DB::table('event_books_emp')->where('emp_hotel_cd', $hotel_cd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->first();
-                        $intcd = @$findAvt->emp_ev_book_id;
-                        $prv_emp_event_cd = @$findAvt->emp_event_cd;
-                        $prv_emp_hotel_cd = @$findAvt->emp_hotel_cd;
-                        $prv_emp_hotel_cat_cd = @$findAvt->emp_hotel_cat_cd;
-                        /*
-                        if(($eventcd != $prv_emp_event_cd || $hotel_cd != $prv_emp_hotel_cd) && $intcd > 0){
-                            $queryTrfHtl = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
-                            $findAvt = 0;
-                        }*/
-                        //print_r($row_dataE); die;
-                        if ($intcd > 0) {
-                                $shareRoomUpdt = $findAvt->share_room_with_empcd;
-                                $row_dataE['updated_at']     = $today;
-                                $row_dataE['status_in_htl']  = 1;
-                                $subQueryRun = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update($row_dataE);
-                                $dataMsg['message'] = "Update Successfully"; 
-                        }else{
-                            $row_dataE['ev_emp_create_by']  = $userId;
-                            $row_dataE['status_in_htl']     = 1;
-
-                            $row_dataE['created_at']        = $today;
-                            $row_dataE['updated_at']        = $today;
-                            $row_dataE['emp_cd']            = $emp_cd;
-                            $row_dataE['emp_event_cd']      = $eventcd;
-                            $subQueryRun = DB::table('event_books_emp')->insert($row_dataE);
-                            
-                        }
-
-                        if($share_room_with > 0){ // if room sahre 
-                            $share_room_with_empcdIdsAll = [];
-                            $shareUserFind = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->where('emp_cd', $share_room_with)->where('emp_hotel_cd', $hotel_cd)->first();
-                            if($shareUserFind){
-                                $share_room_with_empcdIds = $shareUserFind->share_room_with_empcd;
-                                if(!is_null($share_room_with_empcdIds) && !empty($share_room_with_empcdIds)){
-                                    $share_room_with_empcdIdsAll = explode(',', $share_room_with_empcdIds);
-                                }
-                            }
-                            $share_room_with_empcdIdsAll[] = (int)$share_room_with;
-                            $share_room_with_empcdIdsAll[] = (int)$emp_cd;
-                            $uniqueShareEmpIds = array_unique($share_room_with_empcdIdsAll);
-                            $uniqueShareEmpIds1 = implode(',', $uniqueShareEmpIds);
-                            
-                            $queryRun = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->whereIn('emp_cd', $uniqueShareEmpIds)->where('emp_hotel_cd', $hotel_cd)->update(['share_room_with_empcd' => $uniqueShareEmpIds1]);
-                        }
-                    }
-
-                    $dataMsg['status'] = 1;
-                    if($cd > 0){
-                        $dataMsg['message'] = "Update Successfully"; 
-                    }else{
+                    if($hotel_cd > 0 && $room_categorycd > 0){
+                    
                         if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
-                            $mail = new EmailController();
-                            $subject = "Login Details for an event.";
-                            $content = "<p>Hello Dear <b>".$name."</b>,</p> <br><p>You have registred for a event. </p><br><p>Your event detalis are below : </p><p><b>CPF No. :</b> ".$cpf_no."<br><b>Login Username/Email :</b> ".$email."<br><b>Passwprd :</b>".$password."<p>";
-                            $mail->sendMail($content, $subject, $email);
+                            $validateEvent = Validator::make($request->all(), [
+                                'eventcd' => ['required'],
+                                'hotel_cd' => ['required'],
+                               // 'room_categorycd' => ['required']
+                            ], [
+                                'eventcd.required' => 'Event name is required field.',
+                                'hotel_cd.required' => 'Hotel name is required field.',
+                                //'room_categorycd.required' => 'Hotel category is required field.'
+                            ]); 
+                     
+                            if($validateEvent->fails()){
+                                //return redirect()->back()->withErrors($validateEvent)->withInput();
+                                $allErrors = $validateEvent->errors()->all();
+                                $allErrors = implode('<br>', $allErrors);
+                                return response()->json(['message' => $allErrors, 'status' => 2]);
+                            }
+                        }
+                        if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
+                            //$row_data['cur_event']          = @$eventcd;
+                            //$row_data['cur_hotel']          = @$hotel_cd;
+                            //$row_data['cur_category']       = @$room_categorycd;
+                            $row_dataE['vehicle_type']      = $vehicle_type;
+                            $row_dataE['assign_check_in']   = date('Y-m-d H:i:s', strtotime(@$assign_check_in));
+                            $row_dataE['assign_check_out']   = date('Y-m-d H:i:s', strtotime(@$assign_check_out));
+                            $row_dataE['user_pass']         = @$user_pass;
+                            $row_dataE['user_trip_id']      = @$user_trip_id;
+                            if(!empty(trim($arv_flight_number))){
+                                $row_dataE['arv_flight_name']    = ucwords(@$arv_flight_name);
+                                $row_dataE['arv_flight_no']      = @$arv_flight_number;
+                                $row_dataE['arv_date_time']      = date('Y-m-d H:i:s', strtotime(@$arv_date_time));
+                                $row_dataE['arv_location']       = ucwords(@$arv_flight_location);
+                                $row_dataE['flight_create_date'] = $today;
+                            }
+                            if(!empty(trim($dpt_flight_number))){
+                                $row_dataE['dptr_flight_name']    = ucwords(@$dpt_flight_name);
+                                $row_dataE['dptr_flight_no']      = @$dpt_flight_number;
+                                $row_dataE['dptr_date_time']      = date('Y-m-d H:i:s', strtotime(@$dpt_date_time));
+                                $row_dataE['dptr_location']       = ucwords(@$dpt_flight_location);
+                            }
+                            if(!empty(trim($drvr_number))){
+                                $row_dataE['drvr_number']        = $drvr_number;
+                                $row_dataE['drvr_veh_details']   = strtoupper($vehicle_details);
+                                $row_dataE['drvr_name']          = ucwords($drvr_name);
+                            }
+                        }
+                        if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
+                            $findUser = DB::table('users')->where('id', $emp_cd)->first();
+                            $user_cpfno         = $findUser->cpf_no;
+                            $user_name          = $findUser->name;
+                            $user_email         = $findUser->email;
+                            $user_mobile        = $findUser->mobile;
+                            $user_level         = $findUser->level;
+                            $user_designation   = $findUser->designation;
+                            $user_category      = $findUser->category;
+                            $user_location      = $findUser->location;
+                            $row_dataE['user_name']         = $user_name;
+                            $row_dataE['user_cpfno']        = $user_cpfno;
+                            $row_dataE['user_email']        = $user_email;
+                            $row_dataE['user_mobile']       = $user_mobile;
+                            $row_dataE['user_level']        = $user_level;
+                            $row_dataE['user_designation']  = $user_designation;
+                            $row_dataE['user_category']     = $user_category;
+                            $row_dataE['user_location']     = $user_location;
+
+                            $row_dataE['event_book_id'] = 0;
+                            $row_dataE['emp_hotel_cd'] = $hotel_cd??0;
+                            $row_dataE['emp_hotel_cat_cd'] = $room_categorycd??0;
+                            $row_dataE['share_room_with_empcd'] = $share_room_with_empcd;
+                            // ->where('emp_ev_book_id', $intcd)
+                            $findAvt = DB::table('event_books_emp')->where('emp_hotel_cd', $hotel_cd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->first();
+                            $intcd = @$findAvt->emp_ev_book_id;
+                            $prv_emp_event_cd = @$findAvt->emp_event_cd;
+                            $prv_emp_hotel_cd = @$findAvt->emp_hotel_cd;
+                            $prv_emp_hotel_cat_cd = @$findAvt->emp_hotel_cat_cd;
+                            /*
+                            if(($eventcd != $prv_emp_event_cd || $hotel_cd != $prv_emp_hotel_cd) && $intcd > 0){
+                                $queryTrfHtl = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update(['status_in_htl' => 0, 'updated_at' => $today]);
+                                $findAvt = 0;
+                            }*/
+                            //print_r($row_dataE); die;
+                            if ($intcd > 0) {
+                                    $shareRoomUpdt = $findAvt->share_room_with_empcd;
+                                    $row_dataE['updated_at']     = $today;
+                                    $row_dataE['status_in_htl']  = 1;
+                                    $subQueryRun = DB::table('event_books_emp')->where('emp_ev_book_id', $intcd)->where('emp_event_cd', $eventcd)->where('emp_cd', $emp_cd)->update($row_dataE);
+                                    $dataMsg['message'] = "Update Successfully"; 
+                            }else{
+                                $row_dataE['ev_emp_create_by']  = $userId;
+                                $row_dataE['status_in_htl']     = 1;
+
+                                $row_dataE['created_at']        = $today;
+                                $row_dataE['updated_at']        = $today;
+                                $row_dataE['emp_cd']            = $emp_cd;
+                                $row_dataE['emp_event_cd']      = $eventcd;
+                                $subQueryRun = DB::table('event_books_emp')->insert($row_dataE);
+                                
+                            }
+
+                            if($share_room_with > 0){ // if room sahre 
+                                $share_room_with_empcdIdsAll = [];
+                                $shareUserFind = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->where('emp_cd', $share_room_with)->where('emp_hotel_cd', $hotel_cd)->first();
+                                if($shareUserFind){
+                                    $share_room_with_empcdIds = $shareUserFind->share_room_with_empcd;
+                                    if(!is_null($share_room_with_empcdIds) && !empty($share_room_with_empcdIds)){
+                                        $share_room_with_empcdIdsAll = explode(',', $share_room_with_empcdIds);
+                                    }
+                                }
+                                $share_room_with_empcdIdsAll[] = (int)$share_room_with;
+                                $share_room_with_empcdIdsAll[] = (int)$emp_cd;
+                                $uniqueShareEmpIds = array_unique($share_room_with_empcdIdsAll);
+                                $uniqueShareEmpIds1 = implode(',', $uniqueShareEmpIds);
+                                
+                                $queryRun = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)->whereIn('emp_cd', $uniqueShareEmpIds)->where('emp_hotel_cd', $hotel_cd)->update(['share_room_with_empcd' => $uniqueShareEmpIds1]);
+                            }
                         }
 
-                        $dataMsg['message'] = "Insert Successfully"; 
+                        $dataMsg['status'] = 1;
+                        if($cd > 0){
+                            $dataMsg['message'] = "Update Successfully"; 
+                        }else{
+                            if(@$page_type == 'hotel' || @$page_type == 'driver' || @$page_type == 'event'){
+                                $mail = new EmailController();
+                                $subject = "Login Details for an event.";
+                                $content = "<p>Hello Dear <b>".$name."</b>,</p> <br><p>You have registred for a event. </p><br><p>Your event detalis are below : </p><p><b>CPF No. :</b> ".$cpf_no."<br><b>Login Username/Email :</b> ".$email."<br><b>Passwprd :</b>".$password."<p>";
+                                $mail->sendMail($content, $subject, $email);
+                            }
+
+                            $dataMsg['message'] = "Insert Successfully"; 
+                        }
                     }
+                }
+            }else{
+                if($cd > 0){
+                    $dataMsg['status'] = 1;
+                    $dataMsg['message'] = "Update Successfully"; 
+                }else{
+                    $dataMsg['status'] = 1;
+                    $dataMsg['message'] = "Insert Successfully"; 
                 }
             }
         }else{
@@ -638,5 +647,37 @@ class UserController extends Controller
             //return redirect()->back()->with('message', $message);
         }
         return redirect('employee')->with('message', $message);
+    }
+    public function passwordChangeByAdmin(Request $request)
+    {
+        //print_r($request->all());
+        $validator = Validator::make($request->all(), [
+            'new_password' => 'required|min:6',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            $allErrors = $validator->errors()->all();
+            $allErrors = implode('<br>', $allErrors);
+            return response()->json(['message' => $allErrors, 'status' => 2]);
+        }
+
+        $emp_id         = $request->emp_id;
+        $new_password   = $request->new_password;
+
+        $row_data = [];
+        $row_data['updated_at']   = date('Y-m-d H:i:s');
+        $row_data['password']     = Hash::make($new_password);
+        $sqlQuery_run = DB::table('users')->where('id', $emp_id)->where('user_type', 2)->update($row_data);
+
+        if($sqlQuery_run){
+            $status = 1;
+            $message = "Password update successfully";
+        }else{
+            $status = 2;
+            $message = "Password not update. Try again.";
+        }
+        return response()->json(['message' => $message, 'status' => $status]);
+
     }
 }

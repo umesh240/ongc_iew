@@ -83,6 +83,7 @@ Route::middleware(['adminGaurd'])->group(function () {
             Route::post('/employee/save', 'update')->name('employee.save');
             Route::post('/employee/delete', 'destroy')->name('employee.delete');
             Route::post('/hotel/assign', 'hotelUpdate')->name('hotel.assign');
+            Route::post('/password_change', 'passwordChangeByAdmin')->name('password.change');
         });
         Route::controller(EventBookController::class)->group(function(){
             Route::get('/bookevent/{ae}/{id?}', 'show')->name('bookevent.ae')->where('ae', 'add|edit');
