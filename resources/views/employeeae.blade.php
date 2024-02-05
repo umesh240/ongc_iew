@@ -93,7 +93,7 @@
     }
   @endphp
   <!-- Main content -->
-  <section class="content">
+  <section class="content secDiv" data-listPage="{{ route('employee') }}">
     <!-- Default box -->
     <div class="card card-primary">
       <div class="card-header">
@@ -301,8 +301,8 @@
               <label>Vehicle Type : </label>
               <select class="form-control form-control-sm vehicle_type" name="vehicle_type">
                 <option value="">NA</option>
-                <option value="Bus">Bus</option>
-                <option value="light-weight">light-Weight </option>
+                <option value="BUS">Bus</option>
+                <option value="LIGHT-VEHICLE">light-Vehicle </option>
               </select>
               <script> $('.vehicle_type').val("{{ old('vehicle_type')?old('vehicle_type'):@$vehicle_type }}"); </script>
             </div>

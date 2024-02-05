@@ -3,10 +3,10 @@
    
 
 @endphp
-<div class="row routeUrl" data-routename="{{ route($routename) }}">
-    <div class="col-sm-3">
+<div class="row routeUrl mb-1" data-routename="{{ route($routename) }}">
+    <div class="col-sm-2">
         <div class="dataTables_length">
-            Show
+            Show<br>
             <select class="custom-select custom-select-sm form-control form-control-sm listLength" style="width: auto;" onchange="searchRecords(this);">
                 <option value="10" {{ ($list_length == 10)?'selected':'' }}>10</option>
                 <option value="50" {{ ($list_length == 50)?'selected':'' }}>50</option>
@@ -21,7 +21,7 @@
     </div>
     <div class="col-sm-2">
     @if($routename == 'employee')   
-        Level
+        Level<br>
         <select class="custom-select custom-select-sm form-control form-control-sm listLevel" style="width: auto;" onchange="searchRecords(this);">
             <option value="">Select Level</option>
             @foreach($level_list as $level)
@@ -32,7 +32,7 @@
     </div>
     <div class="col-sm-2 otherPage" data-pg="{{ @$routename }}">
     @if($routename == 'bookevent' || $routename == 'employee' || $routename == 'hotel')   
-        Event
+        Event<br>
         <select class="custom-select custom-select-sm form-control form-control-sm listEvent" style="width: auto;" onchange="searchRecords(this);">
             <option value="">Select Event</option>
             @foreach($events_list as $event)
@@ -41,9 +41,9 @@
         </select>
     @endif 
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
     @if($routename == 'employee' && @$event_cd > 0)   
-        Hotel
+        Hotel<br>
         <select class="custom-select custom-select-sm form-control form-control-sm listHotel" style="width: auto;" onchange="searchRecords(this);">
             <option value="">All Hotel</option>
             @foreach($hotel_list as $hotel)
@@ -54,10 +54,10 @@
     </div>
     <div class="col-sm-3">
         <div class="dataTables_filter float-right">
-            <div class="btn-group">
-                Search &nbsp;
-                <input type="search" class="form-control form-control-sm listSearch" value="{{ @$list_search }}" placeholder=" Search here..." style="display: inline; width: auto;">
-                <button type="button" class="btn btn-sm btn-success" title="Search" onclick="searchRecords(this);" style="width: 30px;"><i class="fa fa-search"></i></button>
+                Search<br>
+            <div class="input-group">
+                <input type="search" class="form-control form-control-sm listSearch" data-id="btnSearchList" value="{{ @$list_search }}" placeholder=" Search here..." style="display: inline; width: auto;">
+                <button type="button" class="btn btn-sm btn-success btnSearchList" title="Search" onclick="searchRecords(this);" style="width: 30px;"><i class="fa fa-search"></i></button>
             </div>
         </div>
     </div>
@@ -88,5 +88,16 @@ function searchRecords(thiss) {
         location = routeUrl+"/"+listLength+"/"+listSearch;
     }
 }
+/////////////////////////////////////////////
+
+$('input').keydown(function(event) {
+    if (event.which === 13) {
+      var activeInputId = $(this).attr('data-id');
+      if(activeInputId == 'btnSearchList'){
+        $('.btnSearchList').trigger('click');
+        event.preventDefault();
+      }
+    }
+});
 </script>
 

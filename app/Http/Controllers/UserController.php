@@ -223,7 +223,21 @@ class UserController extends Controller
             $empShareRm = $request->input('emp_ShareRm');
             $assignCheckIn = $request->input('assign_check_in');
             $assignCheckOut = $request->input('assign_check_out');
+            $hotlCnt = 0;
+            foreach ($hotelCd as $key => $value) {
+                $hotel_cd           = @$hotelCd[$key];
+                if($hotel_cd > 0){
+                    $hotlCnt++;
+                }
+            }
+            if($hotlCnt == 0){
+                $response = [
+                    'message' => "Please select atleast one hotel.",
+                    'status' => 2,
+                ];
 
+                return response()->json($response);
+            }
             // Iterate through the records
             foreach ($hotelCd as $key => $value) {
                 //echo '---->>'.$hotelCd[$key];

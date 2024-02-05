@@ -446,7 +446,8 @@ class UserDashboardController extends Controller
         $apiData = new Request([
             'emp_ev_book_id' => $emp_ev_book_id,
             'user_id' => $userId,
-            'quiz_completed' => $answers
+            'quiz_completed' => $answers,
+            'save_from' => 'web'
         ]);
         $api = new ApiUsersController();
         

@@ -25,6 +25,7 @@ use App\Http\Controllers\ChattingController;
 use App\Http\Controllers\FeedbackCategoryController;
 use App\Http\Controllers\UserWelcomeController;
 use App\Http\Controllers\BusTransportController;
+use App\Http\Controllers\CheckinupdateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,11 @@ use App\Http\Controllers\BusTransportController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::controller(CheckinupdateController::class)->group(function(){
+    Route::get('/changevisitingdetails/{id?}', 'index')->name('checkInOut_index');
+    Route::post('/checkinupdate', 'checkInOutUpdate')->name('checkInOut_update');
+});
 
 Route::get('/login2', function () {
     return view('auth.login2');
@@ -119,7 +125,7 @@ Route::middleware(['adminGaurd'])->group(function () {
             Route::post('/sos_save', 'update')->name('sos_save');
         });
         Route::controller(QuizController::class)->group(function(){
-            Route::get('/quiz', 'index')->name('quiz');
+            Route::get('/quiz/{length?}/{search?}', 'index')->name('quiz');
             Route::get('/quiz/{ae}/{id?}', 'show')->name('quiz.ae')->where('ae', 'add|edit');
             Route::post('/quiz_save', 'update')->name('quiz.save');
             Route::post('/quiz/delete', 'destroy')->name('quiz.delete');

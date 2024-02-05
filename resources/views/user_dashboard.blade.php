@@ -27,7 +27,9 @@
   $flight_status = $cod = 0;
   $all_hotels = [];
   $user_name = '';  
+  $user_code = 0;
   if(@$status == 200){  
+    $user_code = @$userData->emp_cd;
     $all_hotels = @$userData->all_hotels;
     $user_name = @$userData->user_name;
     $emp_ev_book_id = @$userData->emp_ev_book_id;
@@ -158,11 +160,11 @@
           </p>
           </div>
           <div class="col-md-2 col-2 text-center" style="align-items: center; display: flex;">
-            <!-- <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location"> -->
+            <a href="{{ @$event_mapurl }}" target="_blank"  title="Event Map Location">
               <div class="icon-event">
                 <i class="fa-solid fa-location-dot"></i>
               </div>
-            <!-- </a> -->
+            </a>
           </div>
 
         </div>
@@ -335,6 +337,9 @@
                     </a>
                   </div>
                 </div>
+                <div class="row down mb-3 align-center">
+                  <button type="submit" class="edit-btn" style="margin: auto;"><a href="{{ route('checkInOut_index', ['id' => $user_code]) }}" target="_blank" style="text-decoration: none; color:white;">Edit Check-in/Out Details</a></button>
+                </div>
                 @endforeach
               </div>
               
@@ -428,13 +433,12 @@
                     <div class="row" style ="align-items: center;">
                       @php
                       $drvr_veh_details = $drvr_number = $drvr_name = "Not Applicable";
-                      $vehicle_type = ucwords(strtolower(@$userData->vehicle_type));
-                      if($vehicle_type == 'Light-weight'){
+                      $vehicle_type = @$userData->vehicle_type;
+                      if($vehicle_type == 'LIGHT-VEHICLE'){
                         $drvr_name = @$userData->drvr_name;
                         $drvr_number = @$userData->drvr_number;
                         $drvr_veh_details = @$userData->drvr_veh_details;
-                      }
-                      if(empty($vehicle_type) == ''){
+                      }else{
                         $vehicle_type = "Not Applicable";
                       }
                       $shuttle_timing = @$userData->shuttle_timing;
@@ -641,7 +645,7 @@
           </div>
         </div>
         <div class="wall-content">
-          <a class="twitter-timeline" id="twitter-btn" data-theme="light" href="https://twitter.com/ONGC_?ref_src=twsrc%5Etfw"></a>
+          <a class="twitter-timeline" id="twitter-btn" data-theme="light" href="https://twitter.com/IndiaEnergyWeek?ref_src=twsrc%5Etfw"></a>
         </div>
       </div>
     </div>

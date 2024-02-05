@@ -292,7 +292,9 @@ $('.frmEventEmp').on('submit', function(e) {
 			show_msgT(status, message);
 			if(parseInt(status) == 1){
 				setTimeout(function(){
-					location.reload();
+					var link = $('.secDiv').attr('data-listPage');
+					window.location.href = link;
+					//location.reload();
 				}, 1500);
 			}
 			$('.loading-container').css('display', 'none');
@@ -322,7 +324,9 @@ $('.frmBookEventSave').on('submit', function(e) {
 			show_msgT(status, message);
 			if(parseInt(status) == 1){
 				setTimeout(function(){
-					location.reload();
+					var link = $('.secDiv').attr('data-listPage');
+					window.location.href = link;
+					//location.reload();
 				}, 1500);
 			}
 			$('.loading-container').css('display', 'none');

@@ -40,7 +40,7 @@ class EmailController extends Controller
     public function testEmail()
     {
         
-        $recipient = 'umesh.codeinit@gmail.com';
+        $recipient =  'umesh.codeinit@gmail.com'; //'prayaspanchuri@gmail.com';
         $subject = 'Test Email 1';
         $content = '<html><body>';
                 $content .= '<b style="color:#3A38C2;">A plan buy by a user & deposit details are below</b><br>';
@@ -67,5 +67,5 @@ class EmailController extends Controller
             return 0;
         }
     }
-    
+        
 }

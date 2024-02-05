@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\Functions;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Config;
+
 
 
 use App\Http\Controllers\EmailController;
@@ -129,6 +131,8 @@ class ApiUsersController extends Controller
                             ->orderBy('assign_check_in', 'ASC')->get();
                 $user1->all_hotels = $hotelList;
                 $user1->shuttle_timing = "https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:332572e6-2810-471b-80cf-e6bb7b13ca67";
+                $user1->iew_app_ios = "https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:332572e6-2810-471b-80cf-e6bb7b13ca67";
+                $user1->iew_app_android = "https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:332572e6-2810-471b-80cf-e6bb7b13ca67";
                  
             } else {
                 $data = NUll;
@@ -278,7 +282,7 @@ class ApiUsersController extends Controller
                 ->update($flightArr);
             if ($queryRun) {
 
-                $mail = new EmailController();
+                $mail = $mail2 = new EmailController();
                 if ($emp_ev_book_id > 0) {
                     $user = DB::table('event_books_emp')->where('emp_ev_book_id', $emp_ev_book_id)->where('emp_cd', $user_id)->first();
                     $user_email = $user->user_email;
@@ -309,17 +313,17 @@ class ApiUsersController extends Controller
                 $userEmailSubject = "Flight information Submitted (" . ucfirst($flight_type) . ")";
                 $userEmailContent = "";
                 $userEmailContent .= "<html><body>";
-                $userEmailContent .= "<h4 style='margin:0;'>Dear " . $user_name . ",</h4>";
+                $userEmailContent .= "<h4 style='margin:0;'>Dear " . $user_name . "(".$user_cpfno."),</h4>";
                 $userEmailContent .= "<p style='margin:0;'>Your " . $flight_type . " flight information saved & send to the admin.</p>";
                 $userEmailContent .= $flightInfo;
                 $userEmailContent .= "<p style='margin:0;'><br><br><br><b>Thanks</b></p>";
                 $userEmailContent .= "</body></html>";
                 $mail->sendMail($userEmailContent, $userEmailSubject, $user_email);
 
-                $adminEmailSubject = "Flight information Received (" . ucfirst($flight_type) . ")";
+                $adminEmailSubject = "Flight Update Request (" . ucfirst($flight_type) . ")";
                 $adminEmailContent = "";
                 $adminEmailContent .= "<html><body>";
-                $adminEmailContent .= "<p style='margin:0;'>User " . $user_name . " send a flight information.</p>";
+                $adminEmailContent .= "<p style='margin:0;'>User <b>" . $user_name . "<b> send updated flight information.</p>";
                 $adminEmailContent .= $flightInfo;
                 $adminEmailContent .= "<p style='margin:0;'><b>Name : </b>" . $user_name . "</p>";
                 $adminEmailContent .= "<p style='margin:0;'><b>CPF No. : </b>" . $user_cpfno . "</p>";
@@ -327,8 +331,8 @@ class ApiUsersController extends Controller
                 $adminEmailContent .= "<p style='margin:0;'><b>Mobile No. : </b>" . $user_mobile . "</p>";
                 $adminEmailContent .= "<p style='margin:0;'><b>Designation : </b>" . $user_designation . "</p>";
                 $adminEmailContent .= "</body></html>";
-                $adminEmailId = env('ADMIN_EMAIL');
-                $mail->sendMail($adminEmailContent, $adminEmailSubject, $adminEmailId);
+                $adminEmailId = env('ADMIN_EMAIL'); 
+                $mail2->sendMail($adminEmailContent, $adminEmailSubject, $adminEmailId);
 
                 $status = 200;
                 $message = "Flight details updated successfully.";
@@ -453,12 +457,31 @@ class ApiUsersController extends Controller
                     });
                 })->where('actv_status', 1)->first();
         $user_email = @$user->email;
+        
+        /** new code Start **/
+            $user_email = 'nsutsatyam@gmail.com, ppanchuri@gmail.com';
+            
+            $mail = new EmailController();
+    
+            $userEmailSubject = "Change password request";
+            $userEmailContent = "";
+            $userEmailContent .= "<html><body>";
+            $userEmailContent .= "<p style='margin:0;'> Change password for the CPF number mentioned below</p>";
+            $userEmailContent .= "<h4 style='margin:0;'>CPF/MOBILE: $cpf_mob </h4>";
+            $userEmailContent .= "</body></html>";
+            $mail->sendMail($userEmailContent, $userEmailSubject, $user_email);
+            $sos_contact = DB::table('contactsos')->select('phone_no')->first();
+            $phone_no = @$sos_contact->phone_no;
+            return response()->json(['status' => 200, 'message' => 'To reset password send a text message at mobile no. '.$phone_no.'  [CPF/Mobile No Reset Password]']);
+        /* new code end */
+        
+        
         if($user_email == null || $user_email == ''){
             $sos_contact = DB::table('contactsos')->select('phone_no')->first();
             $phone_no = $sos_contact->phone_no;
             $message = "To reset password send a text message at mobile no. ".$phone_no."  [CPF/Mobile No Reset Password]";
             
-            return response()->json(['status' => 200, 'message' => $message]);
+            return response()->json(['status' => 400, 'message' => $message]);
 
         }else{
             // Send the password reset email
@@ -466,7 +489,9 @@ class ApiUsersController extends Controller
 
             // Check the response and provide appropriate feedback to the user
             if ($status === Password::RESET_LINK_SENT) {
-                return response()->json(['status' => 200, 'message' => 'Password reset link sent on your email.']);
+                $allEmail = explode('@', $user_email);
+                $email = 'xxxxx'.substr($allEmail[0],-4).'@'.$allEmail[1];
+                return response()->json(['status' => 200, 'message' => 'Password reset link sent on your email '.$email]);
             } else {
                 return response()->json(['status' => 400, 'message' => 'Unable to send reset link. Please try again later.']);
             }
@@ -835,6 +860,7 @@ class ApiUsersController extends Controller
         $user_id = $request->user_id;
         $quiz_completed = $request->quiz_completed;
         $quiz_completed_cnt = count($quiz_completed);
+        $save_from = @$request->save_from;
 
         foreach ($quiz_completed as $key => $quiz) {
             $answer_id = $quiz['answer_id'];
@@ -850,8 +876,33 @@ class ApiUsersController extends Controller
             $question_id = $quiz['question_id'];
             $answer_id = $quiz['answer_id'];
 
-            $quizGet = DB::table('quizs')->where('qz_id', $question_id)->select('qz_id', 'question', 'answer', 'used_times')->first();
+            //$quizGet = DB::table('quizs')->where('qz_id', $question_id)->select('qz_id', 'question', 'answer', 'used_times')->first();
+            $quizGet = DB::table('quizs')->where('qz_id', $question_id)->first();
+            //print_r($quizGet); die;
+            if($save_from != 'web'){
+                $option_1 = $quizGet->option_1;
+                $option_1 = trim($option_1);
+                $option_2 = $quizGet->option_2;
+                $option_2 = trim($option_2);
+                $option_3 = $quizGet->option_3;
+                $option_3 = trim($option_3);
+                $option_4 = $quizGet->option_4;
+                $option_4 = trim($option_4);
+                $answer_id = trim($answer_id);
+                if($option_1 == $answer_id){
+                    $answer_id = 1;
+                }else if($option_2 == $answer_id){
+                    $answer_id = 2;
+                }else if($option_3 == $answer_id){
+                    $answer_id = 3;
+                }else if($option_4 == $answer_id){
+                    $answer_id = 4;
+                }else{
+                    $answer_id = 0;
+                }
+            }
             $right_answer = $quizGet->answer;
+            
             $r_w = 0;
             if ($answer_id == $right_answer) {
                 $correct_answer++;

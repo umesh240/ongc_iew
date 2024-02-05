@@ -36,15 +36,21 @@
               <thead>
                 <tr>
                   <th>Question</th>
+                  <th>Answer</th>
                   <th style="width:15%;">Action</th>
                 </tr>
               </thead>
               <tbody>
               @php $cnt = 0; @endphp 
               @foreach ($quiz_list as $quiz) 
-              @php $cnt++; @endphp 
+              @php 
+              $cnt++; 
+              $answer = 'option_'.$quiz->answer;
+              $answerTxt = $quiz->$answer;
+              @endphp 
               <tr style="">
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ $quiz->question; }}</td>
+                <td style="padding-top: 2px; padding-bottom: 2px;">{{ $answerTxt; }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">
                   <button type="button" class="btn btn-xs btn-info" title="View / Edit" onclick="window.location='{{ route("quiz.ae", ["id" => $quiz->qz_id, "ae" => "edit"]) }}';"><i class="fa fa-eye"></i> View/ Edit</button>
                   <button type="button" class="btn btn-xs btn-danger" data-link="{{ route('quiz.delete') }}" title="Delete" onclick="recordsDelete(this, '{{$quiz->qz_id}}');"><i class="fa fa-trash"></i> Trash</button>

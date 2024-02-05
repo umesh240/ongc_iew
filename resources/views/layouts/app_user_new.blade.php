@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="{{ asset('pages/plugins/flickity/flickity.min.css') }}">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
@@ -42,6 +43,7 @@
     <script src="{{ asset('pages/sweetalert2.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('pages/style.css') }}">
     
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <style>
         .content-header { padding: 4px 0.5rem !important; }
         label { margin-bottom: 0 !important; margin-top: 6px !important; }
@@ -50,12 +52,59 @@
           text-transform: capitalize;
         }
         body{ overflow-x: hidden; }
+
+        
+        @keyframes rotate-loading {
+            0%  { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        :root {
+          --wd_ht: 100px;
+          --logo_mr: 4%;
+          --logo_wd: 92%;  
+        }
+        .loading-container {
+            background-color: #797777b0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            z-index: 1111;
+
+        }
+
+        .logo {
+            position: absolute; 
+            width: var(--wd_ht);
+            height: var(--wd_ht);
+        }
+
+        .loading {
+            width: var(--wd_ht);
+            height: var(--wd_ht);
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-color: transparent #fff transparent #fff; /* Change the color if needed */
+            animation: rotate-loading 1.5s linear infinite;
+            transform-origin: 50% 50%;
+        }
+
+        .logo img{    width: var(--logo_wd); margin: var(--logo_mr); }
     </style>
     
   </head>
   <!--<body class="control-sidebar-slide-open sidebar-collapse layout-navbar-fixed layout-fixed sidebar-mini ">-->
   <body class="sidebar-mini layout-fixed">
-
+    <div class="loading-container">
+        <div class="logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        </div>
+        <div class="loading"></div>
+    </div>
   <section class="ongc-head desktop ccsticky-nav" id="mainHeader">
     <div class="container">
       @php
@@ -278,7 +327,9 @@ $(document).ready(function () {
         window.location.href = "/"; // Replace with the actual URL of your home page
     }
 
-  
+  setTimeout(function(){
+    $('.loading-container').css('display', 'none');
+  }, 1000);
   </script>
   @yield('javascript')
   </body>

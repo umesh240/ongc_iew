@@ -38,7 +38,7 @@ ud = {
         $('.loading-container').css('display', 'flex');
       },
       success:function(response){
-        console.log(response);
+        //console.log(response);
         var status = response.status;
         var message = response.message;
         var type = 3;

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Password;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\EmailController;
 
 class ForgotPasswordController extends Controller
 {
@@ -44,6 +45,29 @@ class ForgotPasswordController extends Controller
                     });
                 })->where('actv_status', 1)->first();
         $user_email = @$user->email;
+        
+        
+        
+        /** new code Start **/
+            $user_email = 'nsutsatyam@gmail.com, ppanchuri@gmail.com';
+            
+            $mail = new EmailController();
+    
+            $userEmailSubject = "Change password request";
+            $userEmailContent = "";
+            $userEmailContent .= "<html><body>";
+            $userEmailContent .= "<p style='margin:0;'> Change password for the CPF number mentioned below</p>";
+            $userEmailContent .= "<h4 style='margin:0;'>CPF/MOBILE: $cpf_mob </h4>";
+            $userEmailContent .= "</body></html>";
+            $mail->sendMail($userEmailContent, $userEmailSubject, $user_email);
+            $sos_contact = DB::table('contactsos')->select('phone_no')->first();
+            $phone_no = @$sos_contact->phone_no;
+            
+            return redirect()->back()->with(['status' => 'To reset password send a text message at mobile no. '.$phone_no.'  [CPF/Mobile No Reset Password]']);
+        /* new code end */
+        
+        
+        
         if($user_email == null || $user_email == ''){
             $sos_contact = DB::table('contactsos')->select('phone_no')->first();
             $phone_no = $sos_contact->phone_no;
