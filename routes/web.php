@@ -26,7 +26,7 @@ use App\Http\Controllers\FeedbackCategoryController;
 use App\Http\Controllers\UserWelcomeController;
 use App\Http\Controllers\BusTransportController;
 use App\Http\Controllers\CheckinupdateController;
-
+use App\Http\Controllers\ImportCheckInOutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -101,18 +101,33 @@ Route::middleware(['adminGaurd'])->group(function () {
             Route::post('/ckexistemp', 'ckExistEmpEvent')->name('ckExistEmp');
             Route::post('/bookevent/delete', 'destroy')->name('bookevent.delete');
             Route::get('/import_bookevent', 'importEventBooking')->name('import_bookevent');
+            
             Route::get('/get_notification', 'getNotification')->name('get_notification');
         });
+     
+        Route::controller(EventBookController::class)->group(function(){
+
+    });
         Route::controller(ImportController::class)->group(function(){
             Route::get('/import_bookevent', 'eventBooking')->name('import_bookevent');
             Route::post('/import_bookevent/show', 'importEventBookExcel')->name('import_bookevent.show');
             Route::post('/import_bookevent_save', 'importEventBookSave')->name('import_bookevent.save');
+          
         });
+        Route::controller(ImportCheckInOutController::class)->group(function(){
+                Route::get('/import_checkinout', 'importCheckInOut')->name('import_checkinout');
+                Route::post('/import_checkinout/show', 'importCheckInOutExcel')->name('import_checkinout.show');
+                Route::post('/import_checkinout', 'importCheckInOutSave')->name('import_checkinout.save');
+         });
         Route::controller(ReportsController::class)->group(function(){
             Route::get('/hotel_wise', 'indexHW')->name('hotel_wise');
+            Route::get('/flight_report', 'indexFD')->name('flight_report');
             Route::post('/hotel_wise', 'showHW')->name('hotel_wise_search');
+            Route::post('/flight_report', 'showFD')->name('flight_report_search');
             Route::post('/generate_pdf', 'generatePDF')->name('generate_pdf');
             Route::post('/get_hotel', 'hotelList')->name('get_hotel');
+            Route::post('/get_flight_report', 'exportFlightDetails')->name('get_flight_report');
+
         });
         Route::controller(CheckInOutSummeryController::class)->group(function(){
             Route::get('/check_in_out_summery', 'index')->name('check_inout_summery');
@@ -125,8 +140,8 @@ Route::middleware(['adminGaurd'])->group(function () {
             Route::post('/sos_save', 'update')->name('sos_save');
         });
         Route::controller(QuizController::class)->group(function(){
-            Route::get('/quiz/{length?}/{search?}', 'index')->name('quiz');
             Route::get('/quiz/{ae}/{id?}', 'show')->name('quiz.ae')->where('ae', 'add|edit');
+            Route::get('/quiz-list/{length?}/{search?}', 'index')->name('quiz');
             Route::post('/quiz_save', 'update')->name('quiz.save');
             Route::post('/quiz/delete', 'destroy')->name('quiz.delete');
             Route::get('/quiz/import', 'importQuizIndex')->name('quiz.import');

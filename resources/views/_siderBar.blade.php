@@ -118,6 +118,15 @@
                   <p>Import</p>
                 </a>
               </li>
+              {{-- <li class="nav-item">
+                <a href="{{ route('import_checkinout') }}" class="nav-link @php echo in_array($curRouteNm, ['import_checkinout']) ? 'active' : ''; @endphp ">
+                  <i class="far fa-circle nav-icon text-success"></i>
+                  <p>Import Checkin Out</p>
+                </a>
+              </li> --}}
+
+              
+
             </ul>
           </li>
           <!--
@@ -148,12 +157,21 @@
               <p> Export <i class="right fas fa-angle-left"></i> </p>
             </a>
             <ul class="nav nav-treeview">
+              
+              
               <li class="nav-item">
                 <a href="{{ route('hotel_wise') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search']) ? 'active' : ''; @endphp ">
                   <i class="far fa-circle nav-icon text-success"></i>
                   <p>Event-Hotel Wise</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('flight_report') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'flight_report']) ? 'active' : ''; @endphp ">
+                  <i class="far fa-circle nav-icon text-success"></i>
+                  <p>Get Flight Report</p>
+                </a>
+              </li>
+              
               {{--
               <li class="nav-item">
                 <a href="{{ route('check_inout_summery') }}" class="nav-link  @php echo in_array($curRouteNm, ['check_inout_summery', 'check_inout_summery_show']) ? 'active' : ''; @endphp">

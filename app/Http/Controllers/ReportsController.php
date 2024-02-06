@@ -41,6 +41,15 @@ class ReportsController extends Controller
         return view('hotel_wise', $data);
     }
 
+
+    public function indexFD()
+    {
+        $event_list = $this->eventList();
+        //$event_list = 
+        $data['event_list'] = $event_list;
+        $data['flight_report'] = DB::table('events')->where('actv_event', 1)->get();
+        return view('flight_report', $data);
+    }
     /**
      * Display the specified resource.
      */
@@ -96,6 +105,44 @@ class ReportsController extends Controller
         return view('hotel_wise', $data);
         //return redirect()->route('hotel_wise', $data);
     }
+
+
+    public function showFD(Request $request)
+    {
+        //print_r($request->all()); die;
+        $submit_btn = $request->submit_btn;
+        $eventcd = $request->eventcd;
+        $datefrom = $request->datefrom;
+        $dateto = $request->dateto;
+        $data = [];
+        
+        //$event_list = DB::table('events')->where('actv_event', 1)->get();
+        $event_list = $this->eventList();
+        $data['event_list'] = $event_list;
+        
+        $report_data = EventBook::where('emp_event_cd', $eventcd)->where('status_in_htl', 1)->where('flight_status', 1);
+                      
+        if (!empty($datefrom)) {
+            $data['datefrom'] = date('Y-m-d', strtotime($datefrom)); //$datefrom;
+            $report_data = $report_data->whereDate('event_books_emp.flight_create_date', '>=', $datefrom);
+        }
+        
+        if (!empty($dateto)) {
+            $report_data = $report_data->whereDate('event_books_emp.flight_create_date', '<=', $dateto);
+            $data['dateto'] =  date('Y-m-d', strtotime($dateto));// $dateto;
+        }
+        
+        $report_data = $report_data->orderBy('event_books_emp.updated_at', 'desc')->get();
+        
+        //print_r($report_data); die;
+        $data['report_data'] = $report_data;
+        $data['eventcd'] = $eventcd;
+        
+      
+        return view('flight_report', $data);
+        //return redirect()->route('hotel_wise', $data);
+    }
+
 
     /**
      * Show the form for creating a new resource.

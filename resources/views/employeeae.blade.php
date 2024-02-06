@@ -182,7 +182,7 @@
           @endif
           @for($i = 0; $i < 4; $i++)
           @php
-            $empIdd           = $employee->id;
+            $empIdd           = @$employee->id;
             $hotel_cd         = @$activeHotels[$i]->emp_hotel_cd; 
             $room_categorycd  = @$activeHotels[$i]->emp_hotel_cat_cd;
             $emp_ShareRm      = @$activeHotels[$i]->share_room_with_empcd;

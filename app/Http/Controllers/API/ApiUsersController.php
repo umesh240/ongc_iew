@@ -77,7 +77,7 @@ class ApiUsersController extends Controller
                 }
             } else {
                 $status = 404;
-                $result = 'User not exist.';
+                $result = 'Incorrect CPF/Mobile No. or password.';
             }
             return response()->json(['status' => $status, "message" => $result]);
         } catch (Exception $e) {
