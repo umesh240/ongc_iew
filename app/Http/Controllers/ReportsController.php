@@ -50,6 +50,14 @@ class ReportsController extends Controller
         $data['flight_report'] = DB::table('events')->where('actv_event', 1)->get();
         return view('flight_report', $data);
     }
+    public function indexFR()
+    {
+        $event_list = $this->eventList();
+        //$event_list = 
+        $data['event_list'] = $event_list;
+        $data['full_report'] = DB::table('events')->where('actv_event', 1)->get();
+        return view('full_report', $data);
+    }
     /**
      * Display the specified resource.
      */
@@ -142,6 +150,55 @@ class ReportsController extends Controller
         return view('flight_report', $data);
         //return redirect()->route('hotel_wise', $data);
     }
+
+
+    public function showFR(Request $request)
+    {
+        //print_r($request->all()); die;
+        $submit_btn = $request->submit_btn;
+        $eventcd = $request->eventcd;
+        $datefrom = $request->datefrom;
+        $dateto = $request->dateto;
+        $data = [];
+        
+        //$event_list = DB::table('events')->where('actv_event', 1)->get();
+        $event_list = $this->eventList();
+        $data['event_list'] = $event_list;
+        
+        $report_data = EventBook::where('emp_event_cd', $eventcd)->where('status_in_htl', 1)->where('flight_status', 1);
+                      
+        if (!empty($datefrom)) {
+            $data['datefrom'] = date('Y-m-d', strtotime($datefrom)); //$datefrom;
+            $report_data = $report_data->whereDate('event_books_emp.flight_create_date', '>=', $datefrom);
+        }
+        
+        if (!empty($dateto)) {
+            $report_data = $report_data->whereDate('event_books_emp.flight_create_date', '<=', $dateto);
+            $data['dateto'] =  date('Y-m-d', strtotime($dateto));// $dateto;
+        }
+        
+        $report_data = $report_data->orderBy('event_books_emp.updated_at', 'desc')->get();
+        
+        //print_r($report_data); die;
+       
+        $data['eventcd'] = $eventcd;
+        foreach ($report_data as $key => $value) {
+            // Fetch additional information for each event and add it to the event data
+            $report_data[$key]->share_room_with_cpfno = DB::table('event_books_emp')
+                ->where('emp_cd', $value->share_room_with_empcd)
+                ->where('emp_cd', '!=', $value->emp_cd)
+                ->value('user_cpfno'); 
+        }
+        $data['report_data'] = $report_data;
+      
+        return view('full_report', $data);
+        //return redirect()->route('hotel_wise', $data);
+    }
+
+
+
+    
+
 
 
     /**

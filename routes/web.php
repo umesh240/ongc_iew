@@ -122,11 +122,16 @@ Route::middleware(['adminGaurd'])->group(function () {
         Route::controller(ReportsController::class)->group(function(){
             Route::get('/hotel_wise', 'indexHW')->name('hotel_wise');
             Route::get('/flight_report', 'indexFD')->name('flight_report');
+            Route::get('/full_report', 'indexFR')->name('full_report');
+            
             Route::post('/hotel_wise', 'showHW')->name('hotel_wise_search');
             Route::post('/flight_report', 'showFD')->name('flight_report_search');
+            Route::post('/full_report', 'showFR')->name('full_report_search');
+
             Route::post('/generate_pdf', 'generatePDF')->name('generate_pdf');
             Route::post('/get_hotel', 'hotelList')->name('get_hotel');
             Route::post('/get_flight_report', 'exportFlightDetails')->name('get_flight_report');
+            Route::post('/get_full_report', 'exportFullDetails')->name('get_full_report');
 
         });
         Route::controller(CheckInOutSummeryController::class)->group(function(){

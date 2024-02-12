@@ -783,7 +783,10 @@ class ApiUsersController extends Controller
         $user_id        = $request->id;
         
         $questionLimit = 10;
-        $quizList = DB::table('quizs')->where('delete_yn', 0)->select('qz_id', 'question', 'option_1', 'option_2', 'option_3', 'option_4')->inRandomOrder()->take($questionLimit)->get();
+        $quizList = DB::table('quizs')->where('delete_yn', 0)->select('qz_id', 'question', 'option_1', 'option_2', 'option_3', 'option_4')
+          ->inRandomOrder()
+        ->take($questionLimit)
+        ->get();
         // , 'answer'
         $recordCount = $quizList->count();
         if ($recordCount > 0) {

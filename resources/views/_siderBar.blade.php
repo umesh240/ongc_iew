@@ -165,13 +165,18 @@
                   <p>Event-Hotel Wise</p>
                 </a>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="{{ route('flight_report') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'flight_report']) ? 'active' : ''; @endphp ">
                   <i class="far fa-circle nav-icon text-success"></i>
                   <p>Get Flight Report</p>
                 </a>
+              </li> --}}
+              <li class="nav-item">
+                <a href="{{ route('full_report') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'full_report']) ? 'active' : ''; @endphp ">
+                  <i class="far fa-circle nav-icon text-success"></i>
+                  <p>Full Report</p>
+                </a>
               </li>
-              
               {{--
               <li class="nav-item">
                 <a href="{{ route('check_inout_summery') }}" class="nav-link  @php echo in_array($curRouteNm, ['check_inout_summery', 'check_inout_summery_show']) ? 'active' : ''; @endphp">

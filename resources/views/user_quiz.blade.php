@@ -54,10 +54,14 @@
           <tr>
             <td>
               <div class="row">
+             
                 <div class="col-sm-12 col-12">
+               
                   <button class="edit-btn btnPrevious" type="button" > Previous</button>
                   <button class="edit-btn btnNext" type="button" > Next</button>
+                  
                   <button class="edit-btn btnQuiz float-right" type="button" > Submit</button>
+                  <button class="edit-btn resetQuiz float-right" type="button" > Reset</button>
                 </div>
               </div>
             </td>
@@ -84,6 +88,9 @@ function checkAnswer(element, ansNumber) {
   $(element).addClass('selectedAns');
   trr.find('.answer_id').attr('value', ansNumber).val(ansNumber);
 }
+$('.resetQuiz').click(function(){
+  location.reload();
+})
 /////////////////////////////////////////////////////////////////////////////////
 $('.btnQuiz').click(function () {
   var thiss = this;
