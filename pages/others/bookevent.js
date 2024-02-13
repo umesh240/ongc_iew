@@ -66,7 +66,7 @@ be = {
 				// }else{
 				//	$('.btnUsrSubmit').removeAttr('disabled');
 				//}
-				//console.log(response);
+				//console.log("Hotel List : "+response);
 				$('.hotel_cd').html(hotel_list);
 				var hotel_cd = $('.hotel_cd').attr('data-hotel_cd');
 				if(hotel_cd > 0){
@@ -113,7 +113,7 @@ be = {
 		var hotel_cd = div.find('.hotel_cd').val();
 		var room_categorycd = div.find('.room_categorycd').val();
 		var csrf_token = $('input[name="_token"]').val();
-		console.log('hotel_cd = '+hotel_cd+', room_categorycd = '+room_categorycd+', link = '+link);
+		//console.log('hotel_cd = '+hotel_cd+', room_categorycd = '+room_categorycd+', link = '+link);
 		if(parseInt(room_categorycd) > 0){
 			$.ajax({
 				async: false,
@@ -285,7 +285,7 @@ $('.frmEventEmp').on('submit', function(e) {
           $('.loading-container').css('display', 'flex');
         },
         success: function(result) {
-        	console.log(result);
+        	//console.log(result);
 			var status = result.status;
 			var message = result.message;
         	//console.log('message=='+message);

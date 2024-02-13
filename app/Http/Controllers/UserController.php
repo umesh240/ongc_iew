@@ -176,9 +176,12 @@ class UserController extends Controller
             $data['deleteHotels']   = $deleteHotels;
 
         }
-        
+        /*
         $event_list = DB::table('events')->where('actv_event', 1)->get();
         $hotel_list = DB::table('hotels')->where('actv_hotel', 1)->get();
+        */
+        $event_list = DB::table('events')->get();
+        $hotel_list = DB::table('hotels')->get();
         $data['event_list'] = $event_list;
         $data['hotel_list'] = $hotel_list;
         $data['event_id'] = $event_id;

@@ -35,12 +35,14 @@ class HomeController extends Controller
         $hotelExpired = DB::table('hotels')->whereIn('evv_id', $eventIds)->update(['actv_hotel' => 2]);
 
         $eventCntAll = DB::table('events')->count();
-        $eventCntActv = DB::table('events')->where('actv_event', 1)->count();
+        //$eventCntActv = DB::table('events')->where('actv_event', 1)->count();
+        $eventCntActv = DB::table('events')->count();
         //$data['eventCnt'] = $eventCntAll.'/'.$eventCntActv;
         $data['eventCnt'] = $eventCntActv;
 
         $hotelCntAll = DB::table('hotels')->count();
-        $hotelCntActv = DB::table('hotels')->where('actv_hotel', 1)->count();
+        //$hotelCntActv = DB::table('hotels')->where('actv_hotel', 1)->count();
+        $hotelCntActv = DB::table('hotels')->count();
         //$data['hotelCnt'] = $hotelCntAll.'/'.$hotelCntActv;
         $data['hotelCnt'] = $hotelCntActv;
 

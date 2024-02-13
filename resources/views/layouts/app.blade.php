@@ -211,7 +211,14 @@ $(".tableExport").DataTable({
           page: 'all'
         }
       },
-      filename: ($('.tableExport').attr('data-pgNam').replaceAll("\n", ",")).replaceAll(":", "-"),
+      filename: function() {
+        var pgNam = $(".tableExport").attr('data-pgNam');
+        if (pgNam) {
+          return pgNam.replace(/\n/g, ",").replace(/:/g, "-");
+        } else {
+          return 'default_filename'; // Provide a default filename if data-pgNam attribute is not set
+        }
+      },
       action: function (e, dt, button, config) {
         // Your custom function to be executed on Excel button click
         console.log(123);

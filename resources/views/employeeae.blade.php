@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-  //echo '<pre>'; print_r($deleteHotels); die;
+  //echo '<pre>'; print_r($activeHotels); die;
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Employee Master ';
   $pgArr = array('add' => 'Add', 'edit' => 'Update', 'hotel' => '', 'driver' => '', 'event' => '');

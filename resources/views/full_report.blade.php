@@ -109,6 +109,8 @@
 <th>Pass</th>
 <th>From</th>
 <th>To</th>
+<th>Checkin Confirm</th>
+<th>Checkout Confirm</th>
 
 <th>Hotel</th>
 <th>Room Category</th>
@@ -153,6 +155,21 @@
                   if($check_out != null && strtotime($check_out) > 0){
                     $checkout = date('d/m/Y h:i A', strtotime($check_out));
                   }
+                 
+                 
+                 
+                  $asn_checkin = $asn_checkout = '';
+                  $asn_checkin = $data->assign_check_in;
+                  $asn_checkout = $data->assign_check_out;
+                  if($asn_checkin != null && strtotime($asn_checkin) > 0){
+                    $asn_checkin = date('d/m/Y ', strtotime($asn_checkin));
+                  }
+                  if($asn_checkout != null && strtotime($asn_checkout) > 0){
+                    $asn_checkout = date('d/m/Y', strtotime($asn_checkout));
+                  }
+
+
+
 
                   $created_at = $data->created_at;
                   $updated_at = $data->updated_at;
@@ -182,6 +199,9 @@
   <td>{{ @$data->user_pass}}</td>
   <td>{{ @$asn_checkin }}</td>
   <td>{{ @$asn_checkout }}</td>
+  <td>{{ @$checkin }}</td>
+  <td>{{ @$checkout }}</td>
+
   <td>{{ @$data->hotelDetails->hotel_name }}</td>
   <td>{{ @$data->categoryDetails->hotel_category }}</td>
   <td>{{ @$data->share_room_with_cpfno }}</td>

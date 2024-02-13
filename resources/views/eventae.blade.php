@@ -2,6 +2,7 @@
 @php
   $curRouteNm = Route::currentRouteName();
   $pageNm = 'Event Master ';
+  //print_r($event); die;
 @endphp
 @section('title', $pageNm)
 @section('content')
@@ -25,7 +26,6 @@
   <hr class="w-100 mt-0">
   <!-- /.content-header -->
   @php
-  // print_r($event);
     $airports = [];
     $btn_name = "Save";
     $event_city = '';
@@ -112,7 +112,9 @@
       </div>
       <!-- /.card-body -->
       <div class="card-footer">
+        @if(@$event->actv_event != 2)
         <button type="submit" name="submit" class="btn btn-success"><i class="fa fa-save"></i> {{ $btn_name }}</button>
+        @endif
       </div>
       </form>
       <!-- /.card-footer-->

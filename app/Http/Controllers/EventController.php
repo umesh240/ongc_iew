@@ -31,7 +31,8 @@ class EventController extends Controller
                     ->where(function ($query) use ($search) {
                         $query->where('event_name', 'like', '%'.$search.'%')
                         ->orWhere('event_location', 'like', '%'.$search.'%');
-                    })->where('actv_event', 1)->paginate($length);
+                    })->paginate($length);
+                    //// ->where('actv_event', 1)
         $data['event_list'] = $event_list;
         $data['list_length'] = $length;
         $data['list_search'] = $search;
@@ -45,7 +46,8 @@ class EventController extends Controller
     {
         $data = [];
         if($id > 0){
-            $event = DB::table('events')->where('actv_event', 1)->where('ev_id', $id)->first();
+            //// ->where('actv_event', 1)
+            $event = DB::table('events')->where('ev_id', $id)->first();
             $data['event'] = $event;
         }
        // echo "<pre>";print_r($data); die;

@@ -151,8 +151,8 @@
             </ul>
           </li>
           -->
-          <li class="nav-item @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show']) ? 'menu-open' : ''; @endphp ">
-            <a href="#" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show']) ? 'active' : ''; @endphp ">
+          <li class="nav-item @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show', 'full_report', 'flight_report']) ? 'menu-open' : ''; @endphp ">
+            <a href="#" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'hotel_wise_search', 'check_inout_summery', 'check_inout_summery_show', 'full_report', 'flight_report']) ? 'active' : ''; @endphp ">
               <i class="nav-icon fas fa-file-alt"></i>
               <p> Export <i class="right fas fa-angle-left"></i> </p>
             </a>
@@ -166,13 +166,13 @@
                 </a>
               </li>
               {{-- <li class="nav-item">
-                <a href="{{ route('flight_report') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'flight_report']) ? 'active' : ''; @endphp ">
+                <a href="{{ route('flight_report') }}" class="nav-link @php echo in_array($curRouteNm, ['flight_report']) ? 'active' : ''; @endphp ">
                   <i class="far fa-circle nav-icon text-success"></i>
                   <p>Get Flight Report</p>
                 </a>
               </li> --}}
               <li class="nav-item">
-                <a href="{{ route('full_report') }}" class="nav-link @php echo in_array($curRouteNm, ['hotel_wise', 'full_report']) ? 'active' : ''; @endphp ">
+                <a href="{{ route('full_report') }}" class="nav-link @php echo in_array($curRouteNm, ['full_report']) ? 'active' : ''; @endphp ">
                   <i class="far fa-circle nav-icon text-success"></i>
                   <p>Full Report</p>
                 </a>

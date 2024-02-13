@@ -93,8 +93,8 @@ class EventBookController extends Controller
         $user_cd = $request->user_cd;
         
         $user_exist = DB::table('event_books_emp')->where('status_in_htl', 1)->where('emp_cd', $user_cd)->where('emp_event_cd', $eventcd)->exists();
-
-        $hotels_category = DB::table('hotels')->where('actv_hotel', 1)->where('evv_id', $eventcd)->get();
+        // ->where('actv_hotel', 1)
+        $hotels_category = DB::table('hotels')->where('evv_id', $eventcd)->get();
         $opts = '';
         if(count($hotels_category) > 1){
             $opts .= '<option value="">Select hotel</option>';

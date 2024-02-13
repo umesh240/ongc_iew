@@ -27,9 +27,12 @@ class ReportsController extends Controller
      * Display a listing of the resource.
      */
     
-    public function eventList($active=1)
+    public function eventList($active=0)
     {
-        $event_list = DB::table('events')->where('actv_event', $active)->get();
+        $event_list = DB::table('events')
+                    ->when($active == 1, function ($query) use ($active) {
+                        return $query->where('actv_event', $active);
+                    })->get();
         return $event_list;
     }
 
