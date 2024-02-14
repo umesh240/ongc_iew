@@ -114,7 +114,7 @@ $emp_event_cd = '';
               <option value="">Select event</option>
               @endif
               @foreach($event_list as $event)
-              <option value="1"  >
+              <option value="{{$event->ev_id}}"  >
                 {{ $event->event_name.' ('.date('d/m/Y', strtotime($event->event_datefr)).' - '.date('d/m/Y', strtotime($event->event_dateto)).')' }}
               </option>
               @endforeach

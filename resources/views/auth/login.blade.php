@@ -59,7 +59,7 @@
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="input-group login-pg mb-3">
-                        <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required  autocomplete="" placeholder="CPF No. or Mobile No." autofocus>
+                        <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required  autocomplete="" placeholder="CPF No. or Mobile No. or Email" autofocus>
                         <div class="input-icon">
                             <i class="fas fa-user"></i>
                         </div>

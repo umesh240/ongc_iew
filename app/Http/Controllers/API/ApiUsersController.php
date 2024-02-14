@@ -96,11 +96,12 @@ class ApiUsersController extends Controller
             $user1 = EventBook::where('emp_cd', $idd)->where('status_in_htl', 1)
                 ->leftJoin('events', 'event_books_emp.emp_event_cd', '=', 'events.ev_id')
                 ->with(['hotelDetails', 'categoryDetails', 'shareUserDetails'])
-                ->where('events.actv_event', 1)->orderBy('events.event_datefr', 'ASC')->first();
+               // ->where('events.actv_event', 1)
+                ->orderBy('events.event_datefr', 'ASC')->first();
             // 'eventDetails', 
-            $status = 200;
        
             if ($user1) {
+                $status = 200;
                 $airports = $user1->airports;
                 $airports = json_decode($airports);
                 $user1->airports = $airports;
@@ -135,6 +136,7 @@ class ApiUsersController extends Controller
                 $user1->iew_app_android = "https://www.indiaenergyweek.com/event/2fe24000-628c-4f45-a85e-4e8ed44d433c/websitePage:332572e6-2810-471b-80cf-e6bb7b13ca67";
                  
             } else {
+                $status = 400;
                 $data = NUll;
             }
             return response()->json(['status' => $status, "response" => $data]);

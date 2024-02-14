@@ -393,4 +393,14 @@ class HotelController extends Controller
         }
         return trim('||' . $message . '||' . $status);
     }
+
+
+    public function hotels_occupency(Request $request){
+
+        
+        //return view('hotels_occupency', $data);
+    }
+
+
+
 }

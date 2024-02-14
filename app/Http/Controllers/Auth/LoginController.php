@@ -61,6 +61,7 @@ class LoginController extends Controller
            // Auth::attempt(['email' => $loginValue, 'password' => $password, 'actv_status' => 1])|| 
             Auth::attempt(['cpf_no' => $loginValue, 'password' => $password, 'actv_status' => 1])
             || Auth::attempt(['mobile' => $loginValue, 'password' => $password, 'actv_status' => 1])
+            || Auth::attempt(['email' => $loginValue, 'password' => $password, 'actv_status' => 1])
             ) {
             $user = Auth()->user();
             $userType = $user->user_type;

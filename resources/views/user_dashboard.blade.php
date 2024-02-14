@@ -104,8 +104,9 @@
     @$drvr_name     = @$userData->drvr_name;
     @$drvr_number   = @$userData->drvr_number;
     @$veh_details   = @$userData->drvr_veh_details;
+   
   }
-
+ @$actv_event = @$userData->actv_event;
 
 
 @endphp
@@ -232,8 +233,7 @@
           </div>
           <div class="card-body">
             <!-- Tab panes -->
-            @php
-            @endphp
+           
             <div class="tab-content text-center"> 
               <div class="tab-pane active" id="checkInOut" role="tabpanel">
                 @foreach($all_hotels as $htl)
@@ -337,9 +337,11 @@
                     </a>
                   </div>
                 </div>
+                @if(@$actv_event !=2)
                 <div class="row down mb-3 align-center">
                   <button type="submit" class="edit-btn" style="margin: auto;"><a href="{{ route('checkInOut_index', ['id' => $user_code]) }}" target="_blank" style="text-decoration: none; color:white;">Edit Check-in/Out Details</a></button>
                 </div>
+                @endif
                 @endforeach
               </div>
               
@@ -373,9 +375,11 @@
                       </div>
                       
                       <div class="col-md-12 h-10">
+                      @if(@$actv_event !=2)
                         <div class="tab-btn pt-3">
                           <a href="{{ route('my.page', ['page'=>'flight']) }}"><button class=" edit-btn" type="submit">Edit Details</button></a>
                         </div>
+                          @endif
                       </div>
                       @else
                       <div class="col-md-12">
@@ -614,7 +618,7 @@
       </div>
 
 
-      <div class="col-4 col-md-2  text-center">
+      <!-- <div class="col-4 col-md-2  text-center">
         <div class="local-menus">
           <div class="icon-news">
            <a href="{{ route('my.page', ['page'=>'news']) }}"> <i class="fa-solid fa-video"></i></a>
@@ -624,7 +628,7 @@
           </div>
         </div>
       
-      </div>
+      </div> -->
 
       <div class="col-4 col-md-2  text-center" id="last-col">
       </div>
