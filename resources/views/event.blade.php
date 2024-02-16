@@ -39,6 +39,7 @@
                   <th>Date From</th>
                   <th>Date To</th>
                   <th>Location</th>
+                  <th>Show All Users</th>
                   <th style="width:15%;">Action</th>
                 </tr>
               </thead>
@@ -51,6 +52,7 @@
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ date('d/m/Y h:i A', strtotime($event->event_datefr)); }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ date('d/m/Y h:i A', strtotime($event->event_dateto)); }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ $event->event_location; }}</td>
+                <td style="padding-top: 2px; padding-bottom: 2px;"><a target="_blank" href="{{ url( '/hotels-occupancy/'.$event->ev_id ) }}">Pub. link of all users</a></td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">
                   <button type="button" class="btn btn-xs btn-info" title="View / Edit" onclick="window.location='{{ route("event.ae", ["id" => $event->ev_id, "ae" => "edit"]) }}';"><i class="fa fa-eye"></i> View/ Edit</button>
                   <button type="button" class="btn btn-xs btn-danger" data-link="{{ route('event.delete') }}" title="Delete" onclick="recordsDelete(this, '{{$event->ev_id}}');"><i class="fa fa-trash"></i> Trash</button>

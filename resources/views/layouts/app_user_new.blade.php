@@ -114,15 +114,16 @@
       $parsedUrl = parse_url($currentUrl);
       $pageName = str_replace('/', '', $parsedUrl['path']);
       $showHeader = array("my.dashboard", "my.chat", "my.day_wise", "my.way_finder");
+       
       @endphp
       @if(in_array($pageName, $showHeader))
       <nav class="navbar navbar-expand-lg ">
        
         <a class="navbar-brand" href="#">
           <img src="{{ asset('/pages/images/ongc-red-logo.png') }}" alt="ONGC" id="ongc-red">
-          <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
-          <img src="{{ asset('/pages/images/white-new-iew.png') }}" alt="Indian Energy Logo" 
-            id="logo-two">
+
+          <img  src="{{ $userData->event_logo_1  }}" alt=""/>
+          <img  src="{{$userData->event_logo_2  }}" alt="" />
         </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

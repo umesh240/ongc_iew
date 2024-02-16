@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use App\Models\EventBook;
 
 class HotelController extends Controller
 {
@@ -37,8 +38,8 @@ class HotelController extends Controller
                 'hotels.htl_id',
                 'hotels.hotel_name',
                 'hotels.hotel_address',
-                // DB::raw('(SELECT COUNT(*) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS category_count'),
-                // DB::raw('(SELECT SUM(hotels_category.total_rooms) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS rooms_count'),
+                  DB::raw('(SELECT COUNT(*) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS category_count'),
+                  DB::raw('(SELECT SUM(hotels_category.total_rooms) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS rooms_count'),
                 'events.event_name',
                 'events.actv_event'
             )
@@ -48,14 +49,16 @@ class HotelController extends Controller
             })
             // ->where('hotels_category.soft_delete_yn', 0)
             ->when($event_code > 0, function ($query) use ($event_code) {
-                $query->where('hotels.evv_id', $event_code)->where('hotels.actv_hotel', 1);
+                $query->where('hotels.evv_id', $event_code);
+                //->where('hotels.actv_hotel', 1);
             })
             // ->groupBy('hotels.htl_id', 'hotels.hotel_name', 'hotels.hotel_address', 'events.event_name', 'events.actv_event')
             ->orderBy('events.event_name')->groupBy('hotels.htl_id')
             ->paginate($length);
         // $events_list = DB::table('events')->where('actv_event', 1)->get();
         $events_list = DB::table('hotels')->select('hotels.evv_id as emp_event_cd', 'events.*')
-            ->leftJoin('events', 'hotels.evv_id', '=', 'events.ev_id')->where('events.actv_event', 1)
+            ->leftJoin('events', 'hotels.evv_id', '=', 'events.ev_id')
+            //->where('events.actv_event', $event_code)
             ->distinct()->get();
 
 
@@ -81,7 +84,8 @@ class HotelController extends Controller
             $data['hotel'] = $hotel;
             $data['category'] = $category;
         }
-        $event_list = DB::table('events')->where('actv_event', 1)
+        $event_list = DB::table('events')
+        //->where('actv_event', 1)
             ->when($evv_id > 0, function ($query) use ($evv_id) {
                 $query->orWhere('ev_id', $evv_id);
             })->get();
@@ -395,12 +399,55 @@ class HotelController extends Controller
     }
 
 
-    public function hotels_occupency(Request $request){
+    public function hotels_occupency(Request $request)
+    {
 
+        $eventcd = request('id', null);
+      
+        $hotel_cd = 0;
+        $emp1 = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)
+                        ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {
+                            $query->where('emp_hotel_cd', $hotel_cd);
+                        })->where('status_in_htl', 1)->distinct()
+                        ->orderBy('updated_at', 'desc')->select('emp_ev_book_id','emp_cd','updated_at')->get();
         
-        //return view('hotels_occupency', $data);
+        $emp2 = DB::table('event_books_emp')->where('emp_event_cd', $eventcd)
+                        ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {
+                            $query->where('emp_hotel_cd', $hotel_cd);
+                        })->where('status_in_htl', 0)->distinct()
+                        ->orderBy('updated_at', 'desc')->select('emp_ev_book_id','emp_cd','updated_at')->get();
+
+        $empArr = [];
+        foreach ($emp1 as $key => $emp1Val) {
+            $keyAr = 'emp_cd_'.$emp1Val->emp_cd;
+            $empArr[$keyAr] = $emp1Val->emp_ev_book_id;
+        }
+        foreach ($emp2 as $key => $emp2Val) {
+            $keyAr = 'emp_cd_'.$emp2Val->emp_cd;
+            if (!array_key_exists($keyAr, $empArr)) {
+                $empArr[$keyAr] = $emp2Val->emp_ev_book_id;
+            }
+        }
+        $evEmpIds = implode(',', $empArr);
+        $report_data = EventBook::where('emp_event_cd', $eventcd)->whereIn('emp_ev_book_id', $empArr)
+                        ->when($hotel_cd > 0, function ($query) use ($hotel_cd) {
+                            $query->where('emp_hotel_cd', $hotel_cd);
+                        })
+                        ->with(['userDetails', 'eventDetails', 'hotelDetails', 'categoryDetails','shareUserDetails'])
+                        ->orderBy('event_books_emp.updated_at', 'desc')
+                        ->get();
+
+                        foreach ($report_data as $key => $value) {
+                            // Fetch additional information for each event and add it to the event data
+                            if(!empty( $value->share_room_with_empcd)){
+                            $report_data[$key]->shareUserDetails = DB::table('event_books_emp')
+                                ->where('emp_cd', $value->share_room_with_empcd)
+                                ->where('emp_cd', '!=', $value->emp_cd)
+                                ->first();
+                        }
+                    }
+            $data['report_data'] = $report_data; 
+
+        return view('hotels_occupency', $data);
     }
-
-
-
 }

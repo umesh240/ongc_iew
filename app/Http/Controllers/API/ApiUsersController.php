@@ -92,14 +92,23 @@ class ApiUsersController extends Controller
             $today = date('Y-m-d H:i:s');
             $findEvent = DB::table('events')->where('actv_event', 1)->orderBy('event_datefr', 'asc')->first();
             $ev_id = @$findEvent->ev_id;
-
-            $user1 = EventBook::where('emp_cd', $idd)->where('status_in_htl', 1)
+            $logo_path = asset('/storage/app/event_logo') ."/" ;
+            $user1 = EventBook::where('emp_cd', $idd)
+           // ->select('events.*', DB::raw("CONCAT('$logo_path', event_logo_1) as event_logo_1") ,DB::raw("CONCAT('$logo_path', event_logo_2) as event_logo_2"))
+            ->where('status_in_htl', 1)
                 ->leftJoin('events', 'event_books_emp.emp_event_cd', '=', 'events.ev_id')
-                ->with(['hotelDetails', 'categoryDetails', 'shareUserDetails'])
+                ->with(['hotelDetails', 'categoryDetails'])
                // ->where('events.actv_event', 1)
                 ->orderBy('events.event_datefr', 'ASC')->first();
             // 'eventDetails', 
-       
+            
+                // Fetch additional information for each event and add it to the event data
+               if(!empty($user1->share_room_with_empcd)){
+                $user1->share_user_details =   DB::table('event_books_emp')
+                     ->where('emp_cd', $user1->share_room_with_empcd)
+                    ->where('emp_cd', '!=', $user1->emp_cd)
+                    ->first(); 
+               }
             if ($user1) {
                 $status = 200;
                 $airports = $user1->airports;
@@ -108,7 +117,8 @@ class ApiUsersController extends Controller
                 $weather_result = $user1->weather_result;
                 $weather_result = json_decode($weather_result);
                 $user1->weather_result = $weather_result;
-
+                $user1->event_logo_1 = $logo_path.$user1->event_logo_1;
+                $user1->event_logo_2 = $logo_path.$user1->event_logo_2;
                 $photo_path = asset('/storage/app/leaders_photo/') . '/';
                 $boardDirectors = DB::table('leaders')->where('delete_status', 0)->select('l_name', 'l_post', DB::raw("CONCAT('$photo_path', l_photo) as l_photo"))
                 ->orderBy('order_by', 'asc')->get();

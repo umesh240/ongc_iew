@@ -294,6 +294,7 @@
                   $hotel_map  = @$htl->hotel_geolocation;
                   $emp_ev_book_id  = @$htl->emp_ev_book_id;
                 @endphp
+                
                 <div class="row user-inOut checkinOutdates" data-route="{{ route('check_in_out') }}"
                   data-emp-ev-book-id="{{ $emp_ev_book_id }}" data-csrf-token="{{ csrf_token() }}">
                   <div class="user-inner"></div>
@@ -337,9 +338,19 @@
                     </a>
                   </div>
                 </div>
+
+                @if(@$userData->share_user_details)
+                <div class="row down-bg  mb-3">
+                  <div class="col-md-10 col-9" style="align-items:center; display:flex;">
+                    <h4 class="text-left mb-0">Share With </h4>&nbsp;&nbsp;{{ @$userData->share_user_details->user_name}}
+                  </div>
+                  
+                </div>
+                @endif
+
                 @if(@$actv_event !=2)
                 <div class="row down mb-3 align-center">
-                  <button type="submit" class="edit-btn" style="margin: auto;"><a href="{{ route('checkInOut_index', ['id' => $user_code]) }}" target="_blank" style="text-decoration: none; color:white;">Edit Check-in/Out Details</a></button>
+                  <button type="submit" class="edit-btn" style="margin: auto;"><a href="{{ route('checkInOut_index', ['id' => @$userData->emp_ev_book_id]) }}" target="_blank" style="text-decoration: none; color:white;">Edit Check-in/Out Details</a></button>
                 </div>
                 @endif
                 @endforeach

@@ -32,6 +32,7 @@
     <div class="loading-container">
         <div class="logo">
             <img src="https://ongcevents.co.in/images/logo.png" alt="Logo">
+           
         </div>
         <div class="loading"></div>
     </div>
@@ -42,7 +43,7 @@
 
 <section class="login-page">
 <div class="login-logo">
- <img src="{{ asset('/pages/images/green-logo.png') }}" alt="ONGC Logo">
+<img src="{{asset('/storage/app/event_logo/'.$event_logo_1)}}" alt="Logo">
  </div>
     <div class="login-box justify-content-center">
         <!-- /.login-logo -->
@@ -53,6 +54,7 @@
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('checkInOut_update') }}">
+                <input type="hidden"   name="id" required     value="{{ @$id }}"   >
                     @csrf
                     <div class="row">
                         @if(session('status') == 2 && session('message'))

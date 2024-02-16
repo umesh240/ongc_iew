@@ -6,9 +6,9 @@
   if(@$eventcd > 0){
     $emp_event_cd = $eventcd;
    
-    //echo '<pre>';  print_r($report_data); die;
+   // echo '<pre>';  print_r($sharedonly); die();
   }
-  
+ 
 @endphp
 @section('title', $pageNm)
 @section('content')
@@ -71,7 +71,17 @@
              <input type="date" class="form-control form-control-sm" name="dateto" value="{{ @$dateto ?? '' }}">
             </div>
             <div class="col-sm-2">
-              <label for="exampleInputEmail1">&nbsp;</label>
+              <label for="withCkInOut"></label>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input custom-control-input-success custom-control-input-outline with_ck_inout" type="checkbox" id="withCkInOut" value="1" name="with_ck_inout" {{ @$with_ck_inout==1?'checked':'' }}>
+                  <label for="withCkInOut" class="custom-control-label">Shared only</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1">
+          
+            <label for="exampleInputEmail1">&nbsp;</label>
             <button type="submit" name="submit_btn" value="submit" class="btn btn-sm btn-block btn-success"><i class="fa fa-search"></i> Filter</button>
             </div>
 
@@ -114,8 +124,8 @@
 
 <th>Hotel</th>
 <th>Room Category</th>
-<th>Sharing with cpf no.</th>
-
+<th>Sharing with CPF No.</th>
+<th>Sharing with CPF Name.</th>
 <th>Arrival Airport</th>
 <th>Arrival Airline</th>
 <th>Date of Arrival at Destination</th>
@@ -204,8 +214,8 @@
 
   <td>{{ @$data->hotelDetails->hotel_name }}</td>
   <td>{{ @$data->categoryDetails->hotel_category }}</td>
-  <td>{{ @$data->share_room_with_cpfno }}</td>
-  
+  <td>{{ @$data->share_room_with->user_cpfno }}</td>
+  <td>{{ @$data->share_room_with->user_name }}</td>
   <td>{{ @$data->arv_location}}</td>
   <td>{{ @$data->arv_flight_name}}</td>
  

@@ -201,10 +201,11 @@ class EventController extends Controller
         $event_data['airports'] = @$airportsArr;
         
         $directory = storage_path('app/event_pdf');
-        
+        $directoryLogo = storage_path('app/event_logo');
         if ($request->hasFile('event_details')) {
             $pdf = @$request->file('event_details');
             if(!is_dir($directory)){    mkdir($directory);    }
+
             if($cd > 0){
                 $getPdf = DB::table('events')->where('ev_id', $cd)->first();
                 $event_details_old = $getPdf->event_details;
@@ -217,6 +218,45 @@ class EventController extends Controller
             $pdf->storeAs('event_pdf/', $pdfName);
             $event_data['day_wise'] = $pdfName;
         }
+
+   
+        if ($request->hasFile('event_logo_1')) {
+            $event_logo_1 = @$request->file('event_logo_1');
+            if(!is_dir($directoryLogo)){    mkdir($directoryLogo);    }
+            if($cd > 0){
+                $get_event_logo_1 = DB::table('events')->where('ev_id', $cd)->first();
+                $event_logo_1_old = $get_event_logo_1->event_logo_1;
+                if(trim(@$event_logo_1_old) != ''){
+                    //File::delete($directory.'/'.$event_details_old);
+                }
+            }
+            $event_nameString = str_replace(' ', '', $event_name);
+            $event_logo_1Name = 'logo1_'.$cd.'_'.time().'.'.$event_logo_1->getClientOriginalExtension();
+            $event_logo_1->storeAs('event_logo/', $event_logo_1Name);
+            $event_data['event_logo_1'] = $event_logo_1Name;
+        }
+
+
+
+        if ($request->hasFile('event_logo_2')) {
+            $event_logo_2 = @$request->file('event_logo_2');
+            
+            if($cd > 0){
+                $get_event_logo_2 = DB::table('events')->where('ev_id', $cd)->first();
+                $event_logo_2_old = $get_event_logo_2->event_logo_2;
+                if(trim(@$event_logo_2_old) != ''){
+                    //File::delete($directory.'/'.$event_details_old);
+                }
+            }
+            $event_nameString = str_replace(' ', '', $event_name);
+            $event_logo_2Name = 'logo2_'.$cd.'_'.time().'.'.$event_logo_2->getClientOriginalExtension();
+            $event_logo_2->storeAs('event_logo/', $event_logo_2Name);
+            $event_data['event_logo_2'] = $event_logo_2Name;
+        }
+
+
+
+
         File::chmod($directory, 0755);
         $event_data['pdf_path'] = asset('storage/app/event_pdf').'/';
         if($cd > 0){

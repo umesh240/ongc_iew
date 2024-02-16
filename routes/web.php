@@ -43,7 +43,7 @@ Route::controller(CheckinupdateController::class)->group(function(){
     Route::post('/checkinupdate', 'checkInOutUpdate')->name('checkInOut_update');
 });
 Route::controller(HotelController::class)->group(function(){
-    Route::get('/hotels-occupency/{id?}', 'hotels_occupency')->name('hotels_occupency');
+    Route::get('/hotels-occupancy/{id?}', 'hotels_occupency')->name('hotels_occupency');
 });
 Route::get('/login2', function () {
     return view('auth.login2');

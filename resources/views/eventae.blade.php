@@ -82,6 +82,18 @@
             <label>Event Details (In Pdf):</label>
             <input type="file" class="form-control form-control-sm event_details" name="event_details" accept=".pdf">
           </div>
+          <div class="col-sm-12">
+            <label>Event Logo 1:</label>
+            <input type="file" class="form-control form-control-sm event_details" name="event_logo_1" accept=".jpg,.png,.jpeg">
+            <p>The Logo size should be 86x55 px.</p>
+            <img  width="86" height="55"  src="{{asset('/storage/app/event_logo/'.$event->event_logo_1)}}"/>  
+          </div>
+          <div class="col-sm-12">
+            <label>Event Logo 2:</label>
+            <input type="file" class="form-control form-control-sm event_details" name="event_logo_2" accept=".jpg,.png,.jpeg">
+            <p>The Logo size should  be 79x59 px.</p>
+            <img width="79" height="59" src="{{asset('/storage/app/event_logo/'.$event->event_logo_2)}}"/>  
+          </div>
         </div>
       </div>
       <h4 class="bg-primary pl-3 mb-0">Airport(s) Location</h4>
@@ -112,9 +124,9 @@
       </div>
       <!-- /.card-body -->
       <div class="card-footer">
-        @if(@$event->actv_event != 2)
+       
         <button type="submit" name="submit" class="btn btn-success"><i class="fa fa-save"></i> {{ $btn_name }}</button>
-        @endif
+       
       </div>
       </form>
       <!-- /.card-footer-->

@@ -24,7 +24,7 @@ class ImportController extends Controller
 {
     public function eventBooking()
     {
-        $event_list = DB::table('events')->where('actv_event', 1)->get();
+        $event_list = DB::table('events')->get();
         $data['event_list'] = $event_list;
         $data['showlist'] = 0; 
         return view('import_event', $data);
