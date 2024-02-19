@@ -47,10 +47,12 @@ class ImportController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $event_list = DB::table('events')->where('actv_event', 1)->get();
+        // ->where('actv_event', 1)
+        $event_list = DB::table('events')->get();
         $data['event_list'] = $event_list;
         $eventcd = $request->eventcd;
-        $event_info = DB::table('events')->where('actv_event', 1)->where('ev_id', $eventcd)->first();
+        // ->where('actv_event', 1)
+        $event_info = DB::table('events')->where('ev_id', $eventcd)->first();
         $data['eventcd'] = $eventcd; 
         $data['event_info'] = $event_info; 
         try {

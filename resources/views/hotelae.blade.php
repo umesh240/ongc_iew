@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @php
+use App\Http\Controllers\HotelController;
 $curRouteNm = Route::currentRouteName();
 $pageNm = 'Hotel Master ';
 $emp_event_cd = '';
@@ -94,9 +95,98 @@ $emp_event_cd = '';
   $hospitality_fpr = @$hotel->hospitality_fpr;
   $logistic_fpr = @$hotel->logistic_fpr;
   }
+  $current_date = request('datefrom') ? strtotime( request('datefrom') ) : strtotime($events_details->event_datefr);
+  $end_date = request('dateto') ? strtotime(request('dateto') ) : strtotime($events_details->event_dateto);
+
+  $datefrom = request('datefrom');
+  $dateto = request('dateto');
   @endphp
   <!-- Main content -->
   <section class="content">
+
+
+
+    <div class="card card-primary collapsed-card">
+      <div class="card-header">
+        <h3 class="card-title">Hotel Occupancy Details</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body p-2">
+        <form action="" method="get" class="searchReport">
+
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="exampleInputEmail1">Check Occupancy from custom dates</label>
+
+            </div>
+
+
+            <div class="col-sm-2">
+              <label for="exampleInputEmail1">From Date</label>
+              <input type="date" class="form-control form-control-sm" name="datefrom" value="{{ @$datefrom ??'' }}">
+
+            </div>
+            <div class="col-sm-2">
+              <label for="exampleInputEmail1">To Date</label>
+              <input type="date" class="form-control form-control-sm" name="dateto" value="{{ @$dateto ?? '' }}">
+            </div>
+
+            <div class="col-sm-1">
+
+              <label for="exampleInputEmail1">&nbsp;</label>
+              <button type="submit" class="btn btn-sm btn-block btn-success"><i class="fa fa-search"></i> Filter</button>
+            </div>
+
+            <div class="col-sm-2">
+              <label for="exampleInputEmail1">&nbsp;</label>
+              <div id="export-button-container"></div>
+            </div>
+          </div>
+        </form>
+        <br />
+        <div class="col-lg-12">
+          <table class="table table-bordered" width="100%" style="min-width: 100%;">
+
+            <tr>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Occupied</th>
+              <th>Vacant</th>
+              <th>Category</th>
+            </tr>
+
+
+            @while ($current_date <= $end_date) <tr>
+              <td colspan="5"><strong>{{ date('Y-m-d', $current_date) }}</strong></td>
+              </tr>
+              @foreach($category as $cat)
+              <tr>
+                <td></td>
+                <td>{{ abs(@$hotels_category->total_rooms)  }}</td>
+                <td> {{ HotelController::occupancy(date('Y-m-d', $current_date)   ,  @$hotel->htl_id ) }}</td>
+
+                <td>{{ abs(@$hotels_category->total_rooms)- HotelController::occupancy(date('Y-m-d', $current_date)   ,  @$hotel->htl_id ) }}</td>
+                <td>{{ @$hotels_category->hotel_category }}</td>
+              </tr>
+              @endforeach
+              @php
+              $current_date = strtotime('+1 day', $current_date);
+              @endphp
+              @endwhile
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- /.row -->
+
+
     <!-- Default box -->
     <div class="card card-primary">
       <div class="card-header">
@@ -114,7 +204,7 @@ $emp_event_cd = '';
               <option value="">Select event</option>
               @endif
               @foreach($event_list as $event)
-              <option value="{{$event->ev_id}}"  >
+              <option value="{{$event->ev_id}}">
                 {{ $event->event_name.' ('.date('d/m/Y', strtotime($event->event_datefr)).' - '.date('d/m/Y', strtotime($event->event_dateto)).')' }}
               </option>
               @endforeach
@@ -170,7 +260,7 @@ $emp_event_cd = '';
             @endphp
             @foreach($hotel_imageAll as $img)
             <div class="img-wraps">
-              <span class="closes" title="Delete"  data-delete-image-link="{{ route('hotel.delete_image') }}" onclick="htl.delImage(this, '{{ $img }}')">×</span> 
+              <span class="closes" title="Delete" data-delete-image-link="{{ route('hotel.delete_image') }}" onclick="htl.delImage(this, '{{ $img }}')">×</span>
               <img class="img-responsive" src="{{ asset('storage/app/hotel_image/'.$img) }}">
             </div>
             @endforeach
@@ -226,21 +316,21 @@ $emp_event_cd = '';
         </div> -->
         <div class="card-body">
           <table class="table table-bordered tblCat">
-          <thead class="">
+            <thead class="">
               <tr class="bg-dark">
                 <th style="width: 50%;" class="pt-1 pb-1">Room Type</th>
                 <th style="width: 15%;" class="pt-1 pb-1">Number of rooms</th>
                 <th style="width: 20%;" class="pt-1 pb-1">Level</th>
                 <th colspan="2" style="width: 15%;text-align: center;" class="pt-1 pb-1">Actions</th>
               </tr>
-          </thead>
+            </thead>
             <tbody class="tBodyList">
               <tr>
                 <td class="td_cat">Basic</td>
-                <td><input type="text" name="hotel_noofrooms" value="{{old('hotel_noofrooms')?@old('hotel_noofrooms'): @$hotels_category->vacent_rooms  }} " class="form-control form-control-sm int hotel_noofrooms"  placeholder=" Enter No. of Rooms"></td>
+                <td><input type="text" name="hotel_noofrooms" value="{{old('hotel_noofrooms')?@old('hotel_noofrooms'): abs(@$hotels_category->total_rooms)  }}" class="form-control form-control-sm int hotel_noofrooms" placeholder=" Enter No. of Rooms"></td>
                 <td>A</td>
-                <td style="text-align: center;"> 
-             
+                <td style="text-align: center;">
+
                 </td>
               </tr>
             </tbody>

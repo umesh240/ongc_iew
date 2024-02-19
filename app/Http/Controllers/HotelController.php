@@ -40,7 +40,8 @@ class HotelController extends Controller
                 'hotels.hotel_address',
                   DB::raw('(SELECT COUNT(*) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS category_count'),
                   DB::raw('(SELECT SUM(hotels_category.total_rooms) FROM hotels_category WHERE hotels.htl_id = hotels_category.htl_idd AND hotels_category.soft_delete_yn = 0) AS rooms_count'),
-                'events.event_name',
+                //  DB::raw('(SELECT count(*) FROM `event_books_emp` WHERE event_books_emp.emp_hotel_cd  = events.ev_id  AND hotels.htl_id = event_books_emp.emp_hotel_cd AND `emp_hotel_cd` = 1 AND `status_in_htl` = 1 GROUP BY CASE WHEN `share_room_with_empcd` IS NULL OR `share_room_with_empcd` = 0 THEN `emp_cd` ELSE `share_room_with_empcd` END  ) AS occupied_count'),
+                  'events.event_name',
                 'events.actv_event'
             )
             ->where(function ($query) use ($search) {
@@ -95,6 +96,7 @@ class HotelController extends Controller
         $data['hotels_category'] = $hotels_category;
         $user_list = DB::table('users')->where('user_type', 2)->where('actv_status', 1)->get();
         $data['user_list'] = $user_list;
+        $data['events_details'] =  DB::table('events')->where('ev_id',$evv_id)->first(); 
 
         return view('hotelae', $data);
     }
@@ -450,4 +452,12 @@ class HotelController extends Controller
 
         return view('hotels_occupency', $data);
     }
+
+
+   public static function occupancy($c_date,$hotel_cd){
+     return EventBook::whereDate('assign_check_in', '<=', $c_date)
+        ->whereDate('assign_check_out', '>=', $c_date)->where('emp_hotel_cd', $hotel_cd)->where('status_in_htl', 1)
+        ->count()??0;
+    
+   }
 }

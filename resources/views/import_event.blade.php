@@ -81,13 +81,13 @@
           <div class="card-body">
             <div class="row">
               <div class="col-sm-3">
-                <b>Event Name</b> : {{ $event_info->event_name }}
+                <b>Event Name</b> : {{ @$event_info->event_name }}
               </div>
               <div class="col-sm-3">
-                <b>Date</b> : {{ date('d/m/Y', strtotime($event_info->event_datefr)) }} - {{ date('d/m/Y', strtotime($event_info->event_dateto)) }}
+                <b>Date</b> : {{ date('d/m/Y', strtotime(@$event_info->event_datefr)) }} - {{ date('d/m/Y', strtotime(@$event_info->event_dateto)) }}
               </div>
               <div class="col-sm-4">
-                <b>Location</b> : {{ $event_info->event_location }}
+                <b>Location</b> : {{ @$event_info->event_location }}
               </div>
               <div class="col-sm-2">
                 <button type="submit" name="submit" class="btn btn-sm btn-success btnSubmit"><i class="fa fa-save"></i> Submit</button>

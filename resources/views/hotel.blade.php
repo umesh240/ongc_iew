@@ -36,10 +36,12 @@
             <table class="table table-bordered" width="100%" style="min-width: 100%;">
               <thead>
                 <tr>
+                <th>Hotel ID</th>
                   <th>Hotel Name</th>
                   <th>Hotel Address</th>
-                  
-                  <th>Rooms Count</th>
+                  <!-- <th>category_count</th>  -->
+                  <!-- <th>Rooms Count</th> -->
+                 
                   <th>Event Name</th>
                   <th style="width:15%;">Action</th>
                 </tr>
@@ -50,11 +52,12 @@
               @foreach ($hotel_list as $record) 
               @php $cnt++; @endphp 
               <tr style="">
+              <td style="padding-top: 2px; padding-bottom: 2px;">{{ $record->htl_id; }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ $record->hotel_name; }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">{{ $record->hotel_address }}</td>
-                 
-                <td style="padding-top: 2px; padding-bottom: 2px;">{{ $record->rooms_count }}</td>
-                
+                <!-- <td style="padding-top: 2px; padding-bottom: 2px;">{{ $record->category_count }}</td> -->
+                <!-- <td style="padding-top: 2px; padding-bottom: 2px;">{{abs($record->rooms_count) }}</td> -->
+            
                 <td style="padding-top: 2px; padding-bottom: 2px;" class="{{ @$record->actv_event == 2?'text-danger':'' }}" title="{{ @$record->actv_event == 2?'Expired Event':'' }}" data-toggle="tooltip" data-placement="left">{{ @$record->event_name }}</td>
                 <td style="padding-top: 2px; padding-bottom: 2px;">
                   <button type="button" class="btn btn-xs btn-info" title="View / Edit" onclick="window.location='{{ route("hotel.ae", ["id" => $record->htl_id, "ae" => "edit"]) }}';"><i class="fa fa-eye"></i> View/ Edit</button>
